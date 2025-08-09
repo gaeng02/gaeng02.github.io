@@ -75,5 +75,133 @@
             <div class="search-results" id="searchResults"></div>
         </div>
     </div>
+
+    <main class="main">
+        <section class="hero">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        안녕하세요! 👋<br>
+                        <span class="hero-highlight">Gaeng02</span>입니다
+                    </h1>
+                    <p class="hero-description">
+                        개발자로서의 여정을 기록하고, 지식을 공유하는 공간입니다.<br>
+                        프로젝트, 스터디, 그리고 다양한 포스트를 통해 함께 성장해요.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="/projects/" class="btn btn-primary">프로젝트 보기</a>
+                        <a href="/posts/" class="btn btn-secondary">포스트 읽기</a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="hero-illustration">
+                        <div class="floating-card card-1">
+                            <div class="card-icon">💻</div>
+                            <div class="card-text">프로젝트</div>
+                        </div>
+                        <div class="floating-card card-2">
+                            <div class="card-icon">📚</div>
+                            <div class="card-text">스터디</div>
+                        </div>
+                        <div class="floating-card card-3">
+                            <div class="card-icon">✍️</div>
+                            <div class="card-text">포스트</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="featured">
+            <div class="container">
+                <h2 class="section-title">최근 활동</h2>
+                <div class="featured-grid">
+                    <div class="featured-card">
+                        <div class="card-header">
+                            <h3 class="card-title">최신 프로젝트</h3>
+                            <a href="/projects/" class="card-link">모두 보기 →</a>
+                        </div>
+                        <div class="card-content" id="recentProjects">
+                            <div class="loading">로딩 중...</div>
+                        </div>
+                    </div>
+
+                    <div class="featured-card">
+                        <div class="card-header">
+                            <h3 class="card-title">최신 포스트</h3>
+                            <a href="/posts/" class="card-link">모두 보기 →</a>
+                        </div>
+                        <div class="card-content" id="recentPosts">
+                            <div class="loading">로딩 중...</div>
+                        </div>
+                    </div>
+
+                    <div class="featured-card">
+                        <div class="card-header">
+                            <h3 class="card-title">스터디 카테고리</h3>
+                            <a href="/study/" class="card-link">모두 보기 →</a>
+                        </div>
+                        <div class="card-content" id="studyCategories">
+                            <div class="loading">로딩 중...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" id="projectCount">0</div>
+                        <div class="stat-label">프로젝트</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="postCount">0</div>
+                        <div class="stat-label">포스트</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="studyCount">0</div>
+                        <div class="stat-label">스터디</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="tagCount">0</div>
+                        <div class="stat-label">태그</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="footer-title">Gaeng02</h3>
+                    <p class="footer-description">
+                        개발자로서의 여정을 기록하고 지식을 공유하는 공간입니다.
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-subtitle">바로가기</h4>
+                    <ul class="footer-links">
+                        <li><a href="/projects/">프로젝트</a></li>
+                        <li><a href="/study/">스터디</a></li>
+                        <li><a href="/posts/">포스트</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-subtitle">연락처</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://github.com/gaeng02" target="_blank" rel="noopener">GitHub</a></li>
+                        <li><a href="mailto:contact@gaeng02.dev">이메일</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Gaeng02. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
