@@ -29,8 +29,9 @@
                 <div class = "nav-menu">
                     <a href = "/" class = "nav-link active">Home</a>
                     <a href = "/projects/" class = "nav-link">Project</a>
-                    <a href = "/study/" class = "nav-link">Knowledge</a>
+                    <a href = "/study/" class = "nav-link">Study</a>
                     <a href = "/posts/" class = "nav-link">Post</a>
+                    <a href = "/retrospect/" class = "nav-link">Retrospect</a>
                 </div>
 
                 <div class = "nav-actions">
@@ -138,10 +139,20 @@
 
                     <div class="featured-card">
                         <div class="card-header">
-                            <h3 class="card-title">스터디 카테고리</h3>
+                            <h3 class="card-title">스터디</h3>
                             <a href="/study/" class="card-link">모두 보기 →</a>
                         </div>
                         <div class="card-content" id="studyCategories">
+                            <div class="loading">로딩 중...</div>
+                        </div>
+                    </div>
+
+                    <div class="featured-card">
+                        <div class="card-header">
+                            <h3 class="card-title">회고</h3>
+                            <a href="/retrospect/" class="card-link">모두 보기 →</a>
+                        </div>
+                        <div class="card-content" id="retrospectCategories">
                             <div class="loading">로딩 중...</div>
                         </div>
                     </div>
@@ -163,6 +174,10 @@
                     <div class="stat-item">
                         <div class="stat-number" id="studyCount">0</div>
                         <div class="stat-label">스터디</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="retrospectCount">0</div>
+                        <div class="stat-label">회고</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-number" id="tagCount">0</div>
@@ -188,6 +203,7 @@
                         <li><a href="/projects/">프로젝트</a></li>
                         <li><a href="/study/">스터디</a></li>
                         <li><a href="/posts/">포스트</a></li>
+                        <li><a href="/retrospect/">회고</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
