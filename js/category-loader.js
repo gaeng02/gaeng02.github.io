@@ -42,53 +42,59 @@ class CategoryLoader {
     }
 
     // 폴더 구조를 기반으로 동적으로 카테고리 생성
-    getDynamicCategories(categoryType) {
+    async getDynamicCategories(categoryType) {
         if (categoryType === 'study') {
-            return this.getStudyCategoriesFromStructure();
+            return await this.getStudyCategoriesFromStructure();
         } else if (categoryType === 'projects') {
-            return this.getProjectCategoriesFromStructure();
+            return await this.getProjectCategoriesFromStructure();
         }
         return this.getDefaultCategories(categoryType);
     }
 
     // Study 폴더 구조를 기반으로 카테고리 생성 (계층적 구조)
-    getStudyCategoriesFromStructure() {
-        // 대분류 카테고리 구조
+    async getStudyCategoriesFromStructure() {
+        try {
+            // JSON 파일에서 카테고리 정보 읽어오기
+            const response = await fetch('/data/study-categories.json');
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Study 카테고리 로드됨:', data);
+                return data.categories;
+            }
+        } catch (error) {
+            console.warn('Study 카테고리 JSON 파일 로드 실패, 하드코딩된 구조 사용:', error);
+        }
+
+        // 폴백: 하드코딩된 구조 사용
         const categoryStructure = {
             'computer-science': {
                 name: 'Computer Science',
-                icon: '💻',
-                description: '컴퓨터 과학의 기초 이론과 원리 학습',
                 subcategories: {
-                    'database': { name: 'Database', icon: '🗄️', description: '데이터베이스 시스템과 SQL 학습' },
-                    'operating-system': { name: 'Operating System', icon: '🖥️', description: '운영체제 원리와 구현' },
-                    'algorithm': { name: 'Algorithm', icon: '⚡', description: '알고리즘과 자료구조 학습' },
-                    'compiler': { name: 'Compiler', icon: '🔍', description: '컴파일러 이론과 구현' },
-                    'network': { name: 'Network', icon: '🌐', description: '네트워크 프로토콜과 통신' },
-                    'data-structure': { name: 'Data Structure', icon: '📊', description: '자료구조와 메모리 관리' }
+                    'database': { name: 'Database' },
+                    'operating-system': { name: 'Operating System' },
+                    'algorithm': { name: 'Algorithm' },
+                    'compiler': { name: 'Compiler' },
+                    'network': { name: 'Network' },
+                    'data-structure': { name: 'Data Structure' }
                 }
             },
             'ai': {
                 name: 'AI',
-                icon: '🤖',
-                description: '인공지능과 머신러닝 기술 학습',
                 subcategories: {
-                    'machine-learning': { name: 'Machine Learning', icon: '🧠', description: '머신러닝 알고리즘과 모델' },
-                    'deep-learning': { name: 'Deep Learning', icon: '🕸️', description: '딥러닝과 신경망' },
-                    'computer-vision': { name: 'Computer Vision', icon: '👁️', description: '컴퓨터 비전과 이미지 처리' },
-                    'nlp': { name: 'NLP', icon: '💬', description: '자연어 처리와 언어 모델' },
-                    'reinforcement-learning': { name: 'Reinforcement Learning', icon: '🎮', description: '강화학습과 에이전트' }
+                    'machine-learning': { name: 'Machine Learning' },
+                    'deep-learning': { name: 'Deep Learning' },
+                    'computer-vision': { name: 'Computer Vision' },
+                    'nlp': { name: 'NLP' },
+                    'reinforcement-learning': { name: 'Reinforcement Learning' }
                 }
             },
             'web-development': {
                 name: 'Web Development',
-                icon: '🌍',
-                description: '웹 개발 기술과 프레임워크 학습',
                 subcategories: {
-                    'frontend': { name: 'Frontend', icon: '🎨', description: 'HTML, CSS, JavaScript, React, Vue 등' },
-                    'backend': { name: 'Backend', icon: '⚙️', description: 'Node.js, Python, Java 등 서버 개발' },
-                    'fullstack': { name: 'Fullstack', icon: '🔗', description: '전체 스택 개발 기술' },
-                    'devops': { name: 'DevOps', icon: '🔧', description: 'Docker, Kubernetes, CI/CD 등' }
+                    'frontend': { name: 'Frontend' },
+                    'backend': { name: 'Backend' },
+                    'fullstack': { name: 'Fullstack' },
+                    'devops': { name: 'DevOps' }
                 }
             }
         };
@@ -99,8 +105,6 @@ class CategoryLoader {
             return {
                 name: category.name,
                 slug: key,
-                icon: category.icon,
-                description: category.description,
                 tags: [category.name],
                 hasSubcategories: true
             };
@@ -108,28 +112,43 @@ class CategoryLoader {
     }
 
     // 서브카테고리를 가져오는 함수
-    getSubcategories(mainCategory) {
+    async getSubcategories(mainCategory) {
+        try {
+            // JSON 파일에서 카테고리 정보 읽어오기
+            const response = await fetch('/data/study-categories.json');
+            if (response.ok) {
+                const data = await response.json();
+                const category = data.categories.find(cat => cat.slug === mainCategory);
+                if (category && category.subcategories) {
+                    return category.subcategories;
+                }
+            }
+        } catch (error) {
+            console.warn('Study 서브카테고리 JSON 파일 로드 실패, 하드코딩된 구조 사용:', error);
+        }
+
+        // 폴백: 하드코딩된 구조 사용
         const categoryStructure = {
             'computer-science': {
-                'database': { name: 'Database', icon: '🗄️', description: '데이터베이스 시스템과 SQL 학습' },
-                'operating-system': { name: 'Operating System', icon: '🖥️', description: '운영체제 원리와 구현' },
-                'algorithm': { name: 'Algorithm', icon: '⚡', description: '알고리즘과 자료구조 학습' },
-                'compiler': { name: 'Compiler', icon: '🔍', description: '컴파일러 이론과 구현' },
-                'network': { name: 'Network', icon: '🌐', description: '네트워크 프로토콜과 통신' },
-                'data-structure': { name: 'Data Structure', icon: '📊', description: '자료구조와 메모리 관리' }
+                'database': { name: 'Database' },
+                'operating-system': { name: 'Operating System' },
+                'algorithm': { name: 'Algorithm' },
+                'compiler': { name: 'Compiler' },
+                'network': { name: 'Network' },
+                'data-structure': { name: 'Data Structure' }
             },
             'ai': {
-                'machine-learning': { name: 'Machine Learning', icon: '🧠', description: '머신러닝 알고리즘과 모델' },
-                'deep-learning': { name: 'Deep Learning', icon: '🕸️', description: '딥러닝과 신경망' },
-                'computer-vision': { name: 'Computer Vision', icon: '👁️', description: '컴퓨터 비전과 이미지 처리' },
-                'nlp': { name: 'NLP', icon: '💬', description: '자연어 처리와 언어 모델' },
-                'reinforcement-learning': { name: 'Reinforcement Learning', icon: '🎮', description: '강화학습과 에이전트' }
+                'machine-learning': { name: 'Machine Learning' },
+                'deep-learning': { name: 'Deep Learning' },
+                'computer-vision': { name: 'Computer Vision' },
+                'nlp': { name: 'NLP' },
+                'reinforcement-learning': { name: 'Reinforcement Learning' }
             },
             'web-development': {
-                'frontend': { name: 'Frontend', icon: '🎨', description: 'HTML, CSS, JavaScript, React, Vue 등' },
-                'backend': { name: 'Backend', icon: '⚙️', description: 'Node.js, Python, Java 등 서버 개발' },
-                'fullstack': { name: 'Fullstack', icon: '🔗', description: '전체 스택 개발 기술' },
-                'devops': { name: 'DevOps', icon: '🔧', description: 'Docker, Kubernetes, CI/CD 등' }
+                'frontend': { name: 'Frontend' },
+                'backend': { name: 'Backend' },
+                'fullstack': { name: 'Fullstack' },
+                'devops': { name: 'DevOps' }
             }
         };
 
@@ -141,15 +160,26 @@ class CategoryLoader {
             return {
                 name: subcategory.name,
                 slug: key,
-                icon: subcategory.icon,
-                description: subcategory.description,
                 tags: [subcategory.name]
             };
         });
     }
 
     // Project 폴더 구조를 기반으로 카테고리 생성
-    getProjectCategoriesFromStructure() {
+    async getProjectCategoriesFromStructure() {
+        try {
+            // JSON 파일에서 프로젝트 카테고리 정보 읽어오기
+            const response = await fetch('/data/project-categories.json');
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Project 카테고리 로드됨:', data);
+                return data.categories;
+            }
+        } catch (error) {
+            console.warn('Project 카테고리 JSON 파일 로드 실패, 하드코딩된 구조 사용:', error);
+        }
+
+        // 폴백: 하드코딩된 구조 사용
         const folderStructure = [
             'web', 'mobile', 'desktop', 'ai', 'game', 'other'
         ];
