@@ -8,6 +8,7 @@
       "teamSize": "1명",
       "role": "풀스택 개발",
       "achievements": "프로젝트 완료",
+      "image": "image/click-clean.svg",
       "filename": "click-clean.md",
       "content": "content/project/click-clean.md"
     },
@@ -19,6 +20,7 @@
       "teamSize": "1명",
       "role": "풀스택 개발",
       "achievements": "프로젝트 완료",
+      "image": "image/deepfake-detection.svg",
       "filename": "deepfake-detection.md",
       "content": "content/project/deepfake-detection.md"
     },
@@ -30,6 +32,7 @@
       "teamSize": "1명",
       "role": "풀스택 개발",
       "achievements": "프로젝트 완료",
+      "image": "image/escape-room-app.svg",
       "filename": "escape-room-app.md",
       "content": "content/project/escape-room-app.md"
     },
@@ -41,9 +44,10 @@
       "teamSize": "1명",
       "role": "풀스택 개발",
       "achievements": "프로젝트 완료",
+      "image": "image/portfolio-website.svg",
       "filename": "portfolio-website.md",
       "content": "content/project/portfolio-website.md"
     }
   ],
-  "lastUpdated": "2025-08-14T11:29:57.197Z"
+  "lastUpdated": "2025-08-14T12:00:00.000Z"
 }
