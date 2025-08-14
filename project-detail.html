@@ -3,26 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI - Study - Gaeng02</title>
-    <link rel="stylesheet" href="../../css/main.css">
-    <link rel="stylesheet" href="../../css/components.css">
-    <script src="../../js/main.js" defer></script>
-    <script src="../../js/theme.js" defer></script>
-    <script src="../../js/search.js" defer></script>
-    <script src="../../js/category-loader.js" defer></script>
-    <script defer>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 네비게이션 드롭다운 초기화
-            window.categoryLoader.initializePage('study', null, '#studyDropdownMenu');
-            window.categoryLoader.initializePage('projects', null, '#projectDropdownMenu');
-            
-            // AI 서브카테고리 로드
-            window.categoryLoader.getSubcategories('ai').then(subcategories => {
-                window.categoryLoader.renderCategoryCards(subcategories, 'subcategoriesGrid');
-            });
-        });
-    </script>
+    <title>Project Detail - Gaeng02</title>
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/components.css">
+    <script src="./js/main.js" defer></script>
+    <script src="./js/theme.js" defer></script>
+    <script src="./js/markdown.js" defer></script>
 </head>
+
 <body>
     <header class="header">
         <nav class="nav">
@@ -31,32 +19,23 @@
                     <a href="/" class="brand-link">
                         <span class="brand-text">Gaeng02</span>
                     </a>
-                </div>
-
-                <div class="nav-menu">
-                    <div class="nav-dropdown">
-                        <a href="/projects/" class="nav-link">Project</a>
-                        <div class="dropdown-menu" id="projectDropdownMenu">
-                            <!-- 동적으로 로드됩니다 -->
+                    <div class="nav-menu">
+                        <div class="nav-dropdown">
+                            <a href="/study/" class="nav-link">Study</a>
+                            <div class="dropdown-menu" id="studyDropdownMenu">
+                                <!-- 동적으로 로드됩니다 -->
+                            </div>
                         </div>
+                        <a href="/posts/" class="nav-link">Post</a>
+                        <a href="/retrospect/" class="nav-link">Retrospect</a>
                     </div>
-                    <div class="nav-dropdown">
-                        <a href="/study/" class="nav-link active">Study</a>
-                        <div class="dropdown-menu" id="studyDropdownMenu">
-                            <!-- 동적으로 로드됩니다 -->
-                        </div>
-                    </div>
-                    <a href="/posts/" class="nav-link">Post</a>
-                    <a href="/retrospect/" class="nav-link">Retrospect</a>
                 </div>
 
                 <div class="nav-actions">
-                    <button class="search-toggle" id="searchToggle" aria-label="검색">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <path d="m21 21-4.35-4.35"></path>
-                        </svg>
-                    </button>
+                    <div class="search-container" id="searchContainer">
+                        <input type="text" class="search-input" id="searchInput" placeholder="검색어 입력 후 Enter...">
+                        <button class="search-close" id="searchClose">✕</button>
+                    </div>
                     <button class="theme-toggle" id="themeToggle" aria-label="테마 변경">
                         <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="5"></circle>
@@ -78,42 +57,18 @@
         </nav>
     </header>
 
-    <div class="search-overlay" id="searchOverlay">
-        <div class="search-container">
-            <div class="search-header">
-                <input type="text" class="search-input" id="searchInput" placeholder="검색어를 입력하세요..." autocomplete="off">
-                <button class="search-close" id="searchClose" aria-label="검색 닫기">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
-            </div>
-            <div class="search-results" id="searchResults"></div>
-        </div>
-    </div>
-
     <main class="main">
-        <section class="hero">
-            <div class="hero-container">
-                <div class="hero-content">
-                    <h1 class="hero-title">
-                        <span class="hero-highlight">AI</span>
-                    </h1>
-                    <p class="hero-description">
-                        인공지능과 머신러닝 기술 학습
-                    </p>
+        <div class="container">
+            <div class="project-detail">
+                <div class="project-info" id="projectInfo">
+                    <!-- 프로젝트 정보가 동적으로 로드됩니다 -->
+                </div>
+                
+                <div class="project-content" id="projectContent">
+                    <!-- 프로젝트 콘텐츠가 동적으로 로드됩니다 -->
                 </div>
             </div>
-        </section>
-
-        <section class="projects">
-            <div class="container">
-                <div class="study-categories" id="subcategoriesGrid">
-                    <!-- 서브카테고리들이 동적으로 로드됩니다 -->
-                </div>
-            </div>
-        </section>
+        </div>
     </main>
 
     <footer class="footer">
@@ -146,7 +101,6 @@
                 <div class="footer-section">
                     <h4 class="footer-subtitle">바로가기</h4>
                     <ul class="footer-links">
-                        <li><a href="/projects/">Project</a></li>
                         <li><a href="/study/">Study</a></li>
                         <li><a href="/posts/">Post</a></li>
                         <li><a href="/retrospect/">Retrospect</a></li>
@@ -158,5 +112,104 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // URL 파라미터에서 프로젝트 파일명 추출
+            const urlParams = new URLSearchParams(window.location.search);
+            const projectFile = urlParams.get('project');
+            
+            if (projectFile) {
+                loadProjectDetail(projectFile);
+            } else {
+                document.getElementById('projectContent').innerHTML = '<p class="error-message">프로젝트를 찾을 수 없습니다.</p>';
+            }
+        });
+        
+        async function loadProjectDetail(projectFile) {
+            try {
+                const response = await fetch(`./content/project/${projectFile}`);
+                if (!response.ok) {
+                    throw new Error('프로젝트 파일을 찾을 수 없습니다.');
+                }
+                
+                const markdownContent = await response.text();
+                const { frontmatter, content } = parseFrontmatter(markdownContent);
+                
+                // 페이지 제목 업데이트
+                document.title = `${frontmatter.title} - Project - Gaeng02`;
+                
+                // 프로젝트 정보 표시
+                displayProjectInfo(frontmatter);
+                
+                // 마크다운 콘텐츠 렌더링
+                const htmlContent = window.markdownRenderer.render(content);
+                document.getElementById('projectContent').innerHTML = htmlContent;
+                
+            } catch (error) {
+                console.error('Error loading project:', error);
+                document.getElementById('projectContent').innerHTML = '<p class="error-message">프로젝트를 불러오는 중 오류가 발생했습니다.</p>';
+            }
+        }
+        
+        function parseFrontmatter(content) {
+            const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
+            const match = content.match(frontmatterRegex);
+            
+            if (!match) {
+                return { frontmatter: {}, content: content };
+            }
+            
+            const frontmatterText = match[1];
+            const contentText = match[2];
+            
+            const frontmatter = {};
+            frontmatterText.split('\n').forEach(line => {
+                const colonIndex = line.indexOf(':');
+                if (colonIndex > 0) {
+                    const key = line.substring(0, colonIndex).trim();
+                    let value = line.substring(colonIndex + 1).trim();
+                    
+                    // 따옴표 제거
+                    if ((value.startsWith('"') && value.endsWith('"')) || 
+                        (value.startsWith("'") && value.endsWith("'"))) {
+                        value = value.slice(1, -1);
+                    }
+                    
+                    frontmatter[key] = value;
+                }
+            });
+            
+            return { frontmatter, content: contentText };
+        }
+        
+        function displayProjectInfo(frontmatter) {
+            const projectInfo = document.getElementById('projectInfo');
+            projectInfo.innerHTML = `
+                <div class="project-header">
+                    <h1 class="project-title">${frontmatter.title}</h1>
+                    <p class="project-description">${frontmatter.description}</p>
+                </div>
+                <div class="project-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">개발 기간</span>
+                        <span class="meta-value">${frontmatter.period}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">팀 규모</span>
+                        <span class="meta-value">${frontmatter.teamSize}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">담당 역할</span>
+                        <span class="meta-value">${frontmatter.role}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">주요 성과</span>
+                        <span class="meta-value">${frontmatter.achievements}</span>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
 </body>
 </html>

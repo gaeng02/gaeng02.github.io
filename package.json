@@ -1,0 +1,30 @@
+{
+  "name": "gaeng02-blog",
+  "version": "1.0.0",
+  "description": "Gaeng02's personal blog built with HTML, CSS, and JavaScript",
+  "main": "index.html",
+  "scripts": {
+    "build": "node scripts/build-posts.js",
+    "dev": "python3 -m http.server 8000",
+    "serve": "npx serve .",
+    "watch": "nodemon --watch content --ext md --exec 'npm run build'"
+  },
+  "keywords": [
+    "blog",
+    "portfolio",
+    "markdown",
+    "static-site"
+  ],
+  "author": "Gaeng02",
+  "license": "MIT",
+  "devDependencies": {
+    "gray-matter": "^4.0.3",
+    "nodemon": "^3.0.2",
+    "serve": "^14.2.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gaeng02/gaeng02.github.io.git"
+  },
+  "homepage": "https://gaeng02.github.io"
+} 

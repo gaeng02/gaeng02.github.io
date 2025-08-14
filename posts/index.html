@@ -15,32 +15,23 @@
                     <a href="/" class="brand-link">
                         <span class="brand-text">Gaeng02</span>
                     </a>
-                </div>
-
-                <div class="nav-menu">
-                    <div class="nav-dropdown">
-                        <a href="/projects/" class="nav-link">Project</a>
-                        <div class="dropdown-menu" id="projectDropdownMenu">
-                            <!-- 동적으로 로드됩니다 -->
+                    <div class="nav-menu">
+                        <div class="nav-dropdown">
+                            <a href="/study/" class="nav-link">Study</a>
+                            <div class="dropdown-menu" id="studyDropdownMenu">
+                                <!-- 동적으로 로드됩니다 -->
+                            </div>
                         </div>
+                        <a href="/posts/" class="nav-link active">Post</a>
+                        <a href="/retrospect/" class="nav-link">Retrospect</a>
                     </div>
-                    <div class="nav-dropdown">
-                        <a href="/study/" class="nav-link">Study</a>
-                        <div class="dropdown-menu" id="studyDropdownMenu">
-                            <!-- 동적으로 로드됩니다 -->
-                        </div>
-                    </div>
-                    <a href="/posts/" class="nav-link active">Post</a>
-                    <a href="/retrospect/" class="nav-link">Retrospect</a>
                 </div>
 
                 <div class="nav-actions">
-                    <button class="search-toggle" id="searchToggle" aria-label="검색">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <path d="m21 21-4.35-4.35"></path>
-                        </svg>
-                    </button>
+                    <div class="search-container" id="searchContainer">
+                        <input type="text" class="search-input" id="searchInput" placeholder="검색어 입력 후 Enter...">
+                        <button class="search-close" id="searchClose">✕</button>
+                    </div>
                     <button class="theme-toggle" id="themeToggle" aria-label="테마 변경">
                         <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="5"></circle>
@@ -85,7 +76,6 @@
                         <h3 class="activity-title">기술 관련</h3>
                         <div class="activity-list">
                             <div class="activity-item">
-                                <div class="activity-icon">💻</div>
                                 <div class="activity-content">
                                     <h4>React Hooks 완벽 가이드</h4>
                                     <p>React Hooks의 모든 것을 알아보는 심화 학습</p>
@@ -93,7 +83,6 @@
                                 </div>
                             </div>
                             <div class="activity-item">
-                                <div class="activity-icon">🔧</div>
                                 <div class="activity-content">
                                     <h4>TypeScript 기초부터 고급까지</h4>
                                     <p>TypeScript의 타입 시스템과 고급 기능들</p>
@@ -101,7 +90,6 @@
                                 </div>
                             </div>
                             <div class="activity-item">
-                                <div class="activity-icon">🚀</div>
                                 <div class="activity-content">
                                     <h4>Docker 컨테이너화</h4>
                                     <p>Docker를 활용한 애플리케이션 배포 방법</p>
@@ -115,7 +103,6 @@
                         <h3 class="activity-title">개발 경험</h3>
                         <div class="activity-list">
                             <div class="activity-item">
-                                <div class="activity-icon">✍️</div>
                                 <div class="activity-content">
                                     <h4>웹 개발자의 성장 여정</h4>
                                     <p>주니어 개발자에서 시니어 개발자로 성장하는 방법</p>
@@ -123,7 +110,6 @@
                                 </div>
                             </div>
                             <div class="activity-item">
-                                <div class="activity-icon">🎯</div>
                                 <div class="activity-content">
                                     <h4>프로젝트 관리 팁</h4>
                                     <p>효율적인 프로젝트 관리와 협업 방법</p>
@@ -131,7 +117,6 @@
                                 </div>
                             </div>
                             <div class="activity-item">
-                                <div class="activity-icon">🔍</div>
                                 <div class="activity-content">
                                     <h4>코드 리뷰의 중요성</h4>
                                     <p>좋은 코드 리뷰 문화를 만드는 방법</p>
@@ -145,7 +130,6 @@
                         <h3 class="activity-title">일상 & 생각</h3>
                         <div class="activity-list">
                             <div class="activity-item">
-                                <div class="activity-icon">📝</div>
                                 <div class="activity-content">
                                     <h4>개발자의 독서 습관</h4>
                                     <p>개발자가 읽어야 할 책들과 독서 방법</p>
@@ -153,7 +137,6 @@
                                 </div>
                             </div>
                             <div class="activity-item">
-                                <div class="activity-icon">🎨</div>
                                 <div class="activity-content">
                                     <h4>개발자의 취미 생활</h4>
                                     <p>개발 외에 즐기는 다양한 취미 활동들</p>
@@ -161,7 +144,6 @@
                                 </div>
                             </div>
                             <div class="activity-item">
-                                <div class="activity-icon">🌟</div>
                                 <div class="activity-content">
                                     <h4>개발자의 건강 관리</h4>
                                     <p>장시간 코딩하는 개발자를 위한 건강 관리법</p>
@@ -205,10 +187,9 @@
                 <div class="footer-section">
                     <h4 class="footer-subtitle">바로가기</h4>
                     <ul class="footer-links">
-                        <li><a href="/projects/">프로젝트</a></li>
-                        <li><a href="/study/">스터디</a></li>
+                        <li><a href="/study/">Study</a></li>
                         <li><a href="/posts/">Post</a></li>
-                        <li><a href="/retrospect/">회고</a></li>
+                        <li><a href="/retrospect/">Retrospect</a></li>
                     </ul>
                 </div>
             </div>
@@ -222,10 +203,9 @@
     <script src="../js/theme.js"></script>
     <script src="../js/category-loader.js"></script>
     <script>
-        // 페이지 로드 시 네비게이션 드롭다운 초기화
+        // 페이지 로드 시 네비게이션 드롭다운 초기화 (Study만)
         document.addEventListener('DOMContentLoaded', function() {
             window.categoryLoader.initializePage('study', null, '#studyDropdownMenu');
-            window.categoryLoader.initializePage('projects', null, '#projectDropdownMenu');
         });
     </script>
 </body>

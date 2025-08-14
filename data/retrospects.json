@@ -1,0 +1,88 @@
+{
+  "retrospects": [
+    {
+      "id": 1,
+      "title": "2023년 개발 회고",
+      "description": "2023년 한 해 동안의 개발 경험과 배움을 정리한 회고",
+      "image": "https://via.placeholder.com/300x200/3b82f6/ffffff?text=2023년+개발+회고",
+      "tags": [
+        "성장회고",
+        "개발회고"
+      ],
+      "date": "2024-01-01",
+      "filename": "2023-dev-retrospect.md",
+      "content": "content/retrospect/2023-dev-retrospect.md"
+    },
+    {
+      "id": 2,
+      "title": "2023년 개발 회고",
+      "description": "2023년 한 해 동안의 개발 경험과 배움",
+      "image": "https://via.placeholder.com/300x200/3b82f6/ffffff?text=2023년+개발+회고",
+      "tags": [
+        "회고",
+        "2023",
+        "개발경험"
+      ],
+      "date": "2024-01-01",
+      "filename": "2023-development-retrospect.md",
+      "content": "content/retrospect/2023-development-retrospect.md"
+    },
+    {
+      "id": 6,
+      "title": "UI/UX 개선 프로젝트 회고",
+      "description": "사용자 경험 개선을 위한 디자인 시스템 구축",
+      "image": "https://via.placeholder.com/300x200/3b82f6/ffffff?text=UI/UX+개선+프로젝트+회고",
+      "tags": [
+        "UI/UX",
+        "디자인시스템",
+        "프로젝트회고"
+      ],
+      "date": "2023-12-28",
+      "filename": "ui-ux-improvement-retrospect.md",
+      "content": "content/retrospect/ui-ux-improvement-retrospect.md"
+    },
+    {
+      "id": 3,
+      "title": "성능 최적화 경험담",
+      "description": "웹 애플리케이션 성능 개선을 위한 노력들",
+      "image": "https://via.placeholder.com/300x200/3b82f6/ffffff?text=성능+최적화+경험담",
+      "tags": [
+        "성능최적화",
+        "웹성능",
+        "프론트엔드"
+      ],
+      "date": "2023-12-20",
+      "filename": "performance-optimization-retrospect.md",
+      "content": "content/retrospect/performance-optimization-retrospect.md"
+    },
+    {
+      "id": 4,
+      "title": "React 학습 회고",
+      "description": "React를 배우면서 겪은 어려움과 해결 방법",
+      "image": "https://via.placeholder.com/300x200/3b82f6/ffffff?text=React+학습+회고",
+      "tags": [
+        "학습회고",
+        "React",
+        "Frontend"
+      ],
+      "date": "2023-12-15",
+      "filename": "react-learning-retrospect.md",
+      "content": "content/retrospect/react-learning-retrospect.md"
+    },
+    {
+      "id": 5,
+      "title": "TypeScript 도입 회고",
+      "description": "JavaScript 프로젝트에 TypeScript를 도입한 경험",
+      "image": "https://via.placeholder.com/300x200/3b82f6/ffffff?text=TypeScript+도입+회고",
+      "tags": [
+        "기술회고",
+        "TypeScript",
+        "JavaScript"
+      ],
+      "date": "2023-12-10",
+      "filename": "typescript-adoption-retrospect.md",
+      "content": "content/retrospect/typescript-adoption-retrospect.md"
+    }
+  ],
+  "lastUpdated": "2025-08-13T17:42:27.081Z"
+}

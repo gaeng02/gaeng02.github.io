@@ -1,0 +1,49 @@
+{
+  "projects": [
+    {
+      "id": 1,
+      "title": "Click Clean",
+      "description": "Click Clean 프로젝트입니다.",
+      "period": "2024.01 - 2024.02",
+      "teamSize": "1명",
+      "role": "풀스택 개발",
+      "achievements": "프로젝트 완료",
+      "filename": "click-clean.md",
+      "content": "content/project/click-clean.md"
+    },
+    {
+      "id": 2,
+      "title": "Deepfake Detection",
+      "description": "Deepfake Detection 프로젝트입니다.",
+      "period": "2024.01 - 2024.02",
+      "teamSize": "1명",
+      "role": "풀스택 개발",
+      "achievements": "프로젝트 완료",
+      "filename": "deepfake-detection.md",
+      "content": "content/project/deepfake-detection.md"
+    },
+    {
+      "id": 3,
+      "title": "Escape Room App",
+      "description": "Escape Room App 프로젝트입니다.",
+      "period": "2024.01 - 2024.02",
+      "teamSize": "1명",
+      "role": "풀스택 개발",
+      "achievements": "프로젝트 완료",
+      "filename": "escape-room-app.md",
+      "content": "content/project/escape-room-app.md"
+    },
+    {
+      "id": 4,
+      "title": "포트폴리오 웹사이트",
+      "description": "개인 포트폴리오 웹사이트를 개발한 프로젝트입니다.",
+      "period": "2024.01 - 2024.02",
+      "teamSize": "1명",
+      "role": "풀스택 개발",
+      "achievements": "프로젝트 완료",
+      "filename": "portfolio-website.md",
+      "content": "content/project/portfolio-website.md"
+    }
+  ],
+  "lastUpdated": "2025-08-14T11:29:57.197Z"
+}

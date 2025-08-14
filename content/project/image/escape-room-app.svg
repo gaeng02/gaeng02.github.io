@@ -1,0 +1,37 @@
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 배경 -->
+  <rect width="200" height="200" fill="url(#grad4)"/>
+  
+  <!-- 스마트폰 아이콘 -->
+  <rect x="75" y="40" width="50" height="80" rx="8" fill="white" opacity="0.9"/>
+  <rect x="80" y="45" width="40" height="70" rx="3" fill="#10b981"/>
+  
+  <!-- 방탈출 퍼즐 아이콘 -->
+  <rect x="85" y="50" width="30" height="30" fill="white" opacity="0.8"/>
+  <rect x="87" y="52" width="8" height="8" fill="#10b981"/>
+  <rect x="97" y="52" width="8" height="8" fill="#10b981"/>
+  <rect x="107" y="52" width="8" height="8" fill="#10b981"/>
+  <rect x="87" y="62" width="8" height="8" fill="#10b981"/>
+  <rect x="97" y="62" width="8" height="8" fill="white"/>
+  <rect x="107" y="62" width="8" height="8" fill="#10b981"/>
+  <rect x="87" y="72" width="8" height="8" fill="#10b981"/>
+  <rect x="97" y="72" width="8" height="8" fill="#10b981"/>
+  <rect x="107" y="72" width="8" height="8" fill="#10b981"/>
+  
+  <!-- 자물쇠 아이콘 -->
+  <circle cx="100" cy="95" r="8" fill="white" opacity="0.8"/>
+  <rect x="96" y="95" width="8" height="12" fill="white" opacity="0.8"/>
+  
+  <!-- Escape Room 텍스트 -->
+  <text x="100" y="140" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">Escape Room</text>
+  
+  <!-- App 텍스트 -->
+  <text x="100" y="160" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="white" opacity="0.8">App</text>
+</svg>

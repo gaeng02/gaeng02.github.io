@@ -1,0 +1,47 @@
+{
+  "categories": [
+    {
+      "name": "Web Development",
+      "slug": "web",
+      "description": "React, Vue, Angular 등을 활용한 웹 애플리케이션 개발",
+      "color": "#3b82f6",
+      "tags": ["Web Development"]
+    },
+    {
+      "name": "Mobile Apps",
+      "slug": "mobile",
+      "description": "React Native, Flutter를 활용한 크로스 플랫폼 모바일 앱",
+      "color": "#10b981",
+      "tags": ["Mobile Apps"]
+    },
+    {
+      "name": "Desktop Apps",
+      "slug": "desktop",
+      "description": "Electron, Tauri를 활용한 데스크톱 애플리케이션",
+      "color": "#f59e0b",
+      "tags": ["Desktop Apps"]
+    },
+    {
+      "name": "AI/ML Projects",
+      "slug": "ai",
+      "description": "머신러닝과 인공지능을 활용한 프로젝트",
+      "color": "#ef4444",
+      "tags": ["AI/ML Projects"]
+    },
+    {
+      "name": "Game Development",
+      "slug": "game",
+      "description": "Unity, Unreal Engine을 활용한 게임 개발",
+      "color": "#8b5cf6",
+      "tags": ["Game Development"]
+    },
+    {
+      "name": "Other Projects",
+      "slug": "other",
+      "description": "기타 다양한 기술을 활용한 프로젝트들",
+      "color": "#06b6d4",
+      "tags": ["Other Projects"]
+    }
+  ],
+  "lastUpdated": "2024-01-01T00:00:00Z"
+}

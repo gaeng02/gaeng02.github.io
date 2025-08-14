@@ -1,0 +1,145 @@
+name: Build Projects Data
+
+on:
+  push:
+    paths:
+      - 'content/project/**/*.md'
+  workflow_dispatch:
+
+jobs:
+  build-projects:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Find project markdown files
+      id: find-files
+      run: |
+        # content/project 디렉토리에서 모든 .md 파일 찾기
+        find content/project -name "*.md" -type f > project_files.txt
+        echo "Found $(wc -l < project_files.txt) project files"
+        
+    - name: Generate projects.json
+      run: |
+        # Node.js 스크립트로 frontmatter 파싱
+        cat > parse-project-frontmatter.js << 'EOF'
+        const fs = require('fs');
+        const path = require('path');
+        
+        function parseFrontmatter(content) {
+          const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
+          const match = content.match(frontmatterRegex);
+          
+          if (!match) {
+            return { frontmatter: {}, content: content };
+          }
+          
+          const frontmatterText = match[1];
+          const contentText = match[2];
+          
+          const frontmatter = {};
+          frontmatterText.split('\n').forEach(line => {
+            const colonIndex = line.indexOf(':');
+            if (colonIndex > 0) {
+              const key = line.substring(0, colonIndex).trim();
+              let value = line.substring(colonIndex + 1).trim();
+              
+              // 따옴표 제거
+              if ((value.startsWith('"') && value.endsWith('"')) || 
+                  (value.startsWith("'") && value.endsWith("'"))) {
+                value = value.slice(1, -1);
+              }
+              
+              frontmatter[key] = value;
+            }
+          });
+          
+          return { frontmatter, content: contentText };
+        }
+        
+        function generateProjectsJson() {
+          const projectDir = 'content/project';
+          const outputFile = 'data/projects.json';
+          
+          if (!fs.existsSync(projectDir)) {
+            console.log('content/project 디렉토리가 없습니다.');
+            return;
+          }
+          
+          const files = fs.readdirSync(projectDir)
+            .filter(file => file.endsWith('.md'))
+            .map(file => path.join(projectDir, file));
+          
+          const projects = [];
+          let id = 1;
+          
+          files.forEach(file => {
+            try {
+              const content = fs.readFileSync(file, 'utf8');
+              const { frontmatter } = parseFrontmatter(content);
+              
+              const filename = path.basename(file);
+              const filenameWithoutExt = path.basename(file, '.md');
+              
+              // frontmatter에서 정보 추출, 없으면 기본값 사용
+              const title = frontmatter.title || filenameWithoutExt.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+              const description = frontmatter.description || `${title} 프로젝트입니다.`;
+              const period = frontmatter.period || "2024.01 - 2024.02";
+              const teamSize = frontmatter.teamSize || "1명";
+              const role = frontmatter.role || "풀스택 개발";
+              const achievements = frontmatter.achievements || "프로젝트 완료";
+              const image = frontmatter.image || null;
+              
+              projects.push({
+                id: id++,
+                title,
+                description,
+                period,
+                teamSize,
+                role,
+                achievements,
+                image,
+                filename,
+                content: file
+              });
+            } catch (error) {
+              console.error(`파일 파싱 오류 (${file}):`, error.message);
+            }
+          });
+          
+          // 날짜순으로 정렬 (최신순)
+          projects.sort((a, b) => {
+            const dateA = new Date(a.period.split(' - ')[1] || a.period);
+            const dateB = new Date(b.period.split(' - ')[1] || b.period);
+            return dateB - dateA;
+          });
+          
+          const result = {
+            projects,
+            lastUpdated: new Date().toISOString()
+          };
+          
+          fs.writeFileSync(outputFile, JSON.stringify(result, null, 2));
+          console.log(`Generated ${outputFile} with ${projects.length} items`);
+        }
+        
+        generateProjectsJson();
+        EOF
+        
+        # Node.js 스크립트 실행
+        node parse-project-frontmatter.js
+        
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add data/projects.json
+        git diff --quiet && git diff --staged --quiet || git commit -m "Update projects data [skip ci]"
+        git push

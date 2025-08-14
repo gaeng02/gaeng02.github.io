@@ -27,16 +27,17 @@ class CategoryLoader {
     // 카테고리 폴더 목록을 가져오는 함수
     async getCategories(categoryType) {
         try {
-            const response = await fetch(`/api/categories/${categoryType}`);
+            // API 대신 JSON 파일을 직접 읽기
+            const response = await fetch(`/data/${categoryType}.json`);
             if (response.ok) {
-                const categories = await response.json();
-                return categories;
+                const data = await response.json();
+                return data.categories || data;
             } else {
-                // API가 없을 경우 폴더 구조 기반으로 동적 생성
+                // JSON 파일이 없을 경우 폴더 구조 기반으로 동적 생성
                 return this.getDynamicCategories(categoryType);
             }
         } catch (error) {
-            console.warn('API 호출 실패, 동적 카테고리 생성:', error);
+            console.warn('JSON 파일 로드 실패, 동적 카테고리 생성:', error);
             return this.getDynamicCategories(categoryType);
         }
     }
@@ -111,58 +112,34 @@ class CategoryLoader {
         });
     }
 
-    // 서브카테고리를 가져오는 함수
-    async getSubcategories(mainCategory) {
-        try {
-            // JSON 파일에서 카테고리 정보 읽어오기
-            const response = await fetch('/data/study-categories.json');
-            if (response.ok) {
-                const data = await response.json();
-                const category = data.categories.find(cat => cat.slug === mainCategory);
-                if (category && category.subcategories) {
-                    return category.subcategories;
-                }
-            }
-        } catch (error) {
-            console.warn('Study 서브카테고리 JSON 파일 로드 실패, 하드코딩된 구조 사용:', error);
-        }
-
-        // 폴백: 하드코딩된 구조 사용
+    // 서브카테고리를 가져오는 함수 (동기 버전)
+    getSubcategories(mainCategory) {
+        // 하드코딩된 구조 사용
         const categoryStructure = {
-            'computer-science': {
-                'database': { name: 'Database' },
-                'operating-system': { name: 'Operating System' },
-                'algorithm': { name: 'Algorithm' },
-                'compiler': { name: 'Compiler' },
-                'network': { name: 'Network' },
-                'data-structure': { name: 'Data Structure' }
-            },
-            'ai': {
-                'machine-learning': { name: 'Machine Learning' },
-                'deep-learning': { name: 'Deep Learning' },
-                'computer-vision': { name: 'Computer Vision' },
-                'nlp': { name: 'NLP' },
-                'reinforcement-learning': { name: 'Reinforcement Learning' }
-            },
-            'web-development': {
-                'frontend': { name: 'Frontend' },
-                'backend': { name: 'Backend' },
-                'fullstack': { name: 'Fullstack' },
-                'devops': { name: 'DevOps' }
-            }
+            'computer-science': [
+                { name: 'Database', slug: 'database', tags: ['Database'] },
+                { name: 'Operating System', slug: 'operating-system', tags: ['Operating System'] },
+                { name: 'Algorithm', slug: 'algorithm', tags: ['Algorithm'] },
+                { name: 'Compiler', slug: 'compiler', tags: ['Compiler'] },
+                { name: 'Network', slug: 'network', tags: ['Network'] },
+                { name: 'Data Structure', slug: 'data-structure', tags: ['Data Structure'] }
+            ],
+            'ai': [
+                { name: 'Machine Learning', slug: 'machine-learning', tags: ['Machine Learning'] },
+                { name: 'Deep Learning', slug: 'deep-learning', tags: ['Deep Learning'] },
+                { name: 'Computer Vision', slug: 'computer-vision', tags: ['Computer Vision'] },
+                { name: 'NLP', slug: 'nlp', tags: ['NLP'] },
+                { name: 'Reinforcement Learning', slug: 'reinforcement-learning', tags: ['Reinforcement Learning'] }
+            ],
+            'web-development': [
+                { name: 'Frontend', slug: 'frontend', tags: ['Frontend'] },
+                { name: 'Backend', slug: 'backend', tags: ['Backend'] },
+                { name: 'Fullstack', slug: 'fullstack', tags: ['Fullstack'] },
+                { name: 'DevOps', slug: 'devops', tags: ['DevOps'] }
+            ]
         };
 
-        const subcategories = categoryStructure[mainCategory];
-        if (!subcategories) return [];
-
-        return Object.keys(subcategories).map(key => {
-            const subcategory = subcategories[key];
-            return {
-                name: subcategory.name,
-                slug: key,
-                tags: [subcategory.name]
-            };
-        });
+        return categoryStructure[mainCategory] || [];
     }
 
     // Project 폴더 구조를 기반으로 카테고리 생성
@@ -349,9 +326,9 @@ class CategoryLoader {
 
             // 모든 카테고리와 서브카테고리를 포함한 HTML 생성
             const sectionsHTML = categories.map(category => {
-                const subcategories = this.getSubcategories(category.slug);
+                const subcategories = this.getSubcategories(category.slug) || [];
                 const subcategoriesHTML = subcategories.map(sub => `
-                    <a href="/study/${category.slug}/${sub.slug}/" class="study-category-item">
+                    <a href="/study/dynamic.html?category=${category.slug}&subcategory=${sub.slug}" class="study-category-item">
                         <div class="study-category-name">${sub.name}</div>
                     </a>
                 `).join('');
@@ -405,9 +382,9 @@ class CategoryLoader {
             
             // 각 카테고리의 하위 카테고리들을 별도 컬럼으로 생성
             const subcategoriesColumnsHTML = categories.map(category => {
-                const subcategories = this.getSubcategories(category.slug);
+                const subcategories = this.getSubcategories(category.slug) || [];
                 const subcategoriesHTML = subcategories.map(sub => 
-                    `<a href="/study/${category.slug}/${sub.slug}/" class="dropdown-item dropdown-subitem">${sub.name}</a>`
+                    `<a href="/study/dynamic.html?category=${category.slug}&subcategory=${sub.slug}" class="dropdown-item dropdown-subitem">${sub.name}</a>`
                 ).join('');
                 
                 return `<div class="dropdown-subcategory-column">${subcategoriesHTML}</div>`;
@@ -433,10 +410,81 @@ class CategoryLoader {
         }
     }
 
+    // 서브카테고리 파일들을 가져오는 함수 (동적 라우팅용)
+    async getSubcategoryFiles(category, subcategory) {
+        try {
+            // API 대신 하드코딩된 파일 목록 사용 (현재는 API가 없으므로)
+            return this.getHardcodedFiles(category, subcategory);
+        } catch (error) {
+            console.warn('파일 목록 로드 실패:', error);
+            return [];
+        }
+    }
+
+    // 하드코딩된 파일 목록 (API가 없을 때 사용)
+    getHardcodedFiles(category, subcategory) {
+        const fileMap = {
+            'ai': {
+                'computer-vision': [
+                    { name: 'sample.md', title: 'Sample', description: 'Computer Vision 샘플 파일' }
+                ],
+                'machine-learning': [
+                    { name: 'ml-basics.md', title: 'Machine Learning Basics', description: '머신러닝 기초' }
+                ],
+                'deep-learning': [
+                    { name: 'dl-intro.md', title: 'Deep Learning Introduction', description: '딥러닝 소개' }
+                ]
+            },
+            'computer-science': {
+                'database': [
+                    { name: 'db-basics.md', title: 'Database Basics', description: '데이터베이스 기초' }
+                ]
+            },
+            'web-development': {
+                'frontend': [
+                    { name: 'react-basics.md', title: 'React Basics', description: 'React 기초' }
+                ]
+            }
+        };
+
+        return fileMap[category]?.[subcategory] || [];
+    }
+
+    // 파일 카드들을 렌더링하는 함수
+    renderFileCards(files, containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        if (files.length === 0) {
+            container.innerHTML = '<p class="loading">이 서브카테고리에 파일이 없습니다.</p>';
+            return;
+        }
+
+        const cardsHTML = files.map(file => `
+            <div class="project-card">
+                <div class="project-header">
+                    <h3 class="project-title">${file.title || file.name}</h3>
+                    <div class="project-meta">마크다운 파일</div>
+                </div>
+                <ul class="project-achievements">
+                    <li class="project-achievement">${file.description || '파일 설명이 없습니다.'}</li>
+                </ul>
+            </div>
+        `).join('');
+
+        container.innerHTML = cardsHTML;
+    }
+
     // 페이지 초기화
     async initializePage(categoryType, containerId, dropdownSelector) {
+        console.log('initializePage 호출:', categoryType, containerId, dropdownSelector);
+        
         const categories = await this.getCategories(categoryType);
-        this.renderCategoryCards(categories, containerId);
+        console.log('로드된 카테고리:', categories);
+        
+        if (containerId) {
+            this.renderCategoryCards(categories, containerId);
+        }
         
         if (dropdownSelector) {
             this.updateDropdownMenu(categories, dropdownSelector);

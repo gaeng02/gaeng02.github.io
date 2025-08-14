@@ -1,0 +1,304 @@
+name: Build Stats
+
+on:
+  push:
+    paths: 
+      - 'content/**'
+      - '.github/workflows/build-stats.yml'
+  workflow_dispatch: # 수동 실행도 가능하도록
+
+jobs:
+  build-stats:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # 파일 커밋 권한 필요
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+                        - name: Count files and generate stats
+                    run: |
+                      echo "Counting files in content directories..."
+                      
+                      # 각 카테고리별 파일/폴더 개수 계산
+                      POST_COUNT=$(find content/post -name "*.md" | wc -l)
+                      PROJECT_COUNT=$(find content/project -name "*.md" | wc -l)
+                      STUDY_COUNT=$(find content/study -name "*.md" | wc -l)
+                      RETROSPECT_COUNT=$(find content/retrospect -name "*.md" | wc -l)
+                      
+                      echo "Post: $POST_COUNT"
+                      echo "Project: $PROJECT_COUNT"
+                      echo "Study: $STUDY_COUNT"
+                      echo "Retrospect: $RETROSPECT_COUNT"
+                      
+                      # JSON 파일 생성
+                      cat > data/stats.json << EOF
+                      {
+                        "post": $POST_COUNT,
+                        "project": $PROJECT_COUNT,
+                        "study": $STUDY_COUNT,
+                        "retrospect": $RETROSPECT_COUNT,
+                        "lastUpdated": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+                      }
+                      EOF
+                      
+                      echo "Stats file generated:"
+                      cat data/stats.json
+                  
+                  - name: Generate study categories
+                    run: |
+                      echo "Generating study categories from folder structure..."
+                      
+                      # Study 폴더 구조 분석
+                      STUDY_CATEGORIES=$(find content/study -maxdepth 1 -type d | tail -n +2 | sed 's|content/study/||')
+                      
+                      # JSON 구조 생성
+                      cat > data/study-categories.json << 'EOF'
+                      {
+                        "categories": [
+EOF
+                      
+                      # 각 대분류 카테고리 처리
+                      first=true
+                      for category in $STUDY_CATEGORIES; do
+                        if [ "$first" = true ]; then
+                          first=false
+                        else
+                          echo "," >> data/study-categories.json
+                        fi
+                        
+                        # 카테고리 이름 변환
+                        case $category in
+                          "computer-science")
+                            name="Computer Science"
+                            ;;
+                          "ai")
+                            name="AI"
+                            ;;
+                          "web-development")
+                            name="Web Development"
+                            ;;
+                          *)
+                            name=$(echo $category | sed 's/-/ /g' | sed 's/\b\w/\U&/g')
+                            ;;
+                        esac
+                        
+                        # 서브카테고리 찾기
+                        subcategories=$(find content/study/$category -maxdepth 1 -type d | tail -n +2 | sed "s|content/study/$category/||")
+                        
+                        cat >> data/study-categories.json << EOF
+                          {
+                            "name": "$name",
+                            "slug": "$category",
+                            "tags": ["$name"],
+                            "hasSubcategories": true,
+                            "subcategories": [
+EOF
+                        
+                        # 서브카테고리 처리
+                        first_sub=true
+                        for subcategory in $subcategories; do
+                          if [ "$first_sub" = true ]; then
+                            first_sub=false
+                          else
+                            echo "," >> data/study-categories.json
+                          fi
+                          
+                          # 서브카테고리 이름 변환
+                          case $subcategory in
+                            "machine-learning")
+                              subname="Machine Learning"
+                              ;;
+                            "deep-learning")
+                              subname="Deep Learning"
+                              ;;
+                            "computer-vision")
+                              subname="Computer Vision"
+                              ;;
+                            "operating-system")
+                              subname="Operating System"
+                              ;;
+                            "data-structure")
+                              subname="Data Structure"
+                              ;;
+                            *)
+                              subname=$(echo $subcategory | sed 's/-/ /g' | sed 's/\b\w/\U&/g')
+                              ;;
+                          esac
+                          
+                          cat >> data/study-categories.json << EOF
+                              {
+                                "name": "$subname",
+                                "slug": "$subcategory"
+                              }
+EOF
+                        done
+                        
+                        cat >> data/study-categories.json << EOF
+                            ]
+                          }
+EOF
+                      done
+                      
+                      cat >> data/study-categories.json << EOF
+                        ],
+                        "lastUpdated": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+                      }
+                      EOF
+                      
+                      echo "Study categories file generated:"
+                      cat data/study-categories.json
+                  
+                  - name: Generate project categories and projects
+                    run: |
+                      echo "Generating project categories and projects from folder structure..."
+                      
+                      # Project 폴더 구조 분석 (더 이상 카테고리 폴더가 없으므로 하드코딩)
+                      PROJECT_CATEGORIES="web mobile desktop ai game other"
+                      
+                      # JSON 구조 생성
+                      cat > data/project-categories.json << 'EOF'
+                      {
+                        "categories": [
+EOF
+                      
+                      # 각 프로젝트 카테고리 처리
+                      first=true
+                      for category in $PROJECT_CATEGORIES; do
+                        if [ "$first" = true ]; then
+                          first=false
+                        else
+                          echo "," >> data/project-categories.json
+                        fi
+                        
+                        # 카테고리 정보는 하드코딩 (더 이상 README.md가 없음)
+                          case $category in
+                            "web")
+                              name="Web Development"
+                              description="React, Vue, Angular 등을 활용한 웹 애플리케이션 개발"
+                              color="#3b82f6"
+                              ;;
+                            "mobile")
+                              name="Mobile Apps"
+                              description="React Native, Flutter를 활용한 크로스 플랫폼 모바일 앱"
+                              color="#10b981"
+                              ;;
+                            "desktop")
+                              name="Desktop Apps"
+                              description="Electron, Tauri를 활용한 데스크톱 애플리케이션"
+                              color="#f59e0b"
+                              ;;
+                            "ai")
+                              name="AI/ML Projects"
+                              description="머신러닝과 인공지능을 활용한 프로젝트"
+                              color="#ef4444"
+                              ;;
+                            "game")
+                              name="Game Development"
+                              description="Unity, Unreal Engine을 활용한 게임 개발"
+                              color="#8b5cf6"
+                              ;;
+                            "other")
+                              name="Other Projects"
+                              description="기타 다양한 기술을 활용한 프로젝트들"
+                              color="#06b6d4"
+                              ;;
+                            *)
+                              name=$(echo $category | sed 's/-/ /g' | sed 's/\b\w/\U&/g')
+                              description="$name 관련 프로젝트"
+                              color="#64748b"
+                              ;;
+                          esac
+                        fi
+                        
+                        cat >> data/project-categories.json << EOF
+                          {
+                            "name": "$name",
+                            "slug": "$category",
+                            "description": "$description",
+                            "color": "$color",
+                            "tags": ["$name"]
+                          }
+EOF
+                      done
+                      
+                      cat >> data/project-categories.json << EOF
+                        ],
+                        "lastUpdated": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+                      }
+                      EOF
+                      
+                      echo "Project categories file generated:"
+                      cat data/project-categories.json
+                      
+                      # 프로젝트 정보 수집
+                      echo "Collecting project information..."
+                      cat > data/projects.json << 'EOF'
+                      {
+                        "projects": [
+EOF
+                      
+                      # 모든 프로젝트 파일 찾기
+                      first_project=true
+                      project_files=$(find content/project -name "*.md" -type f)
+                      
+                      for project_file in $project_files; do
+                          
+                          if [ -f "$project_file" ]; then
+                            if [ "$first_project" = true ]; then
+                              first_project=false
+                            else
+                              echo "," >> data/projects.json
+                            fi
+                            
+                            # 프로젝트 정보 파싱
+                            project_name=$(grep "**프로젝트명**:" "$project_file" | sed 's/.*\*\*프로젝트명\*\*: //')
+                            short_description=$(grep "**짧은 소개**:" "$project_file" | sed 's/.*\*\*짧은 소개\*\*: //')
+                            period=$(grep "**개발기간**:" "$project_file" | sed 's/.*\*\*개발기간\*\*: //')
+                            team_size=$(grep "**개발 인원**:" "$project_file" | sed 's/.*\*\*개발 인원\*\*: //')
+                            role=$(grep "**담당 역할**:" "$project_file" | sed 's/.*\*\*담당 역할\*\*: //')
+                            contribution=$(grep "**기여도**:" "$project_file" | sed 's/.*\*\*기여도\*\*: //')
+                            achievement=$(grep "**얻은 효과**:" "$project_file" | sed 's/.*\*\*얻은 효과\*\*: //')
+                            project_category=$(grep "**카테고리**:" "$project_file" | sed 's/.*\*\*카테고리\*\*: //')
+                            start_date=$(grep "**시작일**:" "$project_file" | sed 's/.*\*\*시작일\*\*: //')
+                            
+                            # 프로젝트 상세 내용 추출 (## 프로젝트 상세 내용 섹션 이후)
+                            details_section=$(sed -n '/## 프로젝트 상세 내용/,$p' "$project_file" | sed '1d' | sed '/^## /q' | sed '$d' | grep -v '^$' | sed 's/^- //')
+                            details_array=$(echo "$details_section" | sed 's/^/"/; s/$/"/' | tr '\n' ',' | sed 's/,$//')
+                            
+                            cat >> data/projects.json << EOF
+                          {
+                            "name": "$project_name",
+                            "shortDescription": "$short_description",
+                            "period": "$period",
+                            "teamSize": "$team_size",
+                            "role": "$role",
+                            "contribution": "$contribution",
+                            "achievement": "$achievement",
+                            "category": "$project_category",
+                            "startDate": "$start_date",
+                            "details": [$details_array]
+                          }
+EOF
+                          fi
+                        done
+                      done
+                      
+                      cat >> data/projects.json << EOF
+                        ],
+                        "lastUpdated": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+                      }
+                      EOF
+                      
+                      echo "Projects file generated:"
+                      cat data/projects.json
+      
+                        - name: Commit and push changes
+                    run: |
+                      git config --local user.email "action@github.com"
+                      git config --local user.name "GitHub Action"
+                      git add data/stats.json data/study-categories.json data/project-categories.json data/projects.json
+                      git diff --quiet && git diff --staged --quiet || (git commit -m "Update stats and categories [skip ci]" && git push)

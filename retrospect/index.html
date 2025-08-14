@@ -15,32 +15,23 @@
                     <a href="/" class="brand-link">
                         <span class="brand-text">Gaeng02</span>
                     </a>
-                </div>
-
-                <div class="nav-menu">
-                    <div class="nav-dropdown">
-                        <a href="/projects/" class="nav-link">Project</a>
-                        <div class="dropdown-menu" id="projectDropdownMenu">
-                            <!-- 동적으로 로드됩니다 -->
+                    <div class="nav-menu">
+                        <div class="nav-dropdown">
+                            <a href="/study/" class="nav-link">Study</a>
+                            <div class="dropdown-menu" id="studyDropdownMenu">
+                                <!-- 동적으로 로드됩니다 -->
+                            </div>
                         </div>
+                        <a href="/posts/" class="nav-link">Post</a>
+                        <a href="/retrospect/" class="nav-link active">Retrospect</a>
                     </div>
-                    <div class="nav-dropdown">
-                        <a href="/study/" class="nav-link">Study</a>
-                        <div class="dropdown-menu" id="studyDropdownMenu">
-                            <!-- 동적으로 로드됩니다 -->
-                        </div>
-                    </div>
-                    <a href="/posts/" class="nav-link">Post</a>
-                    <a href="/retrospect/" class="nav-link active">Retrospect</a>
                 </div>
 
                 <div class="nav-actions">
-                    <button class="search-toggle" id="searchToggle" aria-label="검색">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <path d="m21 21-4.35-4.35"></path>
-                        </svg>
-                    </button>
+                    <div class="search-container" id="searchContainer">
+                        <input type="text" class="search-input" id="searchInput" placeholder="검색어 입력 후 Enter...">
+                        <button class="search-close" id="searchClose">✕</button>
+                    </div>
                     <button class="theme-toggle" id="themeToggle" aria-label="테마 변경">
                         <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="5"></circle>
@@ -77,90 +68,22 @@
             </div>
         </section>
 
-        <section class="recent-activities">
+        <section class="retrospect-content">
             <div class="container">
-                <h2 class="section-title">회고 카테고리</h2>
-                <div class="activities-grid">
-                    <div class="activity-section">
-                        <h3 class="activity-title">프로젝트 회고</h3>
-                        <div class="activity-list">
-                            <div class="activity-item">
-                                <div class="activity-content">
-                                    <h4>2023년 개발 회고</h4>
-                                    <p>2023년 한 해 동안의 개발 경험과 배움</p>
-                                    <span class="activity-date">2024.01.01</span>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-content">
-                                    <h4>UI/UX 개선 프로젝트 회고</h4>
-                                    <p>사용자 경험 개선을 위한 디자인 시스템 구축</p>
-                                    <span class="activity-date">2023.12.28</span>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-content">
-                                    <h4>성능 최적화 경험담</h4>
-                                    <p>웹 애플리케이션 성능 개선을 위한 노력들</p>
-                                    <span class="activity-date">2023.12.20</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <!-- 태그 필터 -->
+                <div class="tag-filters">
+                    <button class="tag-filter active" data-tag="all">전체</button>
+                    <!-- 동적으로 생성됩니다 -->
+                </div>
 
-                    <div class="activity-section">
-                        <h3 class="activity-title">학습 회고</h3>
-                        <div class="activity-list">
-                            <div class="activity-item">
-                                <div class="activity-content">
-                                    <h4>React 학습 회고</h4>
-                                    <p>React를 배우면서 겪은 어려움과 해결 방법</p>
-                                    <span class="activity-date">2023.12.15</span>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-content">
-                                    <h4>TypeScript 도입 회고</h4>
-                                    <p>JavaScript 프로젝트에 TypeScript를 도입한 경험</p>
-                                    <span class="activity-date">2023.12.10</span>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-content">
-                                    <h4>Docker 학습 회고</h4>
-                                    <p>컨테이너 기술을 배우면서 얻은 인사이트</p>
-                                    <span class="activity-date">2023.12.05</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <!-- 회고 카드 그리드 -->
+                <div class="retrospect-grid" id="retrospectGrid">
+                    <!-- 동적으로 로드됩니다 -->
+                </div>
 
-                    <div class="activity-section">
-                        <h3 class="activity-title">개인 성장 회고</h3>
-                        <div class="activity-list">
-                            <div class="activity-item">
-                                <div class="activity-content">
-                                    <h4>주니어 개발자 성장기</h4>
-                                    <p>주니어 개발자로서 겪은 성장 과정과 배움</p>
-                                    <span class="activity-date">2023.11.30</span>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-content">
-                                    <h4>목표 설정과 달성</h4>
-                                    <p>연간 목표를 설정하고 달성한 과정</p>
-                                    <span class="activity-date">2023.11.25</span>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-content">
-                                    <h4>습관 형성의 중요성</h4>
-                                    <p>개발자로서 좋은 습관을 만드는 방법</p>
-                                    <span class="activity-date">2023.11.20</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <!-- 페이지네이션 -->
+                <div class="pagination" id="pagination">
+                    <!-- 동적으로 로드됩니다 -->
                 </div>
             </div>
         </section>
@@ -196,10 +119,9 @@
                 <div class="footer-section">
                     <h4 class="footer-subtitle">바로가기</h4>
                     <ul class="footer-links">
-                        <li><a href="/projects/">Project</a></li>
-                        <li><a href="/study/">스터디</a></li>
+                        <li><a href="/study/">Study</a></li>
                         <li><a href="/posts/">Post</a></li>
-                        <li><a href="/retrospect/">회고</a></li>
+                        <li><a href="/retrospect/">Retrospect</a></li>
                     </ul>
                 </div>
             </div>
@@ -212,11 +134,15 @@
     <script src="../js/main.js"></script>
     <script src="../js/theme.js"></script>
     <script src="../js/category-loader.js"></script>
+    <script src="../js/retrospect-loader.js"></script>
     <script>
-        // 페이지 로드 시 네비게이션 드롭다운 초기화
+        // 페이지 로드 시 초기화
         document.addEventListener('DOMContentLoaded', function() {
+            // 네비게이션 드롭다운 초기화 (Study만)
             window.categoryLoader.initializePage('study', null, '#studyDropdownMenu');
-            window.categoryLoader.initializePage('projects', null, '#projectDropdownMenu');
+            
+            // 회고 페이지 초기화
+            window.retrospectLoader.initializePage();
         });
     </script>
 </body>

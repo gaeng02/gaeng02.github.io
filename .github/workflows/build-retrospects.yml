@@ -1,0 +1,149 @@
+name: Build Retrospects Data
+
+on:
+  push:
+    paths:
+      - 'content/retrospect/**/*.md'
+  workflow_dispatch:
+
+jobs:
+  build-retrospects:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Find retrospect markdown files
+      id: find-files
+      run: |
+        # content/retrospect 디렉토리에서 모든 .md 파일 찾기
+        find content/retrospect -name "*.md" -type f > retrospect_files.txt
+        echo "Found $(wc -l < retrospect_files.txt) retrospect files"
+        
+    - name: Generate retrospects.json
+      run: |
+        # Node.js 스크립트로 frontmatter 파싱
+        cat > parse-frontmatter.js << 'EOF'
+        const fs = require('fs');
+        const path = require('path');
+        
+        function parseFrontmatter(content) {
+          const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
+          const match = content.match(frontmatterRegex);
+          
+          if (!match) {
+            return { frontmatter: {}, content: content };
+          }
+          
+          const frontmatterText = match[1];
+          const contentText = match[2];
+          
+          const frontmatter = {};
+          frontmatterText.split('\n').forEach(line => {
+            const colonIndex = line.indexOf(':');
+            if (colonIndex > 0) {
+              const key = line.substring(0, colonIndex).trim();
+              let value = line.substring(colonIndex + 1).trim();
+              
+              // 따옴표 제거
+              if ((value.startsWith('"') && value.endsWith('"')) || 
+                  (value.startsWith("'") && value.endsWith("'"))) {
+                value = value.slice(1, -1);
+              }
+              
+              // 배열 파싱 (tags: ["tag1", "tag2"])
+              if (value.startsWith('[') && value.endsWith(']')) {
+                try {
+                  value = JSON.parse(value);
+                } catch (e) {
+                  // JSON 파싱 실패 시 문자열로 유지
+                }
+              }
+              
+              frontmatter[key] = value;
+            }
+          });
+          
+          return { frontmatter, content: contentText };
+        }
+        
+        function generateRetrospectsJson() {
+          const retrospectDir = 'content/retrospect';
+          const outputFile = 'data/retrospects.json';
+          
+          if (!fs.existsSync(retrospectDir)) {
+            console.log('content/retrospect 디렉토리가 없습니다.');
+            return;
+          }
+          
+          const files = fs.readdirSync(retrospectDir)
+            .filter(file => file.endsWith('.md'))
+            .map(file => path.join(retrospectDir, file));
+          
+          const retrospects = [];
+          let id = 1;
+          
+          files.forEach(file => {
+            try {
+              const content = fs.readFileSync(file, 'utf8');
+              const { frontmatter } = parseFrontmatter(content);
+              
+              const filename = path.basename(file);
+              const filenameWithoutExt = path.basename(file, '.md');
+              
+              // frontmatter에서 정보 추출, 없으면 기본값 사용
+              const title = frontmatter.title || filenameWithoutExt.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+              const description = frontmatter.description || `${title}에 대한 회고입니다.`;
+              const tags = frontmatter.tags || ['회고'];
+              const date = frontmatter.date || new Date().toISOString();
+              
+              // 이미지 URL 생성 (제목 기반)
+              const imageTitle = title.replace(/\s+/g, '+');
+              const image = frontmatter.image || `https://via.placeholder.com/300x200/3b82f6/ffffff?text=${imageTitle}`;
+              
+              retrospects.push({
+                id: id++,
+                title,
+                description,
+                image,
+                tags,
+                date,
+                filename,
+                content: file
+              });
+            } catch (error) {
+              console.error(`파일 파싱 오류 (${file}):`, error.message);
+            }
+          });
+          
+          // 날짜순으로 정렬 (최신순)
+          retrospects.sort((a, b) => new Date(b.date) - new Date(a.date));
+          
+          const result = {
+            retrospects,
+            lastUpdated: new Date().toISOString()
+          };
+          
+          fs.writeFileSync(outputFile, JSON.stringify(result, null, 2));
+          console.log(`Generated ${outputFile} with ${retrospects.length} items`);
+        }
+        
+        generateRetrospectsJson();
+        EOF
+        
+        # Node.js 스크립트 실행
+        node parse-frontmatter.js
+        
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add data/retrospects.json
+        git diff --quiet && git diff --staged --quiet || git commit -m "Update retrospects data [skip ci]"
+        git push

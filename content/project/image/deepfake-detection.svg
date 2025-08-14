@@ -1,0 +1,30 @@
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ef4444;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#dc2626;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 배경 -->
+  <rect width="200" height="200" fill="url(#grad3)"/>
+  
+  <!-- AI/뇌 아이콘 -->
+  <circle cx="100" cy="80" r="30" fill="white" opacity="0.9"/>
+  
+  <!-- 뇌 모양 -->
+  <path d="M85 70 Q75 75 75 85 Q75 95 85 100 Q95 105 105 100 Q115 95 115 85 Q115 75 105 70 Q95 65 85 70" fill="#ef4444"/>
+  <path d="M80 75 Q70 80 70 90 Q70 100 80 105 Q90 110 100 105 Q110 100 110 90 Q110 80 100 75 Q90 70 80 75" fill="white" opacity="0.3"/>
+  
+  <!-- 신경망 연결선 -->
+  <line x1="70" y1="60" x2="90" y2="75" stroke="white" stroke-width="2" opacity="0.6"/>
+  <line x1="130" y1="60" x2="110" y2="75" stroke="white" stroke-width="2" opacity="0.6"/>
+  <line x1="70" y1="100" x2="90" y2="85" stroke="white" stroke-width="2" opacity="0.6"/>
+  <line x1="130" y1="100" x2="110" y2="85" stroke="white" stroke-width="2" opacity="0.6"/>
+  
+  <!-- Deepfake 텍스트 -->
+  <text x="100" y="140" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">Deepfake</text>
+  
+  <!-- Detection 텍스트 -->
+  <text x="100" y="160" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="white" opacity="0.8">Detection</text>
+</svg>

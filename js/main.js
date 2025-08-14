@@ -31,39 +31,29 @@ function toggleTheme() {
 
 // Search functionality
 function initializeSearch() {
-    const searchToggle = document.getElementById('searchToggle');
-    const searchOverlay = document.getElementById('searchOverlay');
-    const searchClose = document.getElementById('searchClose');
     const searchInput = document.getElementById('searchInput');
+    const searchClose = document.getElementById('searchClose');
     
-    if (searchToggle) {
-        searchToggle.addEventListener('click', () => {
-            searchOverlay.classList.add('active');
+    if (searchInput && searchClose) {
+        searchClose.addEventListener('click', () => {
+            searchInput.value = '';
             searchInput.focus();
         });
-    }
-    
-    if (searchClose) {
-        searchClose.addEventListener('click', () => {
-            searchOverlay.classList.remove('active');
-        });
-    }
-    
-    if (searchOverlay) {
-        searchOverlay.addEventListener('click', (e) => {
-            if (e.target === searchOverlay) {
-                searchOverlay.classList.remove('active');
-            }
-        });
-    }
-    
-    if (searchInput) {
-        searchInput.addEventListener('input', handleSearch);
+
         searchInput.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                searchOverlay.classList.remove('active');
+                searchInput.value = '';
+            } else if (e.key === 'Enter') {
+                const query = searchInput.value.trim();
+                if (query) {
+                    // Google에서 "gaeng02 {검색어}"로 검색
+                    const googleSearchUrl = `https://www.google.com/search?q=gaeng02+${encodeURIComponent(query)}`;
+                    window.open(googleSearchUrl, '_blank');
+                }
             }
         });
+
+        searchInput.addEventListener('input', handleSearch);
     }
     
     // Load search data
