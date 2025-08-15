@@ -89,9 +89,6 @@ Post 파일들은 `content/post/` 폴더에 저장해야 합니다.
 2. Frontmatter의 `image` 필드에 경로 지정
 3. 본문에서도 마크다운 문법으로 이미지 삽입 가능
 
-```markdown
-![이미지 설명](image/파일명.jpg)
-```
 
 ## 주의사항
 

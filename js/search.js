@@ -22,29 +22,30 @@ class SearchManager {
                 fetch('/data/study.json').catch(() => ({ json: () => ({}) }))
             ]);
             
-            const projects = await projectsResponse.json();
-            const posts = await postsResponse.json();
+            const projectsData = await projectsResponse.json();
+            const postsData = await postsResponse.json();
             const studyData = await studyResponse.json();
             
             // Flatten study data
             const studyPosts = [];
-            Object.keys(studyData).forEach(category => {
-                const categoryData = studyData[category];
-                if (categoryData.posts) {
-                    categoryData.posts.forEach(post => {
-                        studyPosts.push({
-                            ...post,
-                            type: 'study',
-                            category: category,
-                            categoryTitle: categoryData.title || category
+            if (studyData.categories) {
+                studyData.categories.forEach(category => {
+                    if (category.posts) {
+                        category.posts.forEach(post => {
+                            studyPosts.push({
+                                ...post,
+                                type: 'study',
+                                category: category.slug,
+                                categoryTitle: category.name
+                            });
                         });
-                    });
-                }
-            });
+                    }
+                });
+            }
             
             this.searchData = [
-                ...projects.map(item => ({ ...item, type: 'project' })),
-                ...posts.map(item => ({ ...item, type: 'post' })),
+                ...(projectsData.projects || []).map(item => ({ ...item, type: 'project' })),
+                ...(postsData.posts || []).map(item => ({ ...item, type: 'post' })),
                 ...studyPosts
             ];
             

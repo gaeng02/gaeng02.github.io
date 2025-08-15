@@ -68,14 +68,14 @@ async function loadSearchData() {
             fetch('/data/study.json').catch(() => ({ json: () => [] }))
         ]);
         
-        const projects = await projectsResponse.json();
-        const posts = await postsResponse.json();
-        const study = await studyResponse.json();
+        const projectsData = await projectsResponse.json();
+        const postsData = await postsResponse.json();
+        const studyData = await studyResponse.json();
         
         searchData = [
-            ...projects.map(item => ({ ...item, type: 'project' })),
-            ...posts.map(item => ({ ...item, type: 'post' })),
-            ...study.map(item => ({ ...item, type: 'study' }))
+            ...(projectsData.projects || []).map(item => ({ ...item, type: 'project' })),
+            ...(postsData.posts || []).map(item => ({ ...item, type: 'post' })),
+            ...(studyData.study || []).map(item => ({ ...item, type: 'study' }))
         ];
     } catch (error) {
         console.error('Failed to load search data:', error);
@@ -159,8 +159,8 @@ async function loadRecentProjects() {
     
     try {
         const response = await fetch('/data/projects.json');
-        const projects = await response.json();
-        const recentProjects = projects.slice(0, 3);
+        const projectsData = await response.json();
+        const recentProjects = (projectsData.projects || []).slice(0, 3);
         
         if (recentProjects.length === 0) {
             container.innerHTML = '<div class="no-content">아직 프로젝트가 없습니다.</div>';
@@ -263,18 +263,18 @@ async function updateStats() {
             fetch('/data/study.json').catch(() => ({ json: () => ({}) }))
         ]);
         
-        const projects = await projectsResponse.json();
-        const posts = await postsResponse.json();
+        const projectsData = await projectsResponse.json();
+        const postsData = await postsResponse.json();
         const studyData = await studyResponse.json();
         
-        const projectCount = projects.length;
-        const postCount = posts.length;
-        const studyCount = Object.keys(studyData).length;
+        const projectCount = (projectsData.projects || []).length;
+        const postCount = (postsData.posts || []).length;
+        const studyCount = (studyData.categories || []).length;
         
         // Count unique tags
         const allTags = new Set();
-        projects.forEach(project => project.tags?.forEach(tag => allTags.add(tag)));
-        posts.forEach(post => post.tags?.forEach(tag => allTags.add(tag)));
+        (projectsData.projects || []).forEach(project => project.tags?.forEach(tag => allTags.add(tag)));
+        (postsData.posts || []).forEach(post => post.tags?.forEach(tag => allTags.add(tag)));
         const tagCount = allTags.size;
         
         // Update DOM

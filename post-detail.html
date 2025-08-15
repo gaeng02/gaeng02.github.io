@@ -3,16 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Detail - Gaeng02</title>
+    <title>Post - Gaeng02</title>
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./css/components.css">
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
-    <script src="./js/main.js" defer></script>
-    <script src="./js/theme.js" defer></script>
-    <script src="./js/markdown.js" defer></script>
-    <script src="./js/category-loader.js" defer></script>
 </head>
-
 <body>
     <header class="header">
         <nav class="nav">
@@ -28,7 +23,7 @@
                                 <!-- 동적으로 로드됩니다 -->
                             </div>
                         </div>
-                        <a href="/post.html" class="nav-link">Post</a>
+                        <a href="/post.html" class="nav-link active">Post</a>
                     </div>
                 </div>
 
@@ -60,17 +55,19 @@
 
     <main class="main">
         <div class="container">
-            <div class="project-detail">
-                <div class="project-info" id="projectInfo">
-                    <!-- 프로젝트 정보가 동적으로 로드됩니다 -->
-                </div>
-                
-                <div class="project-layout">
-                    <div class="project-content" id="projectContent">
-                        <!-- 프로젝트 콘텐츠가 동적으로 로드됩니다 -->
+            <div class="post-detail">
+                <div class="post-layout">
+                    <div class="post-info">
+                        <div class="post-header">
+                            <h1 id="postTitle"></h1>
+                            <p id="postDescription"></p>
+                        </div>
+                        <div id="postMeta"></div>
                     </div>
-                    <div id="tableOfContents" class="table-of-contents">
-                        <!-- 목차가 여기에 표시됩니다 -->
+                    <div id="postContent" class="post-content"></div>
+                    <div id="tableOfContents" class="table-of-contents" style="display: none;">
+                        <h3>목차</h3>
+                        <ul class="toc-list"></ul>
                     </div>
                 </div>
             </div>
@@ -118,37 +115,40 @@
         </div>
     </footer>
 
+    <script src="./js/markdown.js"></script>
+    <script src="./js/theme.js"></script>
+    <script src="./js/category-loader.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // 네비게이션 드롭다운 초기화 (Study만)
             window.categoryLoader.initializePage('study', null, '#studyDropdownMenu');
             
-            // URL 파라미터에서 프로젝트 파일명 추출
+            // URL 파라미터에서 Post 파일명 추출
             const urlParams = new URLSearchParams(window.location.search);
-            const projectFile = urlParams.get('project');
+            const postFile = urlParams.get('post');
             
-            if (projectFile) {
-                loadProjectDetail(projectFile);
+            if (postFile) {
+                loadPostDetail(postFile);
             } else {
-                document.getElementById('projectContent').innerHTML = '<p class="error-message">프로젝트를 찾을 수 없습니다.</p>';
+                document.getElementById('postContent').innerHTML = '<p class="error-message">Post를 찾을 수 없습니다.</p>';
             }
         });
         
-        async function loadProjectDetail(projectFile) {
+        async function loadPostDetail(postFile) {
             try {
-                const response = await fetch(`./content/project/${projectFile}`);
+                const response = await fetch(`./content/post/${postFile}`);
                 if (!response.ok) {
-                    throw new Error('프로젝트 파일을 찾을 수 없습니다.');
+                    throw new Error('Post 파일을 찾을 수 없습니다.');
                 }
                 
                 const markdownContent = await response.text();
                 const { frontmatter, content } = parseFrontmatter(markdownContent);
                 
                 // 페이지 제목 업데이트
-                document.title = `${frontmatter.title} - Project - Gaeng02`;
+                document.title = `${frontmatter.title} - Post - Gaeng02`;
                 
-                // 프로젝트 정보 표시
-                displayProjectInfo(frontmatter);
+                // Post 정보 표시
+                displayPostInfo(frontmatter);
                 
                 // 마크다운 콘텐츠 렌더링
                 let htmlContent;
@@ -164,7 +164,7 @@
                     // 폴백: 간단한 렌더러 사용
                     htmlContent = window.markdownRenderer.render(content);
                 }
-                document.getElementById('projectContent').innerHTML = htmlContent;
+                document.getElementById('postContent').innerHTML = htmlContent;
                 
                 // 목차 생성
                 generateTableOfContents();
@@ -172,8 +172,8 @@
                         // 스크롤 이벤트 리스너 제거 (현재 위치 표시 기능 비활성화)
                 
             } catch (error) {
-                console.error('Error loading project:', error);
-                document.getElementById('projectContent').innerHTML = '<p class="error-message">프로젝트를 불러오는 중 오류가 발생했습니다.</p>';
+                console.error('Error loading post:', error);
+                document.getElementById('postContent').innerHTML = '<p class="error-message">Post를 불러오는 중 오류가 발생했습니다.</p>';
             }
         }
         
@@ -208,37 +208,30 @@
             return { frontmatter, content: contentText };
         }
         
-        function displayProjectInfo(frontmatter) {
-            const projectInfo = document.getElementById('projectInfo');
-            projectInfo.innerHTML = `
-                <div class="project-header">
-                    <h1 class="project-title">${frontmatter.title}</h1>
-                    <p class="project-description">${frontmatter.description}</p>
+        function displayPostInfo(frontmatter) {
+            // Post 제목과 설명 표시
+            document.getElementById('postTitle').textContent = frontmatter.title;
+            document.getElementById('postDescription').textContent = frontmatter.description;
+            
+            // Post 메타 정보 표시
+            const postMeta = document.getElementById('postMeta');
+            postMeta.innerHTML = `
+                <div class="meta-item">
+                    <span class="meta-label">작성일</span>
+                    <span class="meta-value">${frontmatter.date}</span>
                 </div>
-                <div class="project-meta">
-                    <div class="meta-item">
-                        <span class="meta-label">개발 기간</span>
-                        <span class="meta-value">${frontmatter.period}</span>
-                    </div>
-                    <div class="meta-item">
-                        <span class="meta-label">팀 규모</span>
-                        <span class="meta-value">${frontmatter.teamSize}</span>
-                    </div>
-                    <div class="meta-item">
-                        <span class="meta-label">담당 역할</span>
-                        <span class="meta-value">${frontmatter.role}</span>
-                    </div>
-                    <div class="meta-item">
-                        <span class="meta-label">주요 성과</span>
-                        <span class="meta-value">${frontmatter.achievements}</span>
-                    </div>
+                ${frontmatter.tags ? `
+                <div class="meta-item">
+                    <span class="meta-label">태그</span>
+                    <span class="meta-value">${frontmatter.tags}</span>
                 </div>
+                ` : ''}
             `;
         }
         
         // 목차 생성 함수
         function generateTableOfContents() {
-            const content = document.getElementById('projectContent');
+            const content = document.getElementById('postContent');
             const toc = document.getElementById('tableOfContents');
             
             if (!content || !toc) return;

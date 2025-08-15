@@ -11,12 +11,14 @@ image: "image/click-clean.svg"
 # Click Clean 프로젝트
 
 ## 프로젝트 개요
-
 Cloud Architecture를 고려한 AI 기반 서비스로, 설득력 있는 최적의 성능을 가진 AI 모델을 구현한 프로젝트입니다.
 
 ## 프로젝트 목표
 
 - Cloud Architecture를 고려하여 서비스에 맞는 아키텍처 구현
+테스트
+ㅂㅈㄷ
+<br>
 - AI 모델을 활용하여 설득력 있는 최적의 성능의 모델 개발
 - 확장 가능하고 안정적인 클라우드 기반 서비스 구축
 

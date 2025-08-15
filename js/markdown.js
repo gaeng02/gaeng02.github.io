@@ -46,9 +46,15 @@ class MarkdownProcessor {
 
         // Custom code block renderer
         renderer.code = (code, language) => {
-            const validLanguage = hljs.getLanguage(language) ? language : 'plaintext';
-            const highlighted = hljs.highlight(code, { language: validLanguage }).value;
-            return `<pre class="hljs"><code class="language-${validLanguage}">${highlighted}</code></pre>`;
+            if (typeof hljs !== 'undefined' && hljs.getLanguage) {
+                const validLanguage = hljs.getLanguage(language) ? language : 'plaintext';
+                const highlighted = hljs.highlight(code, { language: validLanguage }).value;
+                return `<pre class="hljs"><code class="language-${validLanguage}">${highlighted}</code></pre>`;
+            } else {
+                // Fallback when highlight.js is not available
+                const validLanguage = language || 'plaintext';
+                return `<pre><code class="language-${validLanguage}">${code}</code></pre>`;
+            }
         };
 
         // Custom link renderer
@@ -196,12 +202,9 @@ class PostLoader {
     // Load regular posts
     async loadPosts() {
         try {
-            // In a real implementation, you would scan the content/posts directory
-            // For now, we'll use a predefined list
+            // 실제 content/post 디렉토리에서 파일들을 스캔
             const postFiles = [
-                '/content/posts/hello-world.md',
-                '/content/posts/getting-started.md',
-                '/content/posts/web-development-tips.md'
+                '/content/post/sample.md'
             ];
 
             for (const filePath of postFiles) {
@@ -219,9 +222,10 @@ class PostLoader {
     async loadProjects() {
         try {
             const projectFiles = [
-                '/content/projects/portfolio-website.md',
-                '/content/projects/todo-app.md',
-                '/content/projects/blog-system.md'
+                '/content/project/portfolio-website.md',
+                '/content/project/click-clean.md',
+                '/content/project/escape-room-app.md',
+                '/content/project/deepfake-detection.md'
             ];
 
             for (const filePath of projectFiles) {
@@ -239,9 +243,7 @@ class PostLoader {
     async loadStudyPosts() {
         try {
             const studyFiles = [
-                '/content/study/javascript/async-await.md',
-                '/content/study/react/hooks-guide.md',
-                '/content/study/css/grid-layout.md'
+                '/content/study/ai/computer-vision/sample.md'
             ];
 
             for (const filePath of studyFiles) {
@@ -347,17 +349,19 @@ window.markdownRenderer = {
         // 인라인 코드 처리
         html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
         
-        // 목록 처리
-        html = html.replace(/^\* (.*$)/gim, '<li>$1</li>');
-        html = html.replace(/^- (.*$)/gim, '<li>$1</li>');
+        // 목록 처리 - 순서가 있는 목록
         html = html.replace(/^\d+\. (.*$)/gim, '<li>$1</li>');
         
-        // 목록 그룹화
-        html = html.replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>');
+        // 목록 처리 - 순서가 없는 목록
+        html = html.replace(/^[\*\-] (.*$)/gim, '<li>$1</li>');
         
-        // 단락 처리
-        html = html.replace(/\n\n/g, '</p><p>');
-        html = html.replace(/^(.+)$/gm, '<p>$1</p>');
+        // 목록 그룹화 - 연속된 li 태그들을 ul로 감싸기
+        html = html.replace(/(<li>.*?<\/li>)(\s*<li>.*?<\/li>)*/gs, function(match) {
+            return '<ul>' + match + '</ul>';
+        });
+        
+        // 단락 처리 - 제목, 목록, 코드 블록이 아닌 연속된 텍스트를 p 태그로 감싸기
+        html = html.replace(/^(?!<[hou][1-6l]|<\/?[uo]l|<\/?li|<\/?pre|<\/?code)(.+)$/gm, '<p>$1</p>');
         
         // 빈 단락 제거
         html = html.replace(/<p><\/p>/g, '');

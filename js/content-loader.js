@@ -55,22 +55,10 @@ class ContentLoader {
             const contentMap = {
                 'post': [
                     {
-                        title: "웹 개발자의 성장 여정",
+                        title: "Post 작성 방법 가이드",
                         date: "2024-01-15",
-                        description: "주니어 개발자에서 시니어 개발자로 성장하는 방법",
-                        slug: "web-developer-journey"
-                    },
-                    {
-                        title: "프로젝트 관리 팁",
-                        date: "2024-01-10",
-                        description: "효율적인 프로젝트 관리와 협업 방법",
-                        slug: "project-management-tips"
-                    },
-                    {
-                        title: "코드 리뷰의 중요성",
-                        date: "2024-01-08",
-                        description: "좋은 코드 리뷰 문화를 만드는 방법",
-                        slug: "code-review-importance"
+                        description: "Post 카테고리에 글을 작성하는 방법을 설명하는 샘플입니다.",
+                        slug: "sample"
                     }
                 ],
                 'study': [

@@ -27,7 +27,9 @@ jobs:
                       POST_COUNT=$(find content/post -name "*.md" | wc -l)
                       PROJECT_COUNT=$(find content/project -name "*.md" | wc -l)
                       STUDY_COUNT=$(find content/study -name "*.md" | wc -l)
-                      RETROSPECT_COUNT=$(find content/retrospect -name "*.md" | wc -l)
+                      
+                      # Post 파일 중에서 Retrospect 태그가 있는 파일 개수 계산
+                      RETROSPECT_COUNT=$(grep -l "tags.*retrospect\|tags.*Retrospect" content/post/*.md 2>/dev/null | wc -l)
                       
                       echo "Post: $POST_COUNT"
                       echo "Project: $PROJECT_COUNT"
@@ -295,10 +297,68 @@ EOF
                       
                       echo "Projects file generated:"
                       cat data/projects.json
+                      
+                      # 포스트 정보 수집 (Post + Retrospect 통합)
+                      echo "Collecting post information..."
+                      cat > data/posts.json << 'EOF'
+                      {
+                        "posts": [
+EOF
+                      
+                      # 모든 포스트 파일 찾기 (Post + Retrospect)
+                      first_post=true
+                      post_files=$(find content/post -name "*.md" -type f)
+                      
+                      for post_file in $post_files; do
+                          if [ -f "$post_file" ]; then
+                            if [ "$first_post" = true ]; then
+                              first_post=false
+                            else
+                              echo "," >> data/posts.json
+                            fi
+                            
+                            # 파일명에서 slug 추출
+                            filename=$(basename "$post_file" .md)
+                            
+                            # frontmatter 파싱
+                            title=$(grep "^title:" "$post_file" | sed 's/^title: //' | sed 's/^"//; s/"$//')
+                            description=$(grep "^description:" "$post_file" | sed 's/^description: //' | sed 's/^"//; s/"$//')
+                            date=$(grep "^date:" "$post_file" | sed 's/^date: //' | sed 's/^"//; s/"$//')
+                            tags=$(grep "^tags:" "$post_file" | sed 's/^tags: //' | sed 's/^"//; s/"$//')
+                            image=$(grep "^image:" "$post_file" | sed 's/^image: //' | sed 's/^"//; s/"$//')
+                            
+                            # 기본값 설정
+                            [ -z "$title" ] && title="$filename"
+                            [ -z "$description" ] && description=""
+                            [ -z "$date" ] && date="$(date +%Y-%m-%d)"
+                            [ -z "$tags" ] && tags=""
+                            [ -z "$image" ] && image=""
+                            
+                            cat >> data/posts.json << EOF
+                          {
+                            "slug": "$filename",
+                            "title": "$title",
+                            "description": "$description",
+                            "date": "$date",
+                            "tags": "$tags",
+                            "image": "$image"
+                          }
+EOF
+                          fi
+                        done
+                        
+                        cat >> data/posts.json << EOF
+                        ],
+                        "lastUpdated": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+                      }
+                      EOF
+                      
+                      echo "Posts file generated:"
+                      cat data/posts.json
       
                         - name: Commit and push changes
                     run: |
                       git config --local user.email "action@github.com"
                       git config --local user.name "GitHub Action"
-                      git add data/stats.json data/study-categories.json data/project-categories.json data/projects.json
+                      git add data/stats.json data/study-categories.json data/project-categories.json data/projects.json data/posts.json
                       git diff --quiet && git diff --staged --quiet || (git commit -m "Update stats and categories [skip ci]" && git push)

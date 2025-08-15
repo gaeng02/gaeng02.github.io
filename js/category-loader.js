@@ -427,22 +427,6 @@ class CategoryLoader {
             'ai': {
                 'computer-vision': [
                     { name: 'sample.md', title: 'Sample', description: 'Computer Vision 샘플 파일' }
-                ],
-                'machine-learning': [
-                    { name: 'ml-basics.md', title: 'Machine Learning Basics', description: '머신러닝 기초' }
-                ],
-                'deep-learning': [
-                    { name: 'dl-intro.md', title: 'Deep Learning Introduction', description: '딥러닝 소개' }
-                ]
-            },
-            'computer-science': {
-                'database': [
-                    { name: 'db-basics.md', title: 'Database Basics', description: '데이터베이스 기초' }
-                ]
-            },
-            'web-development': {
-                'frontend': [
-                    { name: 'react-basics.md', title: 'React Basics', description: 'React 기초' }
                 ]
             }
         };
@@ -460,8 +444,13 @@ class CategoryLoader {
             return;
         }
 
+        // URL에서 현재 카테고리와 서브카테고리 정보 추출
+        const urlParams = new URLSearchParams(window.location.search);
+        const category = urlParams.get('category');
+        const subcategory = urlParams.get('subcategory');
+
         const cardsHTML = files.map(file => `
-            <div class="project-card">
+            <div class="project-card" onclick="window.location.href='/study-detail.html?category=${category}&subcategory=${subcategory}&file=${file.name}'" style="cursor: pointer;">
                 <div class="project-header">
                     <h3 class="project-title">${file.title || file.name}</h3>
                     <div class="project-meta">마크다운 파일</div>

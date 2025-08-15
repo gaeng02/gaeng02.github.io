@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post - Gaeng02</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/components.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <a href="/" class="brand-link">
+                        <span class="brand-text">Gaeng02</span>
+                    </a>
+                    <div class="nav-menu">
+                        <div class="nav-dropdown">
+                            <a href="/study.html" class="nav-link">Study</a>
+                            <div class="dropdown-menu" id="studyDropdownMenu">
+                                <!-- 동적으로 로드됩니다 -->
+                            </div>
+                        </div>
+                        <a href="/post.html" class="nav-link active">Post</a>
+                    </div>
+                </div>
+
+                <div class="nav-actions">
+                    <div class="search-container" id="searchContainer">
+                        <input type="text" class="search-input" id="searchInput" placeholder="검색어 입력 후 Enter...">
+                        <button class="search-close" id="searchClose">✕</button>
+                    </div>
+                    <button class="theme-toggle" id="themeToggle" aria-label="테마 변경">
+                        <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                        <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <section class="hero">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        <span class="hero-highlight">Post</span>
+                    </h1>
+                    <p class="hero-description">
+                        개발 관련 생각과 경험을 담은 글들을 공유합니다.<br>
+                        기술적인 내용부터 개발자의 일상까지 다양한 주제로 글을 씁니다.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="post-content">
+            <div class="container">
+                <!-- 태그 필터 -->
+                <div class="tag-filters" id="tagFilters">
+                    <button class="tag-filter active" data-tag="all">전체</button>
+                    <!-- 동적으로 로드됩니다 -->
+                </div>
+
+                <!-- 포스트 그리드 -->
+                <div class="post-grid" id="postGrid">
+                    <!-- 동적으로 로드됩니다 -->
+                </div>
+
+                <!-- 페이지네이션 -->
+                <div class="pagination" id="pagination">
+                    <!-- 동적으로 로드됩니다 -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="footer-title">Gaeng02</h3>
+                    <p class="footer-description">
+                        개발자로서의 여정을 기록하고 지식을 공유하는 공간입니다.
+                    </p>
+                    <div class="social-links">
+                        <a href="https://github.com/gaeng02" target="_blank" rel="noopener" class="social-link" aria-label="GitHub">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                        </a>
+                        <a href="mailto:sondin144@gmail.com" class="social-link" aria-label="이메일">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <polyline points="22,6 12,13 2,6"/>
+                            </svg>
+                        </a>
+                        <a href="https://instagram.com/gaeng._.02" target="_blank" rel="noopener" class="social-link" aria-label="Instagram">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-subtitle">Quick Links</h4>
+                    <ul class="footer-links">
+                                            <li><a href="/study.html">Study</a></li>
+                    <li><a href="/post.html">Post</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Gaeng02. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+    <script src="../js/category-loader.js" defer></script>
+    <script>
+        let allPosts = [];
+        let filteredPosts = [];
+        let currentPage = 1;
+        let postsPerPage = 6;
+        let currentTag = 'all';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // 네비게이션 드롭다운 초기화 (Study만)
+            window.categoryLoader.initializePage('study', null, '#studyDropdownMenu');
+            
+            // 포스트 데이터 로드
+            loadPosts();
+            
+            // URL 파라미터에서 태그 확인
+            const urlParams = new URLSearchParams(window.location.search);
+            const tagParam = urlParams.get('tag');
+            if (tagParam) {
+                // 페이지 제목 업데이트
+                document.title = `${tagParam} - Post - Gaeng02`;
+                
+                // 태그 필터가 생성된 후에 해당 태그 선택
+                setTimeout(() => {
+                    filterByTag(tagParam);
+                }, 100);
+            }
+        });
+
+        async function loadPosts() {
+            try {
+                const response = await fetch('/data/posts.json');
+                if (!response.ok) {
+                    throw new Error('포스트 데이터를 불러올 수 없습니다.');
+                }
+                
+                const data = await response.json();
+                allPosts = data.posts || [];
+                filteredPosts = [...allPosts];
+                
+                // 태그 필터 생성
+                generateTagFilters();
+                
+                // 포스트 그리드 렌더링
+                renderPosts();
+                
+                // 페이지네이션 렌더링
+                renderPagination();
+                
+            } catch (error) {
+                console.error('Error loading posts:', error);
+                document.getElementById('postGrid').innerHTML = '<p class="error-message">포스트를 불러오는 중 오류가 발생했습니다.</p>';
+            }
+        }
+
+        function generateTagFilters() {
+            const tagFilters = document.getElementById('tagFilters');
+            const tags = new Set();
+            
+            // 모든 포스트에서 태그 수집
+            allPosts.forEach(post => {
+                if (post.tags) {
+                    post.tags.split(',').forEach(tag => {
+                        tags.add(tag.trim());
+                    });
+                }
+            });
+            
+            // 태그 필터 버튼 생성
+            Array.from(tags).sort().forEach(tag => {
+                const button = document.createElement('button');
+                button.className = 'tag-filter';
+                button.textContent = tag;
+                button.setAttribute('data-tag', tag);
+                button.addEventListener('click', () => filterByTag(tag));
+                tagFilters.appendChild(button);
+            });
+            
+            // "전체" 버튼에 클릭 이벤트 추가
+            const allButton = document.querySelector('[data-tag="all"]');
+            if (allButton) {
+                allButton.addEventListener('click', () => filterByTag('all'));
+            }
+        }
+
+        function filterByTag(tag) {
+            currentTag = tag;
+            currentPage = 1;
+            
+            // 태그 필터 버튼 활성화 상태 업데이트
+            document.querySelectorAll('.tag-filter').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // 해당 태그 버튼 찾기 (대소문자 구분 없이)
+            let targetButton = document.querySelector(`[data-tag="${tag}"]`);
+            if (!targetButton) {
+                // 대소문자 구분 없이 찾기
+                const allButtons = document.querySelectorAll('.tag-filter');
+                targetButton = Array.from(allButtons).find(btn => 
+                    btn.getAttribute('data-tag').toLowerCase() === tag.toLowerCase()
+                );
+            }
+            
+            if (targetButton) {
+                targetButton.classList.add('active');
+            } else {
+                // 태그가 존재하지 않으면 "전체" 버튼 활성화
+                const allButton = document.querySelector('[data-tag="all"]');
+                if (allButton) {
+                    allButton.classList.add('active');
+                }
+            }
+            
+            // 포스트 필터링
+            if (tag === 'all') {
+                filteredPosts = [...allPosts];
+            } else {
+                filteredPosts = allPosts.filter(post => {
+                    if (!post.tags) return false;
+                    return post.tags.split(',').some(t => t.trim().toLowerCase() === tag.toLowerCase());
+                });
+            }
+            
+            // 포스트 그리드와 페이지네이션 다시 렌더링
+            renderPosts();
+            renderPagination();
+        }
+
+        function renderPosts() {
+            const postGrid = document.getElementById('postGrid');
+            const startIndex = (currentPage - 1) * postsPerPage;
+            const endIndex = startIndex + postsPerPage;
+            const postsToShow = filteredPosts.slice(startIndex, endIndex);
+            
+            if (postsToShow.length === 0) {
+                postGrid.innerHTML = '<p class="no-results">해당 태그의 포스트가 없습니다.</p>';
+                return;
+            }
+            
+            postGrid.innerHTML = postsToShow.map(post => `
+                <div class="post-card" onclick="openPost('${post.slug}.md')">
+                    <div class="post-image">
+                        <img src="${post.image || '/images/default-post.jpg'}" alt="${post.title}" onerror="this.src='/images/default-post.jpg'">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title">${post.title}</h3>
+                        <p class="post-description">${post.description}</p>
+                        <div class="post-meta">
+                            <span class="post-date">${post.date}</span>
+                            ${post.tags ? `
+                            <div class="post-tags">
+                                ${post.tags.split(',').map(tag => `
+                                    <span class="post-tag">${tag.trim()}</span>
+                                `).join('')}
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderPagination() {
+            const pagination = document.getElementById('pagination');
+            const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+            
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+            
+            let paginationHTML = '';
+            
+            // 이전 버튼
+            if (currentPage > 1) {
+                paginationHTML += `<button class="pagination-btn" onclick="changePage(${currentPage - 1})">이전</button>`;
+            }
+            
+            // 페이지 번호
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === currentPage) {
+                    paginationHTML += `<button class="pagination-btn active">${i}</button>`;
+                } else {
+                    paginationHTML += `<button class="pagination-btn" onclick="changePage(${i})">${i}</button>`;
+                }
+            }
+            
+            // 다음 버튼
+            if (currentPage < totalPages) {
+                paginationHTML += `<button class="pagination-btn" onclick="changePage(${currentPage + 1})">다음</button>`;
+            }
+            
+            pagination.innerHTML = paginationHTML;
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            renderPosts();
+            renderPagination();
+            
+            // 페이지 상단으로 스크롤
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function openPost(slug) {
+            window.location.href = `/post-detail.html?post=${slug}`;
+        }
+    </script>
+</body>
+</html> 
