@@ -50,18 +50,16 @@ class ContentLoader {
      */
     async getLatestContent(category, limit = 3) {
         try {
-            // 실제 구현에서는 서버에서 파일 목록을 가져와야 하지만,
-            // 현재는 하드코딩된 예시 데이터를 사용
-            const contentMap = {
-                'post': [
-                    {
-                        title: "Post 작성 방법 가이드",
-                        date: "2024-01-15",
-                        description: "Post 카테고리에 글을 작성하는 방법을 설명하는 샘플입니다.",
-                        slug: "sample"
-                    }
-                ],
-                'study': [
+            if (category === 'post') {
+                // Post 데이터는 JSON 파일에서 가져오기
+                const response = await fetch('/data/posts.json');
+                if (response.ok) {
+                    const data = await response.json();
+                    return (data.posts || []).slice(0, limit);
+                }
+            } else if (category === 'study') {
+                // Study 데이터는 하드코딩된 예시 사용
+                return [
                     {
                         title: "React Hooks 완벽 가이드",
                         date: "2024-01-15",
@@ -80,8 +78,10 @@ class ContentLoader {
                         description: "Docker를 활용한 애플리케이션 배포 방법",
                         slug: "docker-containerization"
                     }
-                ],
-                'retrospect': [
+                ];
+            } else if (category === 'retrospect') {
+                // Retrospect 데이터는 하드코딩된 예시 사용
+                return [
                     {
                         title: "2023년 개발 회고",
                         date: "2024-01-01",
@@ -100,10 +100,10 @@ class ContentLoader {
                         description: "웹 애플리케이션 성능 개선을 위한 노력들",
                         slug: "performance-optimization-retrospect"
                     }
-                ]
-            };
+                ];
+            }
 
-            return contentMap[category] || [];
+            return [];
         } catch (error) {
             console.error(`Error loading ${category} content:`, error);
             return [];
@@ -238,10 +238,10 @@ class ContentLoader {
             console.error('Error loading stats:', error);
                     // 폴백: 하드코딩된 값 사용
         return {
-            post: 4,
+            post: 7,
             project: 4,
-            study: 0,
-            retrospect: 3
+            study: 3,
+            retrospect: 5
         };
         }
     }

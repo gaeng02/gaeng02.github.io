@@ -1,0 +1,99 @@
+name: Update Posts
+
+on:
+  push:
+    paths: 
+      - 'content/post/**'
+      - '.github/workflows/build-posts.yml'
+  workflow_dispatch:
+
+jobs:
+  update-posts:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Update posts from markdown
+        run: |
+          echo "Updating posts from markdown files..."
+          
+          # posts.json 초기화
+          cat > data/posts.json << 'EOF'
+          {
+            "posts": [
+          EOF
+          
+          # content/post 폴더의 모든 .md 파일 찾기
+          POST_FILES=$(find content/post -name "*.md" | sort)
+          FIRST=true
+          
+          for file in $POST_FILES; do
+            echo "Processing: $file"
+            
+            if [ "$FIRST" = true ]; then
+              FIRST=false
+            else
+              echo "," >> data/posts.json
+            fi
+            
+            # 파일명에서 slug 추출
+            filename=$(basename "$file" .md)
+            
+            # frontmatter 파싱 (간단한 버전)
+            title=$(grep -m 1 '^title:' "$file" | sed 's/^title: *"//' | sed 's/"$//')
+            description=$(grep -m 1 '^description:' "$file" | sed 's/^description: *"//' | sed 's/"$//')
+            date=$(grep -m 1 '^date:' "$file" | sed 's/^date: *"//' | sed 's/"$//')
+            slug=$(grep -m 1 '^slug:' "$file" | sed 's/^slug: *"//' | sed 's/"$//')
+            
+            # slug가 없으면 filename 사용
+            if [ -z "$slug" ]; then
+              slug="$filename"
+            fi
+            
+            # tags 파싱
+            tags_line=$(grep -m 1 '^tags:' "$file")
+            if [[ $tags_line == *"["* ]]; then
+              # 배열 형태: tags: ["tag1", "tag2"]
+              tags=$(echo "$tags_line" | sed 's/^tags: *\[//' | sed 's/\]$//' | sed 's/"//g' | sed 's/, /","/g')
+              tags_json="[\"$tags\"]"
+            else
+              # 문자열 형태: tags: tag1, tag2
+              tags=$(echo "$tags_line" | sed 's/^tags: *//' | sed 's/"//g')
+              tags_json="[\"$tags\"]"
+            fi
+            
+            # image 경로 생성
+            image="image/${filename}.jpg"
+            
+            # JSON 객체 생성
+            cat >> data/posts.json << EOF
+            {
+              "title": "$title",
+              "description": "$description",
+              "date": "$date",
+              "tags": $tags_json,
+              "image": "$image",
+              "slug": "$slug"
+            }
+          EOF
+          done
+          
+          # JSON 파일 닫기
+          cat >> data/posts.json << EOF
+            ],
+            "lastUpdated": "$(date -u +"%Y-%m-%dT%H:%m:%SZ")"
+          }
+          EOF
+          
+          echo "Posts file updated:"
+          cat data/posts.json
+      
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/posts.json
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update posts from markdown files"
+          git push

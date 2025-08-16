@@ -301,6 +301,20 @@ a:hover {
     padding-left: 0;
     font-size: var(--font-size-xs);
     color: var(--text-secondary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dropdown-count {
+    background-color: var(--primary-color);
+    color: var(--text-inverse);
+    padding: 1px 4px;
+    border-radius: var(--radius-xs);
+    font-size: 10px;
+    font-weight: 600;
+    min-width: 16px;
+    text-align: center;
 }
 
 .nav-actions {
@@ -1031,6 +1045,7 @@ a:hover {
 .study-category-item {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: var(--spacing-xs) var(--spacing-sm);
     text-decoration: none;
     color: var(--text-secondary);
@@ -1047,6 +1062,17 @@ a:hover {
 .study-category-name {
     font-weight: 500;
     font-size: var(--font-size-sm);
+}
+
+.study-category-count {
+    background-color: var(--primary-color);
+    color: var(--text-inverse);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    min-width: 20px;
+    text-align: center;
 }
 
 /* Featured section */

@@ -129,9 +129,9 @@
         </div>
     </footer>
 
-    <script src="../js/main.js" defer></script>
-    <script src="../js/theme.js" defer></script>
-    <script src="../js/category-loader.js" defer></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/theme.js"></script>
+    <script src="../js/category-loader.js"></script>
     <script>
         let allPosts = [];
         let filteredPosts = [];
@@ -193,9 +193,16 @@
             // 모든 포스트에서 태그 수집
             allPosts.forEach(post => {
                 if (post.tags) {
-                    post.tags.split(',').forEach(tag => {
-                        tags.add(tag.trim());
-                    });
+                    // 태그가 배열인 경우와 문자열인 경우 모두 처리
+                    if (Array.isArray(post.tags)) {
+                        post.tags.forEach(tag => {
+                            tags.add(tag.trim());
+                        });
+                    } else {
+                        post.tags.split(',').forEach(tag => {
+                            tags.add(tag.trim());
+                        });
+                    }
                 }
             });
             
@@ -251,7 +258,13 @@
             } else {
                 filteredPosts = allPosts.filter(post => {
                     if (!post.tags) return false;
-                    return post.tags.split(',').some(t => t.trim().toLowerCase() === tag.toLowerCase());
+                    
+                    // 태그가 배열인 경우와 문자열인 경우 모두 처리
+                    if (Array.isArray(post.tags)) {
+                        return post.tags.some(t => t.trim().toLowerCase() === tag.toLowerCase());
+                    } else {
+                        return post.tags.split(',').some(t => t.trim().toLowerCase() === tag.toLowerCase());
+                    }
                 });
             }
             
@@ -283,9 +296,10 @@
                             <span class="post-date">${post.date}</span>
                             ${post.tags ? `
                             <div class="post-tags">
-                                ${post.tags.split(',').map(tag => `
-                                    <span class="post-tag">${tag.trim()}</span>
-                                `).join('')}
+                                ${Array.isArray(post.tags) ? 
+                                    post.tags.map(tag => `<span class="post-tag">${tag.trim()}</span>`).join('') :
+                                    post.tags.split(',').map(tag => `<span class="post-tag">${tag.trim()}</span>`).join('')
+                                }
                             </div>
                             ` : ''}
                         </div>

@@ -1,0 +1,144 @@
+name: Update Study Categories
+
+on:
+  push:
+    paths: 
+      - 'content/study/**'
+      - '.github/workflows/build-study.yml'
+  workflow_dispatch:
+
+jobs:
+  update-study:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Update study categories with post counts
+        run: |
+          echo "Updating study categories with post counts..."
+          
+          # study-categories.json 초기화
+          cat > data/study-categories.json << 'EOF'
+          {
+            "categories": [
+          EOF
+          
+          # Study 폴더 구조 분석
+          STUDY_CATEGORIES=$(find content/study -maxdepth 1 -type d | tail -n +2 | sed 's|content/study/||' | sort)
+          
+          # 각 대분류 카테고리 처리
+          first=true
+          for category in $STUDY_CATEGORIES; do
+            if [ "$first" = true ]; then
+              first=false
+            else
+              echo "," >> data/study-categories.json
+            fi
+            
+            # 카테고리 이름 변환
+            case $category in
+              "computer-science")
+                name="Computer Science"
+                ;;
+              "ai")
+                name="AI"
+                ;;
+              "web-development")
+                name="Web Development"
+                ;;
+              *)
+                name=$(echo $category | sed 's/-/ /g' | sed 's/\b\w/\U&/g')
+                ;;
+            esac
+            
+            # 서브카테고리 찾기
+            subcategories=$(find content/study/$category -maxdepth 1 -type d | tail -n +2 | sed "s|content/study/$category/||" | sort)
+            
+            cat >> data/study-categories.json << EOF
+              {
+                "name": "$name",
+                "slug": "$category",
+                "tags": ["$name"],
+                "hasSubcategories": true,
+                "subcategories": [
+          EOF
+            
+            # 서브카테고리 처리
+            first_sub=true
+            for subcategory in $subcategories; do
+              if [ "$first_sub" = true ]; then
+                first_sub=false
+              else
+                echo "," >> data/study-categories.json
+              fi
+              
+              # 서브카테고리 이름 변환
+              case $subcategory in
+                "machine-learning")
+                  subname="Machine Learning"
+                  ;;
+                "deep-learning")
+                  subname="Deep Learning"
+                  ;;
+                "computer-vision")
+                  subname="Computer Vision"
+                  ;;
+                "operating-system")
+                  subname="Operating System"
+                  ;;
+                "data-structure")
+                  subname="Data Structure"
+                  ;;
+                "frontend")
+                  subname="Frontend"
+                  ;;
+                "backend")
+                  subname="Backend"
+                  ;;
+                "fullstack")
+                  subname="Fullstack"
+                  ;;
+                "devops")
+                  subname="DevOps"
+                  ;;
+                *)
+                  subname=$(echo $subcategory | sed 's/-/ /g' | sed 's/\b\w/\U&/g')
+                  ;;
+              esac
+              
+              # 해당 서브카테고리의 마크다운 파일 개수 계산
+              post_count=$(find content/study/$category/$subcategory -name "*.md" 2>/dev/null | wc -l)
+              
+              cat >> data/study-categories.json << EOF
+                  {
+                    "name": "$subname",
+                    "slug": "$subcategory",
+                    "postCount": $post_count
+                  }
+          EOF
+            done
+            
+            cat >> data/study-categories.json << EOF
+                ]
+              }
+          EOF
+          done
+          
+          cat >> data/study-categories.json << EOF
+            ],
+            "lastUpdated": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+          }
+          EOF
+          
+          echo "Study categories file updated:"
+          cat data/study-categories.json
+      
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/study-categories.json
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update study categories with post counts"
+          git push
