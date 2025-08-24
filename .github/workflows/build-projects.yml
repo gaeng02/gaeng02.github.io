@@ -6,6 +6,9 @@ on:
       - 'content/project/**/*.md'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build-projects:
     runs-on: ubuntu-latest
