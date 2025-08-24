@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Detail - Gaeng02</title>
-    <link rel="stylesheet" href="./css/main.css">
-    <link rel="stylesheet" href="./css/components.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/project-detail.css">
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
-    <script src="./js/main.js" defer></script>
-    <script src="./js/theme.js" defer></script>
-    <script src="./js/markdown.js" defer></script>
-    <script src="./js/category-loader.js" defer></script>
+    <script src="/js/main.js" defer></script>
+    <script src="/js/theme.js" defer></script>
+    <script src="/js/markdown.js" defer></script>
+    <script src="/js/category-loader.js" defer></script>
 </head>
 
 <body>
@@ -136,7 +137,9 @@
         
         async function loadProjectDetail(projectFile) {
             try {
-                const response = await fetch(`./content/project/${projectFile}`);
+                // .md 확장자가 없으면 추가
+                const fileName = projectFile.endsWith('.md') ? projectFile : `${projectFile}.md`;
+                const response = await fetch(`/content/project/${fileName}`);
                 if (!response.ok) {
                     throw new Error('프로젝트 파일을 찾을 수 없습니다.');
                 }
@@ -210,29 +213,58 @@
         
         function displayProjectInfo(frontmatter) {
             const projectInfo = document.getElementById('projectInfo');
+            
+            // 주요 성과를 배열로 분리 (쉼표로 구분)
+            const achievements = frontmatter.achievements ? 
+                frontmatter.achievements.split(',').map(achievement => achievement.trim()) : [];
+            
             projectInfo.innerHTML = `
                 <div class="project-header">
                     <h1 class="project-title">${frontmatter.title}</h1>
                     <p class="project-description">${frontmatter.description}</p>
                 </div>
-                <div class="project-meta">
-                    <div class="meta-item">
-                        <span class="meta-label">개발 기간</span>
-                        <span class="meta-value">${frontmatter.period}</span>
+                
+                <!-- 프로젝트 정보 카드들 -->
+                <div class="project-info-cards">
+                    <div class="info-card">
+                        <div class="info-card-icon">📅</div>
+                        <div class="info-card-content">
+                            <h3 class="info-card-title">개발 기간</h3>
+                            <p class="info-card-value">${frontmatter.period || '미정'}</p>
+                        </div>
                     </div>
-                    <div class="meta-item">
-                        <span class="meta-label">팀 규모</span>
-                        <span class="meta-value">${frontmatter.teamSize}</span>
+                    
+                    <div class="info-card">
+                        <div class="info-card-icon">👤</div>
+                        <div class="info-card-content">
+                            <h3 class="info-card-title">담당 역할</h3>
+                            <p class="info-card-value">${frontmatter.role || '미정'}</p>
+                        </div>
                     </div>
-                    <div class="meta-item">
-                        <span class="meta-label">담당 역할</span>
-                        <span class="meta-value">${frontmatter.role}</span>
-                    </div>
-                    <div class="meta-item">
-                        <span class="meta-label">주요 성과</span>
-                        <span class="meta-value">${frontmatter.achievements}</span>
+                    
+                    <div class="info-card">
+                        <div class="info-card-icon">👥</div>
+                        <div class="info-card-content">
+                            <h3 class="info-card-title">프로젝트 규모</h3>
+                            <p class="info-card-value">${frontmatter.teamSize || '미정'}</p>
+                        </div>
                     </div>
                 </div>
+                
+                <!-- 주요 성과 섹션 -->
+                ${achievements.length > 0 ? `
+                <div class="project-achievements-section">
+                    <h2 class="achievements-title">주요 성과</h2>
+                    <div class="achievements-list">
+                        ${achievements.map(achievement => `
+                            <div class="achievement-item">
+                                <div class="achievement-icon">🏆</div>
+                                <p class="achievement-text">${achievement}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                ` : ''}
             `;
         }
         

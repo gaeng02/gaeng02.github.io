@@ -98,21 +98,21 @@
         <section class="stats">
             <div class="container">
                 <div class="stats-grid">
-                    <a href="#projects" class="stat-item">
+                    <a href="#projects" class="stat-item" onclick="event.preventDefault(); document.getElementById('projects').scrollIntoView({behavior: 'smooth'});">
                         <div class="stat-number" id="projectCount">0</div>
                         <div class="stat-label">Project</div>
                     </a>
-                                         <a href="/post.html" class="stat-item">
+                                         <a href="/study.html" class="stat-item">
+                         <div class="stat-number" id="studyCount">0</div>
+                         <div class="stat-label">Study</div>
+                     </a>
+                     <a href="/post.html" class="stat-item">
                          <div class="stat-number" id="postCount">0</div>
                          <div class="stat-label">Post</div>
                      </a>
-                    <a href="/study.html" class="stat-item">
-                        <div class="stat-number" id="studyCount">0</div>
-                        <div class="stat-label">스터디</div>
-                    </a>
-                                         <a href="/post.html?tag=Retrospect" class="stat-item">
+                     <a href="/post.html?tag=Retrospect" class="stat-item">
                          <div class="stat-number" id="retrospectCount">0</div>
-                         <div class="stat-label">회고</div>
+                         <div class="stat-label">Retrospect</div>
                      </a>
                 </div>
             </div>

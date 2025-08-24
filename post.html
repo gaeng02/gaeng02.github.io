@@ -4,25 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post - Gaeng02</title>
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/components.css">
 </head>
 <body>
     <header class="header">
         <nav class="nav">
             <div class="nav-container">
                 <div class="nav-brand">
-                    <a href="/" class="brand-link">
+                    <a href="./" class="brand-link">
                         <span class="brand-text">Gaeng02</span>
                     </a>
                     <div class="nav-menu">
                         <div class="nav-dropdown">
-                            <a href="/study.html" class="nav-link">Study</a>
+                            <a href="./study.html" class="nav-link">Study</a>
                             <div class="dropdown-menu" id="studyDropdownMenu">
                                 <!-- 동적으로 로드됩니다 -->
                             </div>
                         </div>
-                        <a href="/post.html" class="nav-link active">Post</a>
+                        <a href="./post.html" class="nav-link active">Post</a>
                     </div>
                 </div>
 
@@ -129,9 +129,9 @@
         </div>
     </footer>
 
-    <script src="../js/main.js"></script>
-    <script src="../js/theme.js"></script>
-    <script src="../js/category-loader.js"></script>
+    <script src="./js/main.js"></script>
+    <script src="./js/theme.js"></script>
+    <script src="./js/category-loader.js"></script>
     <script>
         let allPosts = [];
         let filteredPosts = [];
@@ -285,7 +285,7 @@
             }
             
             postGrid.innerHTML = postsToShow.map(post => `
-                <div class="post-card" onclick="openPost('${post.slug}.md')">
+                <div class="post-card" onclick="openPost('${post.slug}')">
                     <div class="post-image">
                         <img src="${post.image || '/images/default-post.jpg'}" alt="${post.title}" onerror="this.src='/images/default-post.jpg'">
                     </div>
@@ -351,7 +351,7 @@
         }
 
         function openPost(slug) {
-            window.location.href = `/post-detail.html?post=${slug}`;
+                            window.location.href = `/post-detail.html?post=${slug}`;
         }
     </script>
 </body>

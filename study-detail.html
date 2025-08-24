@@ -3,26 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study - Gaeng02</title>
+    <title>Study Detail - Gaeng02</title>
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="../css/detail-pages.css">
+    <link rel="stylesheet" href="../css/study-detail.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
+    <script src="../js/main.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+    <script src="../js/markdown.js" defer></script>
+    <script src="../js/category-loader.js" defer></script>
 </head>
+
 <body>
     <header class="header">
         <nav class="nav">
             <div class="nav-container">
                 <div class="nav-brand">
-                    <a href="/" class="brand-link">
+                    <a href="../" class="brand-link">
                         <span class="brand-text">Gaeng02</span>
                     </a>
                     <div class="nav-menu">
                         <div class="nav-dropdown">
-                            <a href="/study.html" class="nav-link active">Study</a>
+                            <a href="study-dynamic.html" class="nav-link">Study</a>
                             <div class="dropdown-menu" id="studyDropdownMenu">
                                 <!-- 동적으로 로드됩니다 -->
                             </div>
                         </div>
-                        <a href="/post.html" class="nav-link">Post</a>
+                        <a href="../post.html" class="nav-link">Post</a>
                     </div>
                 </div>
 
@@ -54,15 +62,18 @@
 
     <main class="main">
         <div class="container">
-            <div id="studyInfo">
-                <!-- Study 정보가 여기에 표시됩니다 -->
-            </div>
-            <div class="study-layout">
-                <div id="studyContent">
-                    <!-- Study 내용이 여기에 표시됩니다 -->
+            <div class="study-detail">
+                <div class="study-info" id="studyInfo">
+                    <!-- 스터디 정보가 동적으로 로드됩니다 -->
                 </div>
-                <div id="tableOfContents" class="table-of-contents">
-                    <!-- 목차가 여기에 표시됩니다 -->
+                
+                <div class="study-layout">
+                    <div class="study-content" id="studyContent">
+                        <!-- 스터디 콘텐츠가 동적으로 로드됩니다 -->
+                    </div>
+                    <div id="tableOfContents" class="table-of-contents">
+                        <!-- 목차가 여기에 표시됩니다 -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -98,8 +109,8 @@
                 <div class="footer-section">
                     <h4 class="footer-subtitle">Quick Links</h4>
                     <ul class="footer-links">
-                        <li><a href="/study.html">Study</a></li>
-                        <li><a href="/post.html">Post</a></li>
+                        <li><a href="study-dynamic.html">Study</a></li>
+                        <li><a href="../posts/">Post</a></li>
                     </ul>
                 </div>
             </div>
@@ -109,57 +120,70 @@
         </div>
     </footer>
 
-    <script src="/js/markdown.js"></script>
-    <script src="/js/theme.js"></script>
-    <script src="/js/category-loader.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // 네비게이션 드롭다운 초기화 (Study만)
             window.categoryLoader.initializePage('study', null, '#studyDropdownMenu');
             
-            // URL 파라미터에서 Study 파일 정보 추출
+            // URL 파라미터에서 스터디 파일명 추출
             const urlParams = new URLSearchParams(window.location.search);
+            const studyFile = urlParams.get('file') || urlParams.get('study'); // 'file' 또는 'study' 파라미터 지원
             const category = urlParams.get('category');
             const subcategory = urlParams.get('subcategory');
-            const file = urlParams.get('file');
             
-            if (category && subcategory && file) {
-                loadStudyDetail(category, subcategory, file);
+            if (studyFile && category) {
+                loadStudyDetail(category, subcategory, studyFile);
             } else {
-                document.getElementById('studyContent').innerHTML = '<p class="error-message">Study 파일을 찾을 수 없습니다.</p>';
+                document.getElementById('studyContent').innerHTML = '<p class="error-message">스터디를 찾을 수 없습니다.</p>';
             }
         });
         
-        async function loadStudyDetail(category, subcategory, file) {
+        async function loadStudyDetail(category, subcategory, studyFile) {
             try {
-                const response = await fetch(`/content/study/${category}/${subcategory}/${file}`);
+                let filePath;
+                if (subcategory) {
+                    filePath = `../content/study/${category}/${subcategory}/${studyFile}`;
+                } else {
+                    filePath = `../content/study/${category}/${studyFile}`;
+                }
+                
+                console.log('Loading study file from:', filePath);
+                const response = await fetch(filePath);
                 if (!response.ok) {
-                    throw new Error('Study 파일을 찾을 수 없습니다.');
+                    throw new Error('스터디 파일을 찾을 수 없습니다.');
                 }
                 
                 const markdownContent = await response.text();
                 const { frontmatter, content } = parseFrontmatter(markdownContent);
                 
                 // 페이지 제목 업데이트
-                const categoryName = getCategoryDisplayName(category);
-                const subcategoryName = getSubcategoryDisplayName(subcategory);
-                document.title = `${frontmatter.title || file} - ${categoryName} > ${subcategoryName} - Study - Gaeng02`;
+                document.title = `${frontmatter.title} - Study - Gaeng02`;
                 
-                // Study 정보 표시
-                displayStudyInfo(frontmatter, category, subcategory, file);
+                // 스터디 정보 표시
+                displayStudyInfo(frontmatter, category);
                 
                 // 마크다운 콘텐츠 렌더링
-                const htmlContent = window.markdownRenderer.render(content);
+                let htmlContent;
+                if (typeof marked !== 'undefined') {
+                    // marked.js 사용
+                    marked.setOptions({
+                        breaks: true,
+                        gfm: true,
+                        headerIds: true
+                    });
+                    htmlContent = marked.parse(content);
+                } else {
+                    // 폴백: 간단한 렌더러 사용
+                    htmlContent = window.markdownRenderer.render(content);
+                }
                 document.getElementById('studyContent').innerHTML = htmlContent;
                 
                 // 목차 생성
                 generateTableOfContents();
                 
-                        // 스크롤 이벤트 리스너 제거 (현재 위치 표시 기능 비활성화)
-                
             } catch (error) {
                 console.error('Error loading study:', error);
-                document.getElementById('studyContent').innerHTML = '<p class="error-message">Study를 불러오는 중 오류가 발생했습니다.</p>';
+                document.getElementById('studyContent').innerHTML = '<p class="error-message">스터디를 불러오는 중 오류가 발생했습니다.</p>';
             }
         }
         
@@ -194,28 +218,55 @@
             return { frontmatter, content: contentText };
         }
         
-        function displayStudyInfo(frontmatter, category, subcategory, file) {
+        function displayStudyInfo(frontmatter, category) {
             const studyInfo = document.getElementById('studyInfo');
-            const categoryName = getCategoryDisplayName(category);
-            const subcategoryName = getSubcategoryDisplayName(subcategory);
+            const categoryTitle = getCategoryTitle(category);
             
             studyInfo.innerHTML = `
-                <h1 class="study-title">${frontmatter.title || file.replace('.md', '')}</h1>
-                <div class="study-breadcrumb">${categoryName} > ${subcategoryName}</div>
+                <div class="study-header">
+                    <div class="study-category">
+                        <span class="category-badge">${categoryTitle}</span>
+                    </div>
+                    <h1 class="study-title">${frontmatter.title}</h1>
+                    <p class="study-description">${frontmatter.description}</p>
+                </div>
+                <div class="study-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">작성일</span>
+                        <span class="meta-value">${frontmatter.date}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">작성자</span>
+                        <span class="meta-value">${frontmatter.author}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">예상 읽기 시간</span>
+                        <span class="meta-value">${frontmatter.readingTime || '5'}분</span>
+                    </div>
+                    ${frontmatter.tags ? `
+                        <div class="meta-item">
+                            <span class="meta-label">태그</span>
+                            <div class="meta-tags">
+                                ${frontmatter.tags.split(',').map(tag => `<span class="tag">${tag.trim()}</span>`).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
             `;
         }
         
-        function getCategoryDisplayName(category) {
+        function getCategoryTitle(category) {
             const categoryMap = {
-                'computer-science': 'Computer Science',
-                'ai': 'AI',
-                'web-development': 'Web Development'
+                'javascript': 'JavaScript',
+                'react': 'React',
+                'css': 'CSS',
+                'html': 'HTML',
+                'nodejs': 'Node.js',
+                'python': 'Python',
+                'database': 'Database',
+                'devops': 'DevOps'
             };
-            return categoryMap[category] || category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-        }
-        
-        function getSubcategoryDisplayName(subcategory) {
-            return subcategory.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            return categoryMap[category] || category;
         }
         
         // 목차 생성 함수
@@ -268,8 +319,6 @@
             toc.innerHTML = '<h3>목차</h3>';
             toc.appendChild(tocList);
         }
-        
-        // 현재 위치 표시 기능 제거됨
     </script>
 </body>
 </html>

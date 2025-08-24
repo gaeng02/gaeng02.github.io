@@ -3,11 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post - Gaeng02</title>
-    <link rel="stylesheet" href="./css/main.css">
-    <link rel="stylesheet" href="./css/components.css">
+    <title>Post Detail - Gaeng02</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="../css/detail-pages.css">
+    <link rel="stylesheet" href="../css/post-detail.css">
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
+    <script src="/js/main.js" defer></script>
+    <script src="/js/theme.js" defer></script>
+    <script src="/js/markdown.js" defer></script>
+    <script src="/js/category-loader.js" defer></script>
 </head>
+
 <body>
     <header class="header">
         <nav class="nav">
@@ -23,7 +30,7 @@
                                 <!-- 동적으로 로드됩니다 -->
                             </div>
                         </div>
-                        <a href="/post.html" class="nav-link active">Post</a>
+                        <a href="/post.html" class="nav-link">Post</a>
                     </div>
                 </div>
 
@@ -56,18 +63,16 @@
     <main class="main">
         <div class="container">
             <div class="post-detail">
+                <div class="post-info" id="postInfo">
+                    <!-- 포스트 정보가 동적으로 로드됩니다 -->
+                </div>
+                
                 <div class="post-layout">
-                    <div class="post-info">
-                        <div class="post-header">
-                            <h1 id="postTitle"></h1>
-                            <p id="postDescription"></p>
-                        </div>
-                        <div id="postMeta"></div>
+                    <div class="post-content" id="postContent">
+                        <!-- 포스트 콘텐츠가 동적으로 로드됩니다 -->
                     </div>
-                    <div id="postContent" class="post-content"></div>
-                    <div id="tableOfContents" class="table-of-contents" style="display: none;">
-                        <h3>목차</h3>
-                        <ul class="toc-list"></ul>
+                    <div id="tableOfContents" class="table-of-contents">
+                        <!-- 목차가 여기에 표시됩니다 -->
                     </div>
                 </div>
             </div>
@@ -104,8 +109,8 @@
                 <div class="footer-section">
                     <h4 class="footer-subtitle">Quick Links</h4>
                     <ul class="footer-links">
-                        <li><a href="/study.html">Study</a></li>
-                        <li><a href="/post.html">Post</a></li>
+                        <li><a href="study-dynamic.html">Study</a></li>
+                        <li><a href="../post.html">Post</a></li>
                     </ul>
                 </div>
             </div>
@@ -115,30 +120,29 @@
         </div>
     </footer>
 
-    <script src="./js/markdown.js"></script>
-    <script src="./js/theme.js"></script>
-    <script src="./js/category-loader.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // 네비게이션 드롭다운 초기화 (Study만)
             window.categoryLoader.initializePage('study', null, '#studyDropdownMenu');
             
-            // URL 파라미터에서 Post 파일명 추출
+            // URL 파라미터에서 포스트 파일명 추출
             const urlParams = new URLSearchParams(window.location.search);
             const postFile = urlParams.get('post');
             
             if (postFile) {
                 loadPostDetail(postFile);
             } else {
-                document.getElementById('postContent').innerHTML = '<p class="error-message">Post를 찾을 수 없습니다.</p>';
+                document.getElementById('postContent').innerHTML = '<p class="error-message">포스트를 찾을 수 없습니다.</p>';
             }
         });
         
         async function loadPostDetail(postFile) {
             try {
-                const response = await fetch(`./content/post/${postFile}`);
+                // .md 확장자가 없으면 추가
+                const fileName = postFile.endsWith('.md') ? postFile : `${postFile}.md`;
+                const response = await fetch(`/content/post/${fileName}`);
                 if (!response.ok) {
-                    throw new Error('Post 파일을 찾을 수 없습니다.');
+                    throw new Error('포스트 파일을 찾을 수 없습니다.');
                 }
                 
                 const markdownContent = await response.text();
@@ -147,7 +151,7 @@
                 // 페이지 제목 업데이트
                 document.title = `${frontmatter.title} - Post - Gaeng02`;
                 
-                // Post 정보 표시
+                // 포스트 정보 표시
                 displayPostInfo(frontmatter);
                 
                 // 마크다운 콘텐츠 렌더링
@@ -169,11 +173,9 @@
                 // 목차 생성
                 generateTableOfContents();
                 
-                        // 스크롤 이벤트 리스너 제거 (현재 위치 표시 기능 비활성화)
-                
             } catch (error) {
                 console.error('Error loading post:', error);
-                document.getElementById('postContent').innerHTML = '<p class="error-message">Post를 불러오는 중 오류가 발생했습니다.</p>';
+                document.getElementById('postContent').innerHTML = '<p class="error-message">포스트를 불러오는 중 오류가 발생했습니다.</p>';
             }
         }
         
@@ -209,23 +211,35 @@
         }
         
         function displayPostInfo(frontmatter) {
-            // Post 제목과 설명 표시
-            document.getElementById('postTitle').textContent = frontmatter.title;
-            document.getElementById('postDescription').textContent = frontmatter.description;
+            const postInfo = document.getElementById('postInfo');
             
-            // Post 메타 정보 표시
-            const postMeta = document.getElementById('postMeta');
-            postMeta.innerHTML = `
-                <div class="meta-item">
-                    <span class="meta-label">작성일</span>
-                    <span class="meta-value">${frontmatter.date}</span>
+            postInfo.innerHTML = `
+                <div class="post-header">
+                    <h1 class="post-title">${frontmatter.title}</h1>
+                    <p class="post-description">${frontmatter.description}</p>
                 </div>
-                ${frontmatter.tags ? `
-                <div class="meta-item">
-                    <span class="meta-label">태그</span>
-                    <span class="meta-value">${frontmatter.tags}</span>
+                <div class="post-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">작성일</span>
+                        <span class="meta-value">${frontmatter.date}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">작성자</span>
+                        <span class="meta-value">${frontmatter.author}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">예상 읽기 시간</span>
+                        <span class="meta-value">${frontmatter.readingTime || '5'}분</span>
+                    </div>
+                    ${frontmatter.tags ? `
+                        <div class="meta-item">
+                            <span class="meta-label">태그</span>
+                            <div class="meta-tags">
+                                ${frontmatter.tags.split(',').map(tag => `<span class="tag">${tag.trim()}</span>`).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
                 </div>
-                ` : ''}
             `;
         }
         
@@ -279,8 +293,6 @@
             toc.innerHTML = '<h3>목차</h3>';
             toc.appendChild(tocList);
         }
-        
-        // 현재 위치 표시 기능 제거됨
     </script>
 </body>
 </html>

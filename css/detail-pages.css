@@ -1,0 +1,282 @@
+/* Common styles for all detail pages */
+
+/* Detail page layouts */
+.project-detail,
+.study-detail,
+.post-detail {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-2xl) 0;
+}
+
+.project-layout,
+.study-layout,
+.post-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: var(--spacing-2xl);
+    margin-top: var(--spacing-2xl);
+}
+
+.project-content,
+.study-content,
+.post-content {
+    background-color: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2xl);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+}
+
+/* Common header styles */
+.project-header,
+.study-header,
+.post-header {
+    margin-bottom: var(--spacing-xl);
+}
+
+.project-title,
+.study-title,
+.post-title {
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+.project-description,
+.study-description,
+.post-description {
+    font-size: var(--font-size-lg);
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* Common meta styles */
+.project-meta,
+.study-meta,
+.post-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    background-color: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+}
+
+.meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.meta-label {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.meta-value {
+    font-size: var(--font-size-base);
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.meta-tags {
+    display: flex;
+    gap: var(--spacing-xs);
+    flex-wrap: wrap;
+}
+
+/* Table of contents - common styles */
+.table-of-contents {
+    position: sticky;
+    top: calc(var(--header-height) + var(--spacing-lg));
+    height: fit-content;
+    background-color: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+}
+
+.table-of-contents h3 {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.toc-list li {
+    margin-bottom: var(--spacing-sm);
+}
+
+.toc-list a {
+    display: block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s ease;
+    font-size: var(--font-size-sm);
+}
+
+.toc-list a:hover {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.toc-h1 { font-weight: 600; }
+.toc-h2 { font-weight: 500; padding-left: var(--spacing-md); }
+.toc-h3 { font-weight: 400; padding-left: var(--spacing-xl); }
+.toc-h4 { font-weight: 400; padding-left: var(--spacing-2xl); }
+.toc-h5 { font-weight: 400; padding-left: var(--spacing-3xl); }
+.toc-h6 { font-weight: 400; padding-left: var(--spacing-3xl); }
+
+/* Markdown content styles */
+.markdown-content {
+    line-height: 1.7;
+    color: var(--text-primary);
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4,
+.markdown-content h5,
+.markdown-content h6 {
+    margin-top: var(--spacing-2xl);
+    margin-bottom: var(--spacing-lg);
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.markdown-content h1 { font-size: var(--font-size-3xl); }
+.markdown-content h2 { font-size: var(--font-size-2xl); }
+.markdown-content h3 { font-size: var(--font-size-xl); }
+.markdown-content h4 { font-size: var(--font-size-lg); }
+.markdown-content h5 { font-size: var(--font-size-base); }
+.markdown-content h6 { font-size: var(--font-size-sm); }
+
+.markdown-content p {
+    margin-bottom: var(--spacing-lg);
+    color: var(--text-secondary);
+}
+
+.markdown-content ul,
+.markdown-content ol {
+    margin-bottom: var(--spacing-lg);
+    padding-left: var(--spacing-xl);
+}
+
+.markdown-content li {
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-secondary);
+}
+
+.markdown-content blockquote {
+    border-left: 4px solid var(--primary-color);
+    padding-left: var(--spacing-lg);
+    margin: var(--spacing-xl) 0;
+    font-style: italic;
+    color: var(--text-muted);
+}
+
+.markdown-content code {
+    background-color: var(--bg-secondary);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.9em;
+    color: var(--primary-color);
+}
+
+.markdown-content pre {
+    background-color: var(--bg-secondary);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    overflow-x: auto;
+    margin: var(--spacing-xl) 0;
+    border: 1px solid var(--border-color);
+}
+
+.markdown-content pre code {
+    background: none;
+    padding: 0;
+    color: var(--text-primary);
+}
+
+.markdown-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--spacing-xl) 0;
+}
+
+.markdown-content th,
+.markdown-content td {
+    padding: var(--spacing-md);
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.markdown-content th {
+    background-color: var(--bg-secondary);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.markdown-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+    margin: var(--spacing-lg) 0;
+}
+
+.markdown-content a {
+    color: var(--primary-color);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease;
+}
+
+.markdown-content a:hover {
+    border-bottom-color: var(--primary-color);
+}
+
+.markdown-content hr {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: var(--spacing-2xl) 0;
+}
+
+/* Responsive design for detail pages */
+@media (max-width: 768px) {
+    .project-layout,
+    .study-layout,
+    .post-layout {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+    }
+
+    .table-of-contents {
+        position: static;
+        order: -1;
+    }
+
+    .project-meta,
+    .study-meta,
+    .post-meta {
+        grid-template-columns: 1fr;
+    }
+}

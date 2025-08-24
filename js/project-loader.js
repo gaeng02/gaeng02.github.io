@@ -6,14 +6,14 @@ window.projectLoader = {
     // 프로젝트 데이터를 동적으로 로드
     async loadProjectData() {
         try {
-            // 실제 마크다운 파일들을 기반으로 데이터 로드
-            const response = await fetch('/data/projects.json');
+            // data/projects.json에서 데이터 로드
+            const response = await fetch('./data/projects.json');
             if (response.ok) {
                 const data = await response.json();
                 this.projectData = data.projects || [];
+                console.log('프로젝트 데이터 로드 성공:', this.projectData);
             } else {
-                // API가 없을 경우 실제 마크다운 파일들을 읽어서 데이터 생성
-                console.warn('프로젝트 API를 찾을 수 없어 실제 마크다운 파일들을 읽습니다.');
+                console.warn('프로젝트 데이터를 찾을 수 없어 샘플 데이터를 사용합니다.');
                 await this.loadFromMarkdownFiles();
             }
         } catch (error) {
@@ -42,43 +42,8 @@ window.projectLoader = {
                     filename: file.filename
                 }));
             } else {
-                // API가 없을 경우 하드코딩된 샘플 데이터 사용
-                console.warn('프로젝트 API를 찾을 수 없어 샘플 데이터를 사용합니다.');
-                this.projectData = [
-                    {
-                        id: 1,
-                        title: "웹 포트폴리오",
-                        description: "개인 포트폴리오 웹사이트",
-                        period: "2024.01 - 2024.02",
-                        teamSize: "1명",
-                        role: "풀스택 개발",
-                        achievements: "반응형 디자인, SEO 최적화",
-                        image: "image/portfolio-website.svg",
-                        filename: "portfolio-website.md"
-                    },
-                    {
-                        id: 2,
-                        title: "AI 이미지 분류기",
-                        description: "머신러닝을 활용한 이미지 분류 시스템",
-                        period: "2023.11 - 2023.12",
-                        teamSize: "3명",
-                        role: "백엔드 개발",
-                        achievements: "정확도 95% 달성, API 개발",
-                        image: "image/deepfake-detection.svg",
-                        filename: "ai-image-classifier.md"
-                    },
-                    {
-                        id: 3,
-                        title: "모바일 앱",
-                        description: "React Native로 개발한 크로스 플랫폼 앱",
-                        period: "2023.09 - 2023.10",
-                        teamSize: "2명",
-                        role: "프론트엔드 개발",
-                        achievements: "iOS/Android 동시 지원",
-                        image: "image/escape-room-app.svg",
-                        filename: "mobile-app.md"
-                    }
-                ];
+                console.warn('프로젝트 데이터를 찾을 수 없습니다.');
+                this.projectData = [];
             }
         } catch (error) {
             console.error('마크다운 파일 로드 실패:', error);
@@ -88,57 +53,99 @@ window.projectLoader = {
     
     // 페이지 초기화
     async initializePage() {
-        await this.loadProjectData();
-        this.renderProjects();
-        this.updateProjectCount();
+        console.log('프로젝트 로더 초기화 시작');
+        try {
+            await this.loadProjectData();
+            console.log('프로젝트 데이터 로드 완료:', this.projectData);
+            this.renderProjects();
+            this.updateProjectCount();
+            console.log('프로젝트 렌더링 완료');
+        } catch (error) {
+            console.error('프로젝트 초기화 중 에러:', error);
+        }
     },
     
     // 프로젝트 렌더링
     renderProjects() {
+        console.log('프로젝트 렌더링 시작');
         const projectsGrid = document.getElementById('projectsGrid');
-        if (!projectsGrid) return;
+        if (!projectsGrid) {
+            console.error('projectsGrid 엘리먼트를 찾을 수 없습니다');
+            return;
+        }
         
         // 최신순으로 정렬
         const sortedProjects = [...this.projectData].sort((a, b) => {
-            const dateA = new Date(a.period.split(' - ')[1] || a.period);
-            const dateB = new Date(b.period.split(' - ')[1] || b.period);
+            // 날짜 필드 우선순위: date > period > lastUpdated
+            const getDate = (project) => {
+                if (project.date) return new Date(project.date);
+                if (project.period) {
+                    const periodDate = project.period.split(' - ')[1] || project.period;
+                    return new Date(periodDate);
+                }
+                return new Date(); // 기본값으로 현재 날짜
+            };
+            
+            const dateA = getDate(a);
+            const dateB = getDate(b);
             return dateB - dateA;
         });
         
         if (sortedProjects.length === 0) {
+            console.log('렌더링할 프로젝트가 없습니다');
             projectsGrid.innerHTML = '<p class="no-projects">프로젝트가 없습니다.</p>';
             return;
         }
         
-                            const projectsHTML = sortedProjects.map(project => `
-                        <div class="project-card" onclick="window.location.href='./project-detail.html?project=${project.filename}'" style="cursor: pointer;">
+        console.log('정렬된 프로젝트:', sortedProjects);
+        
+        try {
+            const projectsHTML = sortedProjects.map(project => {
+                // 안전한 값 추출
+                const title = project.title || '제목 없음';
+                const description = project.description || '설명 없음';
+                const slug = project.slug || project.filename || 'unknown';
+                const date = project.date || project.period || '날짜 미정';
+                const teamSize = project.teamSize || '팀 규모 미정';
+                
+                return `
+                <div class="project-card" onclick="window.location.href='/project-detail.html?project=${slug}'" style="cursor: pointer;">
+                    <div class="project-layout">
+                        <div class="project-left">
                             ${project.image ? `<div class="project-image">
-                                <img src="./content/project/${project.image}" alt="${project.title}" onerror="this.style.display='none'">
+                                <img src="/content/project/${project.image}" alt="${title}" onerror="this.style.display='none'">
                             </div>` : ''}
-                            <div class="project-header">
-                                <div>
-                                    <h3 class="project-title">${project.title}</h3>
-                                    <div class="project-meta">
-                                        <span class="project-period">${project.period}</span>
-                                        <span class="project-team">${project.teamSize}</span>
-                                    </div>
+                            <div class="project-info">
+                                <h3 class="project-title">${title}</h3>
+                                <p class="project-description">${description}</p>
+                                <div class="project-meta">
+                                    <div class="project-period">📅 ${project.period || date}</div>
+                                    <div class="project-team-role">👥 ${teamSize} - ${project.role || '역할 미정'}</div>
                                 </div>
-                            </div>
-                            <div class="project-content">
-                                <p class="project-description">${project.description}</p>
-                                <div class="project-details">
-                                    <div class="project-role">
-                                        <strong>역할:</strong> ${project.role}
-                                    </div>
-                                    <div class="project-achievements">
-                                        <strong>성과:</strong> ${project.achievements}
-                                    </div>
-                                </div>
+                                ${project.achievements ? `<div class="project-achievements">
+                                    <strong>성과:</strong> ${project.achievements}
+                                </div>` : ''}
+                                ${project.tags ? `<div class="project-tags">
+                                    ${Array.isArray(project.tags) ? 
+                                        project.tags.map(tag => `<span class="project-tag">${tag}</span>`).join('') :
+                                        (typeof project.tags === 'string' ? 
+                                            project.tags.split(',').map(tag => `<span class="project-tag">${tag.trim()}</span>`).join('') :
+                                            ''
+                                        )
+                                    }
+                                </div>` : ''}
                             </div>
                         </div>
-                    `).join('');
-        
-        projectsGrid.innerHTML = projectsHTML;
+                    </div>
+                </div>`;
+            }).join('');
+            
+            projectsGrid.innerHTML = projectsHTML;
+            console.log('프로젝트 HTML 렌더링 완료');
+        } catch (error) {
+            console.error('프로젝트 렌더링 중 에러:', error);
+            projectsGrid.innerHTML = '<p class="error-message">프로젝트를 불러오는 중 오류가 발생했습니다.</p>';
+        }
     },
     
     // 프로젝트 개수 업데이트
