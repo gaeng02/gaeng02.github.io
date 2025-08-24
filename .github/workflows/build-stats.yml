@@ -146,6 +146,9 @@ jobs:
                 echo "," >> data/projects.json
               fi
               
+              # 파일명에서 slug 추출
+              filename=$(basename "$project_file" .md)
+              
               # 프로젝트 정보 파싱 (frontmatter에서 추출)
               project_name=$(grep "^title:" "$project_file" | sed 's/^title: //' | sed 's/^"//; s/"$//')
               short_description=$(grep "^description:" "$project_file" | sed 's/^description: //' | sed 's/^"//; s/"$//')
@@ -163,6 +166,7 @@ jobs:
               cat >> data/projects.json << EOF
                 {
                   "name": "$project_name",
+                  "title": "$project_name",
                   "description": "$short_description",
                   "period": "$period",
                   "teamSize": "$team_size",
@@ -170,6 +174,8 @@ jobs:
                   "achievements": "$achievement",
                   "tags": "$tags",
                   "date": "$date",
+                  "image": "image/${filename}.svg",
+                  "slug": "$filename",
                   "details": [$details_array]
                 }
           EOF
