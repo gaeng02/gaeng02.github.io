@@ -1,18 +1,18 @@
 {
   "categories": [
     {
-      "name": "AI",
+      "name": "Ai",
       "slug": "ai",
-      "tags": ["AI"],
+      "tags": ["Ai"],
       "hasSubcategories": true,
       "subcategories": [
         {
           "name": "Computer Vision",
-          "slug": "computer-vision",
-          "postCount": 3
+          "slug": "computer-vision"
         }
       ]
-    },
+    }
+,
     {
       "name": "Web Development",
       "slug": "web-development",
@@ -21,11 +21,10 @@
       "subcategories": [
         {
           "name": "Frontend",
-          "slug": "frontend",
-          "postCount": 1
+          "slug": "frontend"
         }
       ]
     }
   ],
-  "lastUpdated": "2024-08-14T12:00:00Z"
+  "lastUpdated": "2025-08-24T17:39:06Z"
 }
