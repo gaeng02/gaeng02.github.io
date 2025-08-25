@@ -52,7 +52,7 @@ class ContentLoader {
         try {
             if (category === 'post') {
                 // Post 데이터는 JSON 파일에서 가져오기
-                const response = await fetch('./data/posts.json');
+                const response = await fetch('data/posts.json');
                 if (response.ok) {
                     const data = await response.json();
                     return (data.posts || []).slice(0, limit);

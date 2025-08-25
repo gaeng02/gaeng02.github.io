@@ -17,9 +17,9 @@ class SearchManager {
     async loadSearchData() {
         try {
             const [projectsResponse, postsResponse, studyResponse] = await Promise.all([
-                fetch('/data/projects.json').catch(() => ({ json: () => [] })),
-                fetch('/data/posts.json').catch(() => ({ json: () => [] })),
-                fetch('/data/study.json').catch(() => ({ json: () => ({}) }))
+                fetch('data/projects.json').catch(() => ({ json: () => [] })),
+                fetch('data/posts.json').catch(() => ({ json: () => [] })),
+                fetch('data/study.json').catch(() => ({ json: () => ({}) }))
             ]);
             
             const projectsData = await projectsResponse.json();

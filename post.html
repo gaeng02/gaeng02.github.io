@@ -162,7 +162,7 @@
 
         async function loadPosts() {
             try {
-                const response = await fetch('/data/posts.json');
+                const response = await fetch('data/posts.json');
                 if (!response.ok) {
                     throw new Error('포스트 데이터를 불러올 수 없습니다.');
                 }
@@ -199,9 +199,24 @@
                             tags.add(tag.trim());
                         });
                     } else {
-                        post.tags.split(',').forEach(tag => {
-                            tags.add(tag.trim());
-                        });
+                        // JSON 문자열을 파싱
+                        try {
+                            const parsedTags = JSON.parse(post.tags);
+                            if (Array.isArray(parsedTags)) {
+                                parsedTags.forEach(tag => {
+                                    tags.add(tag.trim());
+                                });
+                            } else {
+                                post.tags.split(',').forEach(tag => {
+                                    tags.add(tag.trim());
+                                });
+                            }
+                        } catch (e) {
+                            // JSON 파싱 실패 시 쉼표로 분리
+                            post.tags.split(',').forEach(tag => {
+                                tags.add(tag.trim());
+                            });
+                        }
                     }
                 }
             });
@@ -263,7 +278,18 @@
                     if (Array.isArray(post.tags)) {
                         return post.tags.some(t => t.trim().toLowerCase() === tag.toLowerCase());
                     } else {
-                        return post.tags.split(',').some(t => t.trim().toLowerCase() === tag.toLowerCase());
+                        // JSON 문자열을 파싱
+                        try {
+                            const parsedTags = JSON.parse(post.tags);
+                            if (Array.isArray(parsedTags)) {
+                                return parsedTags.some(t => t.trim().toLowerCase() === tag.toLowerCase());
+                            } else {
+                                return post.tags.split(',').some(t => t.trim().toLowerCase() === tag.toLowerCase());
+                            }
+                        } catch (e) {
+                            // JSON 파싱 실패 시 쉼표로 분리
+                            return post.tags.split(',').some(t => t.trim().toLowerCase() === tag.toLowerCase());
+                        }
                     }
                 });
             }
@@ -287,7 +313,7 @@
             postGrid.innerHTML = postsToShow.map(post => `
                 <div class="post-card" onclick="openPost('${post.slug}')">
                     <div class="post-image">
-                        <img src="${post.image || '/images/default-post.jpg'}" alt="${post.title}" onerror="this.src='/images/default-post.jpg'">
+                        <img src="${post.image || 'images/default-post.jpg'}" alt="${post.title}" onerror="this.src='images/default-post.jpg'">
                     </div>
                     <div class="post-content">
                         <h3 class="post-title">${post.title}</h3>
@@ -296,10 +322,22 @@
                             <span class="post-date">${post.date}</span>
                             ${post.tags ? `
                             <div class="post-tags">
-                                ${Array.isArray(post.tags) ? 
-                                    post.tags.map(tag => `<span class="post-tag">${tag.trim()}</span>`).join('') :
-                                    post.tags.split(',').map(tag => `<span class="post-tag">${tag.trim()}</span>`).join('')
-                                }
+                                ${(() => {
+                                    if (Array.isArray(post.tags)) {
+                                        return post.tags.map(tag => `<span class="post-tag">${tag.trim()}</span>`).join('');
+                                    } else {
+                                        try {
+                                            const parsedTags = JSON.parse(post.tags);
+                                            if (Array.isArray(parsedTags)) {
+                                                return parsedTags.map(tag => `<span class="post-tag">${tag.trim()}</span>`).join('');
+                                            } else {
+                                                return post.tags.split(',').map(tag => `<span class="post-tag">${tag.trim()}</span>`).join('');
+                                            }
+                                        } catch (e) {
+                                            return post.tags.split(',').map(tag => `<span class="post-tag">${tag.trim()}</span>`).join('');
+                                        }
+                                    }
+                                })()}
                             </div>
                             ` : ''}
                         </div>
@@ -351,7 +389,7 @@
         }
 
         function openPost(slug) {
-                            window.location.href = `/post-detail.html?post=${slug}`;
+                            window.location.href = `post-detail.html?post=${slug}`;
         }
     </script>
 </body>

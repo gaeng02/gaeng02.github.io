@@ -28,7 +28,7 @@ class CategoryLoader {
     async getCategories(categoryType) {
         try {
             // API 대신 JSON 파일을 직접 읽기
-            const response = await fetch(`/data/${categoryType}.json`);
+            const response = await fetch(`data/${categoryType}.json`);
             if (response.ok) {
                 const data = await response.json();
                 return data.categories || data;
@@ -56,7 +56,7 @@ class CategoryLoader {
     async getStudyCategoriesFromStructure() {
         try {
             // JSON 파일에서 카테고리 정보 읽어오기
-            const response = await fetch('/data/study-categories.json');
+            const response = await fetch('data/study-categories.json');
             if (response.ok) {
                 const data = await response.json();
                 console.log('Study 카테고리 로드됨:', data);

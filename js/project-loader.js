@@ -7,7 +7,7 @@ window.projectLoader = {
     async loadProjectData() {
         try {
             // data/projects.json에서 데이터 로드
-            const response = await fetch('./data/projects.json');
+            const response = await fetch('data/projects.json');
             if (response.ok) {
                 const data = await response.json();
                 this.projectData = data.projects || [];
@@ -109,7 +109,7 @@ window.projectLoader = {
                 const teamSize = project.teamSize || '팀 규모 미정';
                 
                 return `
-                <div class="project-card" onclick="window.location.href='/project-detail.html?project=${slug}'" style="cursor: pointer;">
+                <div class="project-card" onclick="window.location.href='project-detail.html?project=${slug}'" style="cursor: pointer;">
                     <div class="project-layout">
                         <div class="project-left">
                             ${project.image ? `<div class="project-image">
