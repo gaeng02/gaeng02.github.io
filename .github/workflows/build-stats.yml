@@ -5,6 +5,8 @@ on:
     paths: 
       - 'content/**'
       - '.github/workflows/build-stats.yml'
+    paths-ignore:
+      - 'data/**'
   workflow_dispatch: # 수동 실행도 가능하도록
 
 permissions:
@@ -52,6 +54,7 @@ jobs:
           cat data/stats.json
       
       - name: Generate study categories
+        if: contains(github.event.head_commit.modified, 'content/study/') || contains(github.event.head_commit.added, 'content/study/') || contains(github.event.head_commit.removed, 'content/study/') || github.event_name == 'workflow_dispatch'
         run: |
           echo "Generating study categories from folder structure..."
           
@@ -124,6 +127,7 @@ jobs:
           cat data/study-categories.json
       
       - name: Generate projects
+        if: contains(github.event.head_commit.modified, 'content/project/') || contains(github.event.head_commit.added, 'content/project/') || contains(github.event.head_commit.removed, 'content/project/') || github.event_name == 'workflow_dispatch'
         run: |
           echo "Generating projects from content files..."
           
@@ -190,7 +194,10 @@ jobs:
           
           echo "Projects file generated:"
           cat data/projects.json
-          
+      
+      - name: Generate posts
+        if: contains(github.event.head_commit.modified, 'content/post/') || contains(github.event.head_commit.added, 'content/post/') || contains(github.event.head_commit.removed, 'content/post/') || github.event_name == 'workflow_dispatch'
+        run: |
           # 포스트 정보 수집 (Post + Retrospect 통합)
           echo "Collecting post information..."
           cat > data/posts.json << 'EOF'
@@ -253,6 +260,30 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git pull origin main --rebase || git pull origin main --allow-unrelated-histories
-          git add data/stats.json data/study-categories.json data/projects.json data/posts.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update stats and categories [skip ci]" && git push --force-with-lease)
+          
+          # 원격 저장소에서 최신 변경사항 가져오기
+          git pull origin main --rebase
+          
+          # 변경사항 스테이징 및 커밋
+          git add data/stats.json
+          
+          # 조건부로 파일 추가
+          if [[ "${{ github.event.head_commit.modified }}" == *"content/study/"* ]] || [[ "${{ github.event.head_commit.added }}" == *"content/study/"* ]] || [[ "${{ github.event.head_commit.removed }}" == *"content/study/"* ]] || [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            git add data/study-categories.json
+          fi
+          
+          if [[ "${{ github.event.head_commit.modified }}" == *"content/project/"* ]] || [[ "${{ github.event.head_commit.added }}" == *"content/project/"* ]] || [[ "${{ github.event.head_commit.removed }}" == *"content/project/"* ]] || [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            git add data/projects.json
+          fi
+          
+          if [[ "${{ github.event.head_commit.modified }}" == *"content/post/"* ]] || [[ "${{ github.event.head_commit.added }}" == *"content/post/"* ]] || [[ "${{ github.event.head_commit.removed }}" == *"content/post/"* ]] || [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            git add data/posts.json
+          fi
+          
+          # 변경사항이 있는 경우에만 커밋
+          if ! git diff --staged --quiet; then
+            git commit -m "Update stats and categories [skip ci]"
+            git push origin main
+          else
+            echo "No changes to commit"
+          fi
