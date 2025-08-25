@@ -152,14 +152,14 @@ jobs:
               filename=$(basename "$project_file" .md)
               
               # 프로젝트 정보 파싱 (frontmatter에서 추출)
-              project_name=$(grep "^title:" "$project_file" | sed 's/^title: //' | sed 's/^"//; s/"$//')
-              short_description=$(grep "^description:" "$project_file" | sed 's/^description: //' | sed 's/^"//; s/"$//')
-              period=$(grep "^period:" "$project_file" | sed 's/^period: //' | sed 's/^"//; s/"$//')
-              team_size=$(grep "^teamSize:" "$project_file" | sed 's/^teamSize: //' | sed 's/^"//; s/"$//')
-              role=$(grep "^role:" "$project_file" | sed 's/^role: //' | sed 's/^"//; s/"$//')
-              achievement=$(grep "^achievements:" "$project_file" | sed 's/^achievements: //' | sed 's/^"//; s/"$//')
-              tags=$(grep "^tags:" "$project_file" | sed 's/^tags: //' | sed 's/^"//; s/"$//')
-              date=$(grep "^date:" "$project_file" | sed 's/^date: //' | sed 's/^"//; s/"$//')
+              project_name=$(grep "^title:" "$project_file" | sed 's/^title: //' | sed 's/^"//; s/"$//' | tr -d '\n')
+              short_description=$(grep "^description:" "$project_file" | sed 's/^description: //' | sed 's/^"//; s/"$//' | tr -d '\n')
+              period=$(grep "^period:" "$project_file" | sed 's/^period: //' | sed 's/^"//; s/"$//' | tr -d '\n')
+              team_size=$(grep "^teamSize:" "$project_file" | sed 's/^teamSize: //' | sed 's/^"//; s/"$//' | tr -d '\n')
+              role=$(grep "^role:" "$project_file" | sed 's/^role: //' | sed 's/^"//; s/"$//' | tr -d '\n')
+              achievement=$(grep "^achievements:" "$project_file" | sed 's/^achievements: //' | sed 's/^"//; s/"$//' | tr -d '\n')
+              tags=$(grep "^tags:" "$project_file" | sed 's/^tags: //' | sed 's/^"//; s/"$//' | tr -d '\n')
+              date=$(grep "^date:" "$project_file" | sed 's/^date: //' | sed 's/^"//; s/"$//' | tr -d '\n')
               
               # 프로젝트 상세 내용 추출 (## 프로젝트 상세 내용 섹션 이후)
               details_section=$(sed -n '/## 프로젝트 상세 내용/,$p' "$project_file" | sed '1d' | sed '/^## /q' | sed '$d' | grep -v '^$' | sed 's/^- //')
@@ -219,17 +219,17 @@ jobs:
               filename=$(basename "$post_file" .md)
               
               # frontmatter 파싱
-              title=$(grep "^title:" "$post_file" | sed 's/^title: //' | sed 's/^"//; s/"$//')
-              description=$(grep "^description:" "$post_file" | sed 's/^description: //' | sed 's/^"//; s/"$//')
-              date=$(grep "^date:" "$post_file" | sed 's/^date: //' | sed 's/^"//; s/"$//')
-              tags=$(grep "^tags:" "$post_file" | sed 's/^tags: //' | sed 's/^"//; s/"$//')
-              image=$(grep "^image:" "$post_file" | sed 's/^image: //' | sed 's/^"//; s/"$//')
+              title=$(grep "^title:" "$post_file" | sed 's/^title: //' | sed 's/^"//; s/"$//' | tr -d '\n')
+              description=$(grep "^description:" "$post_file" | sed 's/^description: //' | sed 's/^"//; s/"$//' | tr -d '\n')
+              date=$(grep "^date:" "$post_file" | sed 's/^date: //' | sed 's/^"//; s/"$//' | tr -d '\n')
+              tags=$(grep "^tags:" "$post_file" | sed 's/^tags: //' | sed 's/^"//; s/"$//' | tr -d '\n')
+              image=$(grep "^image:" "$post_file" | sed 's/^image: //' | sed 's/^"//; s/"$//' | tr -d '\n')
               
               # 기본값 설정
               [ -z "$title" ] && title="$filename"
               [ -z "$description" ] && description=""
               [ -z "$date" ] && date="$(date +%Y-%m-%d)"
-              [ -z "$tags" ] && tags=""
+              [ -z "$tags" ] && tags="[]"
               [ -z "$image" ] && image=""
               
               cat >> data/posts.json << EOF

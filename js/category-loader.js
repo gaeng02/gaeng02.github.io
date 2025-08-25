@@ -324,7 +324,7 @@ class CategoryLoader {
             const subcategoriesHTML = subcategories.map(sub => `
                 <a href="/study-dynamic.html?category=${category.slug}&subcategory=${sub.slug}" class="study-category-item">
                     <div class="study-category-name">${sub.name}</div>
-                    <div class="study-category-count">${sub.postCount}개</div>
+                    
                 </a>
             `).join('');
 
@@ -414,7 +414,7 @@ class CategoryLoader {
             const subcategoriesColumnsHTML = await Promise.all(categories.map(async category => {
                 const subcategories = await this.getSubcategories(category.slug);
                 const subcategoriesHTML = subcategories.map(sub => 
-                    `<a href="/study-dynamic.html?category=${category.slug}&subcategory=${sub.slug}" class="dropdown-item dropdown-subitem">${sub.name} <span class="dropdown-count">(${sub.postCount})</span></a>`
+                    `<a href="/study-dynamic.html?category=${category.slug}&subcategory=${sub.slug}" class="dropdown-item dropdown-subitem">${sub.name}</a>`
                 ).join('');
                 
                 return `<div class="dropdown-subcategory-column">${subcategoriesHTML}</div>`;
@@ -456,13 +456,28 @@ class CategoryLoader {
         const fileMap = {
             'ai': {
                 'computer-vision': [
-                    { name: 'opencv-basics.md', title: 'OpenCV 기초 학습', description: 'OpenCV 라이브러리를 사용한 컴퓨터 비전 기초 학습' },
-                    { name: 'tensorflow-basics.md', title: 'TensorFlow 기초 학습', description: 'TensorFlow를 사용한 컴퓨터 비전 기초 학습' }
+                    { 
+                        name: 'opencv-basics.md', 
+                        title: 'OpenCV 기초 학습', 
+                        date: '2024-01-15',
+                        keywords: ['OpenCV', 'Computer Vision', 'Python', 'Image Processing']
+                    },
+                    { 
+                        name: 'tensorflow-basics.md', 
+                        title: 'TensorFlow 기초 학습', 
+                        date: '2024-01-20',
+                        keywords: ['TensorFlow', 'Deep Learning', 'Neural Networks', 'Python']
+                    }
                 ]
             },
             'web-development': {
                 'frontend': [
-                    { name: 'react-hooks-guide.md', title: 'React Hooks 완벽 가이드', description: 'React Hooks의 모든 것을 알아보는 심화 학습 가이드' }
+                    { 
+                        name: 'react-hooks-guide.md', 
+                        title: 'React Hooks 완벽 가이드', 
+                        date: '2024-02-01',
+                        keywords: ['React', 'Hooks', 'JavaScript', 'Frontend']
+                    }
                 ]
             }
         };
@@ -489,11 +504,13 @@ class CategoryLoader {
             <div class="project-card" onclick="window.location.href='/study-detail.html?category=${category}&subcategory=${subcategory}&file=${file.name}'" style="cursor: pointer;">
                 <div class="project-header">
                     <h3 class="project-title">${file.title || file.name}</h3>
-                    <div class="project-meta">마크다운 파일</div>
+                    <div class="project-meta">${file.date || '작성일자 없음'}</div>
                 </div>
-                <ul class="project-achievements">
-                    <li class="project-achievement">${file.description || '파일 설명이 없습니다.'}</li>
-                </ul>
+                ${file.keywords ? `
+                <div class="project-tags">
+                    ${file.keywords.map(keyword => `<span class="project-tag">${keyword}</span>`).join('')}
+                </div>
+                ` : ''}
             </div>
         `).join('');
 
