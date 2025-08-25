@@ -1,18 +1,65 @@
 {
   "categories": [
     {
-      "name": "Ai",
-      "slug": "ai",
-      "tags": ["Ai"],
+      "name": "Computer Science",
+      "slug": "computer-science",
+      "tags": ["Computer Science"],
       "hasSubcategories": true,
       "subcategories": [
         {
-          "name": "Computer Vision",
-          "slug": "computer-vision"
+          "name": "Database",
+          "slug": "database"
+        },
+        {
+          "name": "Operating System",
+          "slug": "operating-system"
+        },
+        {
+          "name": "Algorithm",
+          "slug": "algorithm"
+        },
+        {
+          "name": "Compiler",
+          "slug": "compiler"
+        },
+        {
+          "name": "Network",
+          "slug": "network"
+        },
+        {
+          "name": "Data Structure",
+          "slug": "data-structure"
         }
       ]
-    }
-,
+    },
+    {
+      "name": "AI",
+      "slug": "ai",
+      "tags": ["AI"],
+      "hasSubcategories": true,
+      "subcategories": [
+        {
+          "name": "Machine Learning",
+          "slug": "machine-learning"
+        },
+        {
+          "name": "Deep Learning",
+          "slug": "deep-learning"
+        },
+        {
+          "name": "Computer Vision",
+          "slug": "computer-vision"
+        },
+        {
+          "name": "NLP",
+          "slug": "nlp"
+        },
+        {
+          "name": "Reinforcement Learning",
+          "slug": "reinforcement-learning"
+        }
+      ]
+    },
     {
       "name": "Web Development",
       "slug": "web-development",
@@ -22,6 +69,18 @@
         {
           "name": "Frontend",
           "slug": "frontend"
+        },
+        {
+          "name": "Backend",
+          "slug": "backend"
+        },
+        {
+          "name": "Fullstack",
+          "slug": "fullstack"
+        },
+        {
+          "name": "DevOps",
+          "slug": "devops"
         }
       ]
     }

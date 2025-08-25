@@ -57,7 +57,7 @@
                 window.categoryLoader.renderFileCards(files, 'contentGrid');
             }).catch(error => {
                 console.error('Error loading files:', error);
-                document.getElementById('contentGrid').innerHTML = '<p class="error-message">파일을 불러오는 중 오류가 발생했습니다.</p>';
+                document.getElementById('contentGrid').innerHTML = '<p class="error-message">스터디를 불러오는 중 오류가 발생했습니다.</p>';
             });
         }
         
@@ -96,13 +96,13 @@
                 container.innerHTML = cardsHTML;
             }).catch(error => {
                 console.error('Error loading subcategories:', error);
-                document.getElementById('contentGrid').innerHTML = '<p class="error-message">서브카테고리를 불러오는 중 오류가 발생했습니다.</p>';
+                document.getElementById('contentGrid').innerHTML = '<p class="error-message">스터디를 불러오는 중 오류가 발생했습니다.</p>';
             });
         }
         
         function loadMainCategories() {
             // 메인 Study 페이지로 리다이렉트
-            window.location.href = '../study.html';
+            window.location.href = 'study.html';
         }
         
         function getCategoryDisplayName(category) {

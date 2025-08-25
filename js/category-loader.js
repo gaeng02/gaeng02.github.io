@@ -44,12 +44,17 @@ class CategoryLoader {
 
     // 폴더 구조를 기반으로 동적으로 카테고리 생성
     async getDynamicCategories(categoryType) {
-        if (categoryType === 'study') {
-            return await this.getStudyCategoriesFromStructure();
-        } else if (categoryType === 'projects') {
-            return await this.getProjectCategoriesFromStructure();
+        try {
+            if (categoryType === 'study') {
+                return await this.getStudyCategoriesFromStructure();
+            } else if (categoryType === 'projects') {
+                return await this.getProjectCategoriesFromStructure();
+            }
+            return this.getDefaultCategories(categoryType);
+        } catch (error) {
+            console.error('동적 카테고리 생성 중 오류:', error);
+            throw error;
         }
-        return this.getDefaultCategories(categoryType);
     }
 
     // Study 폴더 구조를 기반으로 카테고리 생성 (계층적 구조)
@@ -60,7 +65,13 @@ class CategoryLoader {
             if (response.ok) {
                 const data = await response.json();
                 console.log('Study 카테고리 로드됨:', data);
-                return data.categories;
+                if (data.categories && data.categories.length > 0) {
+                    return data.categories;
+                } else {
+                    console.warn('Study 카테고리 데이터가 비어있음, 하드코딩된 구조 사용');
+                }
+            } else {
+                console.warn('Study 카테고리 JSON 파일이 존재하지 않음, 하드코딩된 구조 사용');
             }
         } catch (error) {
             console.warn('Study 카테고리 JSON 파일 로드 실패, 하드코딩된 구조 사용:', error);
@@ -414,7 +425,7 @@ class CategoryLoader {
             const subcategoriesColumnsHTML = await Promise.all(categories.map(async category => {
                 const subcategories = await this.getSubcategories(category.slug);
                 const subcategoriesHTML = subcategories.map(sub => 
-                    `<a href="/study-dynamic.html?category=${category.slug}&subcategory=${sub.slug}" class="dropdown-item dropdown-subitem">${sub.name}</a>`
+                    `<a href="study-dynamic.html?category=${category.slug}&subcategory=${sub.slug}" class="dropdown-item dropdown-subitem">${sub.name}</a>`
                 ).join('');
                 
                 return `<div class="dropdown-subcategory-column">${subcategoriesHTML}</div>`;
@@ -501,7 +512,7 @@ class CategoryLoader {
         const subcategory = urlParams.get('subcategory');
 
         const cardsHTML = files.map(file => `
-            <div class="project-card" onclick="window.location.href='/study-detail.html?category=${category}&subcategory=${subcategory}&file=${file.name}'" style="cursor: pointer;">
+            <div class="project-card" onclick="window.location.href='study-detail.html?category=${category}&subcategory=${subcategory}&file=${file.name}'" style="cursor: pointer;">
                 <div class="project-header">
                     <h3 class="project-title">${file.title || file.name}</h3>
                     <div class="project-meta">${file.date || '작성일자 없음'}</div>
@@ -521,15 +532,25 @@ class CategoryLoader {
     async initializePage(categoryType, containerId, dropdownSelector) {
         console.log('initializePage 호출:', categoryType, containerId, dropdownSelector);
         
-        const categories = await this.getCategories(categoryType);
-        console.log('로드된 카테고리:', categories);
-        
-        if (containerId) {
-            this.renderCategoryCards(categories, containerId);
-        }
-        
-        if (dropdownSelector) {
-            await this.updateDropdownMenu(categories, dropdownSelector);
+        try {
+            const categories = await this.getCategories(categoryType);
+            console.log('로드된 카테고리:', categories);
+            
+            if (containerId) {
+                this.renderCategoryCards(categories, containerId);
+            }
+            
+            if (dropdownSelector) {
+                await this.updateDropdownMenu(categories, dropdownSelector);
+            }
+        } catch (error) {
+            console.error('카테고리 초기화 중 오류:', error);
+            if (containerId) {
+                const container = document.getElementById(containerId);
+                if (container) {
+                    container.innerHTML = '<p class="error-message">스터디를 불러오는 중 오류가 발생했습니다.</p>';
+                }
+            }
         }
     }
 }
