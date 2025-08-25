@@ -113,7 +113,7 @@ window.projectLoader = {
                     <div class="project-layout">
                         <div class="project-left">
                             ${project.image ? `<div class="project-image">
-                                <img src="/content/project/${project.image}" alt="${title}" onerror="this.style.display='none'">
+                                <img src="content/project/${project.image}" alt="${title}" onerror="this.style.display='none'">
                             </div>` : ''}
                             <div class="project-info">
                                 <h3 class="project-title">${title}</h3>
