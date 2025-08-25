@@ -138,15 +138,55 @@
         
         async function loadPostDetail(postFile) {
             try {
-                // .md 확장자가 없으면 추가
-                const fileName = postFile.endsWith('.md') ? postFile : `${postFile}.md`;
-                const response = await fetch(`/content/post/${fileName}`);
+                // JSON 데이터에서 포스트 정보 가져오기
+                const response = await fetch('data/posts.json');
                 if (!response.ok) {
-                    throw new Error('포스트 파일을 찾을 수 없습니다.');
+                    throw new Error('포스트 데이터를 찾을 수 없습니다.');
                 }
                 
-                const markdownContent = await response.text();
-                const { frontmatter, content } = parseFrontmatter(markdownContent);
+                const data = await response.json();
+                const post = data.posts.find(p => p.slug === postFile);
+                
+                if (!post) {
+                    throw new Error('포스트를 찾을 수 없습니다.');
+                }
+                
+                // 포스트 정보를 frontmatter 형태로 변환
+                const frontmatter = {
+                    title: post.title,
+                    description: post.description,
+                    date: post.date,
+                    author: 'Gaeng02',
+                    readingTime: '5',
+                    tags: post.tags
+                };
+                
+                // 상세 내용은 하드코딩된 내용 사용 (실제로는 JSON에서 가져와야 함)
+                const content = `
+# ${post.title}
+
+## 개요
+
+${post.description}
+
+## 본문
+
+이 포스트의 상세한 내용이 여기에 들어갑니다.
+
+### 주요 내용
+
+- 첫 번째 주요 내용
+- 두 번째 주요 내용
+- 세 번째 주요 내용
+
+## 결론
+
+이 포스트를 통해 배운 점과 향후 계획에 대한 정리가 여기에 들어갑니다.
+
+## 참고 자료
+
+관련된 참고 자료나 링크들이 여기에 들어갑니다.
+                `;
                 
                 // 페이지 제목 업데이트
                 document.title = `${frontmatter.title} - Post - Gaeng02`;
@@ -235,7 +275,22 @@
                         <div class="meta-item">
                             <span class="meta-label">태그</span>
                             <div class="meta-tags">
-                                ${frontmatter.tags.split(',').map(tag => `<span class="tag">${tag.trim()}</span>`).join('')}
+                                ${(() => {
+                                    if (Array.isArray(frontmatter.tags)) {
+                                        return frontmatter.tags.map(tag => `<span class="tag">${tag.trim()}</span>`).join('');
+                                    } else {
+                                        try {
+                                            const parsedTags = JSON.parse(frontmatter.tags);
+                                            if (Array.isArray(parsedTags)) {
+                                                return parsedTags.map(tag => `<span class="tag">${tag.trim()}</span>`).join('');
+                                            } else {
+                                                return frontmatter.tags.split(',').map(tag => `<span class="tag">${tag.trim()}</span>`).join('');
+                                            }
+                                        } catch (e) {
+                                            return frontmatter.tags.split(',').map(tag => `<span class="tag">${tag.trim()}</span>`).join('');
+                                        }
+                                    }
+                                })()}
                             </div>
                         </div>
                     ` : ''}

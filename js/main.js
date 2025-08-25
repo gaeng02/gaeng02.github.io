@@ -273,8 +273,37 @@ async function updateStats() {
         
         // Count unique tags
         const allTags = new Set();
-        (projectsData.projects || []).forEach(project => project.tags?.forEach(tag => allTags.add(tag)));
-        (postsData.posts || []).forEach(post => post.tags?.forEach(tag => allTags.add(tag)));
+        
+        // Process project tags
+        (projectsData.projects || []).forEach(project => {
+            if (project.tags) {
+                try {
+                    const tags = Array.isArray(project.tags) ? project.tags : JSON.parse(project.tags);
+                    tags.forEach(tag => allTags.add(tag));
+                } catch (e) {
+                    // If JSON parsing fails, treat as comma-separated string
+                    if (typeof project.tags === 'string') {
+                        project.tags.split(',').forEach(tag => allTags.add(tag.trim()));
+                    }
+                }
+            }
+        });
+        
+        // Process post tags
+        (postsData.posts || []).forEach(post => {
+            if (post.tags) {
+                try {
+                    const tags = Array.isArray(post.tags) ? post.tags : JSON.parse(post.tags);
+                    tags.forEach(tag => allTags.add(tag));
+                } catch (e) {
+                    // If JSON parsing fails, treat as comma-separated string
+                    if (typeof post.tags === 'string') {
+                        post.tags.split(',').forEach(tag => allTags.add(tag.trim()));
+                    }
+                }
+            }
+        });
+        
         const tagCount = allTags.size;
         
         // Update DOM

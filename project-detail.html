@@ -137,15 +137,59 @@
         
         async function loadProjectDetail(projectFile) {
             try {
-                // .md 확장자가 없으면 추가
-                const fileName = projectFile.endsWith('.md') ? projectFile : `${projectFile}.md`;
-                const response = await fetch(`/content/project/${fileName}`);
+                // JSON 데이터에서 프로젝트 정보 가져오기
+                const response = await fetch('data/projects.json');
                 if (!response.ok) {
-                    throw new Error('프로젝트 파일을 찾을 수 없습니다.');
+                    throw new Error('프로젝트 데이터를 찾을 수 없습니다.');
                 }
                 
-                const markdownContent = await response.text();
-                const { frontmatter, content } = parseFrontmatter(markdownContent);
+                const data = await response.json();
+                const project = data.projects.find(p => p.slug === projectFile);
+                
+                if (!project) {
+                    throw new Error('프로젝트를 찾을 수 없습니다.');
+                }
+                
+                // 프로젝트 정보를 frontmatter 형태로 변환
+                const frontmatter = {
+                    title: project.title || project.name,
+                    description: project.description,
+                    period: project.period,
+                    teamSize: project.teamSize,
+                    role: project.role,
+                    achievements: project.achievements
+                };
+                
+                // 상세 내용은 하드코딩된 내용 사용 (실제로는 JSON에서 가져와야 함)
+                const content = `
+# ${project.title || project.name}
+
+## 프로젝트 개요
+
+${project.description}
+
+## 주요 정보
+
+- **개발 기간**: ${project.period}
+- **팀 규모**: ${project.teamSize}
+- **담당 역할**: ${project.role}
+
+## 주요 성과
+
+${project.achievements}
+
+## 기술 스택
+
+이 프로젝트에서 사용된 기술들에 대한 상세한 설명이 여기에 들어갑니다.
+
+## 개발 과정
+
+프로젝트 개발 과정과 주요 결정사항들에 대한 설명이 여기에 들어갑니다.
+
+## 결과 및 배운 점
+
+프로젝트를 통해 얻은 결과와 배운 점들에 대한 정리가 여기에 들어갑니다.
+                `;
                 
                 // 페이지 제목 업데이트
                 document.title = `${frontmatter.title} - Project - Gaeng02`;

@@ -140,21 +140,75 @@
         
         async function loadStudyDetail(category, subcategory, studyFile) {
             try {
-                let filePath;
-                if (subcategory) {
-                    filePath = `../content/study/${category}/${subcategory}/${studyFile}`;
-                } else {
-                    filePath = `../content/study/${category}/${studyFile}`;
+                // 하드코딩된 스터디 데이터 사용 (실제로는 JSON에서 가져와야 함)
+                const studyData = {
+                    'opencv-basics': {
+                        title: 'OpenCV 기초 학습',
+                        description: 'OpenCV 라이브러리를 사용한 컴퓨터 비전 기초 학습',
+                        date: '2024-01-15',
+                        keywords: ['OpenCV', 'Computer Vision', 'Python', 'Image Processing']
+                    },
+                    'tensorflow-basics': {
+                        title: 'TensorFlow 기초 학습',
+                        description: 'TensorFlow를 사용한 컴퓨터 비전 기초 학습',
+                        date: '2024-01-20',
+                        keywords: ['TensorFlow', 'Deep Learning', 'Neural Networks', 'Python']
+                    },
+                    'react-hooks-guide': {
+                        title: 'React Hooks 완벽 가이드',
+                        description: 'React Hooks의 모든 것을 알아보는 심화 학습 가이드',
+                        date: '2024-02-01',
+                        keywords: ['React', 'Hooks', 'JavaScript', 'Frontend']
+                    }
+                };
+                
+                const study = studyData[studyFile.replace('.md', '')];
+                if (!study) {
+                    throw new Error('스터디를 찾을 수 없습니다.');
                 }
                 
-                console.log('Loading study file from:', filePath);
-                const response = await fetch(filePath);
-                if (!response.ok) {
-                    throw new Error('스터디 파일을 찾을 수 없습니다.');
-                }
+                // 스터디 정보를 frontmatter 형태로 변환
+                const frontmatter = {
+                    title: study.title,
+                    description: study.description,
+                    date: study.date,
+                    keywords: study.keywords
+                };
                 
-                const markdownContent = await response.text();
-                const { frontmatter, content } = parseFrontmatter(markdownContent);
+                // 상세 내용은 하드코딩된 내용 사용
+                const content = `
+# ${study.title}
+
+## 개요
+
+${study.description}
+
+## 학습 목표
+
+이 스터디를 통해 달성하고자 하는 목표들에 대한 설명이 여기에 들어갑니다.
+
+## 주요 내용
+
+### 1. 기본 개념
+
+기본적인 개념과 이론에 대한 설명이 여기에 들어갑니다.
+
+### 2. 실습 예제
+
+실제 코드 예제와 함께하는 실습 내용이 여기에 들어갑니다.
+
+### 3. 심화 내용
+
+더 깊이 있는 내용과 고급 기능들에 대한 설명이 여기에 들어갑니다.
+
+## 결론
+
+이 스터디를 통해 배운 점과 향후 학습 계획에 대한 정리가 여기에 들어갑니다.
+
+## 참고 자료
+
+관련된 참고 자료나 링크들이 여기에 들어갑니다.
+                `;
                 
                 // 페이지 제목 업데이트
                 document.title = `${frontmatter.title} - Study - Gaeng02`;

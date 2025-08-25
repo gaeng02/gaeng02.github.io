@@ -128,7 +128,7 @@ class CategoryLoader {
         // JSON 파일에서 카테고리 정보를 가져와서 서브카테고리 반환
         return new Promise(async (resolve) => {
             try {
-                const response = await fetch('/data/study-categories.json');
+                const response = await fetch('data/study-categories.json');
                 if (response.ok) {
                     const data = await response.json();
                     const category = data.categories.find(cat => cat.slug === mainCategory);
@@ -181,7 +181,7 @@ class CategoryLoader {
     async getProjectCategoriesFromStructure() {
         try {
             // JSON 파일에서 프로젝트 카테고리 정보 읽어오기
-            const response = await fetch('/data/project-categories.json');
+            const response = await fetch('data/project-categories.json');
             if (response.ok) {
                 const data = await response.json();
                 console.log('Project 카테고리 로드됨:', data);
@@ -333,7 +333,7 @@ class CategoryLoader {
         const sectionsHTML = await Promise.all(categories.map(async category => {
             const subcategories = await this.getSubcategories(category.slug);
             const subcategoriesHTML = subcategories.map(sub => `
-                <a href="/study-dynamic.html?category=${category.slug}&subcategory=${sub.slug}" class="study-category-item">
+                <a href="study-dynamic.html?category=${category.slug}&subcategory=${sub.slug}" class="study-category-item">
                     <div class="study-category-name">${sub.name}</div>
                     
                 </a>
