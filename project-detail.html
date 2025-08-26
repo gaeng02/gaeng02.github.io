@@ -6,6 +6,7 @@
     <title>Project Detail - Gaeng02</title>
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/detail-pages.css">
     <link rel="stylesheet" href="/css/project-detail.css">
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
     <script src="/js/main.js" defer></script>
@@ -160,20 +161,14 @@
                     achievements: project.achievements
                 };
                 
+                // 페이지 제목 업데이트
+                document.title = `${frontmatter.title} - Project - Gaeng02`;
+                
+                // 프로젝트 헤더 정보 표시
+                displayProjectHeader(frontmatter);
+                
                 // 상세 내용은 하드코딩된 내용 사용 (실제로는 JSON에서 가져와야 함)
                 const content = `
-# ${project.title || project.name}
-
-## 프로젝트 개요
-
-${project.description}
-
-## 주요 정보
-
-- **개발 기간**: ${project.period}
-- **팀 규모**: ${project.teamSize}
-- **담당 역할**: ${project.role}
-
 ## 주요 성과
 
 ${project.achievements}
@@ -190,12 +185,6 @@ ${project.achievements}
 
 프로젝트를 통해 얻은 결과와 배운 점들에 대한 정리가 여기에 들어갑니다.
                 `;
-                
-                // 페이지 제목 업데이트
-                document.title = `${frontmatter.title} - Project - Gaeng02`;
-                
-                // 프로젝트 정보 표시
-                displayProjectInfo(frontmatter);
                 
                 // 마크다운 콘텐츠 렌더링
                 let htmlContent;
@@ -255,61 +244,33 @@ ${project.achievements}
             return { frontmatter, content: contentText };
         }
         
-        function displayProjectInfo(frontmatter) {
+        function displayProjectHeader(frontmatter) {
             const projectInfo = document.getElementById('projectInfo');
             
-            // 주요 성과를 배열로 분리 (쉼표로 구분)
-            const achievements = frontmatter.achievements ? 
-                frontmatter.achievements.split(',').map(achievement => achievement.trim()) : [];
-            
-            projectInfo.innerHTML = `
+            // 프로젝트 헤더 정보를 project-info에 추가
+            const headerHTML = `
                 <div class="project-header">
-                    <h1 class="project-title">${frontmatter.title}</h1>
-                    <p class="project-description">${frontmatter.description}</p>
+                    <h1>${frontmatter.title}</h1>
+                    <p>${frontmatter.description}</p>
                 </div>
                 
-                <!-- 프로젝트 정보 카드들 -->
-                <div class="project-info-cards">
-                    <div class="info-card">
-                        <div class="info-card-icon">📅</div>
-                        <div class="info-card-content">
-                            <h3 class="info-card-title">개발 기간</h3>
-                            <p class="info-card-value">${frontmatter.period || '미정'}</p>
-                        </div>
+                <div class="project-meta">
+                    <div class="meta-item">
+                        <div class="meta-label">개발 기간</div>
+                        <div class="meta-value">${frontmatter.period || '미정'}</div>
                     </div>
-                    
-                    <div class="info-card">
-                        <div class="info-card-icon">👤</div>
-                        <div class="info-card-content">
-                            <h3 class="info-card-title">담당 역할</h3>
-                            <p class="info-card-value">${frontmatter.role || '미정'}</p>
-                        </div>
+                    <div class="meta-item">
+                        <div class="meta-label">담당 역할</div>
+                        <div class="meta-value">${frontmatter.role || '미정'}</div>
                     </div>
-                    
-                    <div class="info-card">
-                        <div class="info-card-icon">👥</div>
-                        <div class="info-card-content">
-                            <h3 class="info-card-title">프로젝트 규모</h3>
-                            <p class="info-card-value">${frontmatter.teamSize || '미정'}</p>
-                        </div>
+                    <div class="meta-item">
+                        <div class="meta-label">프로젝트 규모</div>
+                        <div class="meta-value">${frontmatter.teamSize || '미정'}</div>
                     </div>
                 </div>
-                
-                <!-- 주요 성과 섹션 -->
-                ${achievements.length > 0 ? `
-                <div class="project-achievements-section">
-                    <h2 class="achievements-title">주요 성과</h2>
-                    <div class="achievements-list">
-                        ${achievements.map(achievement => `
-                            <div class="achievement-item">
-                                <div class="achievement-icon">🏆</div>
-                                <p class="achievement-text">${achievement}</p>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-                ` : ''}
             `;
+            
+            projectInfo.innerHTML = headerHTML;
         }
         
         // 목차 생성 함수
