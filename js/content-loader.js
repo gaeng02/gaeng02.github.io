@@ -58,49 +58,40 @@ class ContentLoader {
                     return (data.posts || []).slice(0, limit);
                 }
             } else if (category === 'study') {
-                // Study 데이터는 하드코딩된 예시 사용
-                return [
-                    {
-                        title: "React Hooks 완벽 가이드",
-                        date: "2024-01-15",
-                        description: "React Hooks의 모든 것을 알아보는 심화 학습",
-                        slug: "react-hooks-guide"
-                    },
-                    {
-                        title: "TypeScript 기초부터 고급까지",
-                        date: "2024-01-10",
-                        description: "TypeScript의 타입 시스템과 고급 기능들",
-                        slug: "typescript-guide"
-                    },
-                    {
-                        title: "Docker 컨테이너화",
-                        date: "2024-01-05",
-                        description: "Docker를 활용한 애플리케이션 배포 방법",
-                        slug: "docker-containerization"
-                    }
-                ];
+                // Study 데이터는 JSON 파일에서 가져오기
+                const response = await fetch('data/study-categories.json');
+                if (response.ok) {
+                    const data = await response.json();
+                    const allStudies = [];
+                    Object.values(data.categories || {}).forEach(category => {
+                        if (category.subcategories) {
+                            Object.values(category.subcategories).forEach(subcategory => {
+                                if (subcategory.posts) {
+                                    allStudies.push(...subcategory.posts);
+                                }
+                            });
+                        }
+                    });
+                    return allStudies.slice(0, limit);
+                }
             } else if (category === 'retrospect') {
-                // Retrospect 데이터는 하드코딩된 예시 사용
-                return [
-                    {
-                        title: "2023년 개발 회고",
-                        date: "2024-01-01",
-                        description: "2023년 한 해 동안의 개발 경험과 배움",
-                        slug: "2023-development-retrospect"
-                    },
-                    {
-                        title: "UI/UX 개선 프로젝트 회고",
-                        date: "2023-12-28",
-                        description: "사용자 경험 개선을 위한 디자인 시스템 구축",
-                        slug: "ui-ux-improvement-retrospect"
-                    },
-                    {
-                        title: "성능 최적화 경험담",
-                        date: "2023-12-20",
-                        description: "웹 애플리케이션 성능 개선을 위한 노력들",
-                        slug: "performance-optimization-retrospect"
-                    }
-                ];
+                // Retrospect 데이터는 posts.json에서 "회고" 태그가 있는 포스트만 가져오기
+                const response = await fetch('data/posts.json');
+                if (response.ok) {
+                    const data = await response.json();
+                    const retrospectPosts = (data.posts || []).filter(post => {
+                        if (post.tags) {
+                            try {
+                                const tags = Array.isArray(post.tags) ? post.tags : JSON.parse(post.tags);
+                                return tags.includes('회고');
+                            } catch (e) {
+                                return post.tags.includes('회고');
+                            }
+                        }
+                        return false;
+                    });
+                    return retrospectPosts.slice(0, limit);
+                }
             }
 
             return [];
@@ -115,52 +106,13 @@ class ContentLoader {
      */
     async getProject() {
         try {
-            // 실제 구현에서는 서버에서 프로젝트 데이터를 가져와야 하지만,
-            // 현재는 하드코딩된 예시 데이터를 사용
-            return [
-                {
-                    title: "웹 포트폴리오",
-                    description: "React와 TypeScript를 사용한 개인 포트폴리오 웹사이트",
-                    image: "https://via.placeholder.com/300x200/3b82f6/ffffff?text=Project+1",
-                    tags: ["React", "TypeScript", "CSS3"],
-                    slug: "web-portfolio"
-                },
-                {
-                    title: "모바일 앱",
-                    description: "React Native로 개발한 크로스 플랫폼 모바일 애플리케이션",
-                    image: "https://via.placeholder.com/300x200/10b981/ffffff?text=Project+2",
-                    tags: ["React Native", "JavaScript", "Firebase"],
-                    slug: "mobile-app"
-                },
-                {
-                    title: "AI 챗봇",
-                    description: "Python과 TensorFlow를 활용한 자연어 처리 챗봇",
-                    image: "https://via.placeholder.com/300x200/f59e0b/ffffff?text=Project+3",
-                    tags: ["Python", "TensorFlow", "NLP"],
-                    slug: "ai-chatbot"
-                },
-                {
-                    title: "게임 개발",
-                    description: "Unity를 사용한 2D 플랫폼 게임",
-                    image: "https://via.placeholder.com/300x200/ef4444/ffffff?text=Project+4",
-                    tags: ["Unity", "C#", "Game Dev"],
-                    slug: "game-development"
-                },
-                {
-                    title: "데스크톱 앱",
-                    description: "Electron을 활용한 크로스 플랫폼 데스크톱 애플리케이션",
-                    image: "https://via.placeholder.com/300x200/8b5cf6/ffffff?text=Project+5",
-                    tags: ["Electron", "Node.js", "HTML/CSS"],
-                    slug: "desktop-app"
-                },
-                {
-                    title: "데이터 분석",
-                    description: "Python과 Pandas를 사용한 데이터 분석 및 시각화 프로젝트",
-                    image: "https://via.placeholder.com/300x200/06b6d4/ffffff?text=Project+6",
-                    tags: ["Python", "Pandas", "Matplotlib"],
-                    slug: "data-analysis"
-                }
-            ];
+            // 프로젝트 데이터는 JSON 파일에서 가져오기
+            const response = await fetch('data/projects.json');
+            if (response.ok) {
+                const data = await response.json();
+                return data.projects || [];
+            }
+            return [];
         } catch (error) {
             console.error('Error loading projects:', error);
             return [];
@@ -236,13 +188,12 @@ class ContentLoader {
             return stats;
         } catch (error) {
             console.error('Error loading stats:', error);
-                    // 폴백: 하드코딩된 값 사용
-        return {
-            post: 7,
-            project: 4,
-            study: 3,
-            retrospect: 5
-        };
+            return {
+                post: 0,
+                project: 0,
+                study: 0,
+                retrospect: 0
+            };
         }
     }
 

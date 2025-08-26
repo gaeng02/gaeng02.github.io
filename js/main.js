@@ -393,7 +393,7 @@ function formatDate(dateString) {
 
 // Page focus/blur effects
 window.addEventListener('blur', function() {
-    document.title = "Come Back =(";
+    document.title = "Gaeng02's Blog - Waiting...";
 });
 
 window.addEventListener('focus', function() {

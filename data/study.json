@@ -1,25 +1,3 @@
 {
-  "categories": [
-    {
-      "name": "Computer Science",
-      "slug": "computer-science",
-      "description": "컴퓨터 과학 기초 지식",
-      "tags": ["Computer Science"],
-      "color": "#3b82f6"
-    },
-    {
-      "name": "AI",
-      "slug": "ai",
-      "description": "인공지능 관련 학습",
-      "tags": ["AI"],
-      "color": "#10b981"
-    },
-    {
-      "name": "Web Development",
-      "slug": "web-development",
-      "description": "웹 개발 기술",
-      "tags": ["Web Development"],
-      "color": "#f59e0b"
-    }
-  ]
+  "categories": []
 }
