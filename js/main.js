@@ -289,16 +289,27 @@ async function updateStats() {
             }
         });
         
-        // Process post tags
+        // Process post tags and count retrospect posts
+        let retrospectCount = 0;
         (postsData.posts || []).forEach(post => {
             if (post.tags) {
                 try {
                     const tags = Array.isArray(post.tags) ? post.tags : JSON.parse(post.tags);
                     tags.forEach(tag => allTags.add(tag));
+                    
+                    // Count posts with "회고" tag
+                    if (tags.includes('회고')) {
+                        retrospectCount++;
+                    }
                 } catch (e) {
                     // If JSON parsing fails, treat as comma-separated string
                     if (typeof post.tags === 'string') {
                         post.tags.split(',').forEach(tag => allTags.add(tag.trim()));
+                        
+                        // Count posts with "회고" tag
+                        if (post.tags.includes('회고')) {
+                            retrospectCount++;
+                        }
                     }
                 }
             }
@@ -310,7 +321,7 @@ async function updateStats() {
         updateStatElement('projectCount', projectCount);
         updateStatElement('postCount', postCount);
         updateStatElement('studyCount', studyCount);
-        updateStatElement('tagCount', tagCount);
+        updateStatElement('retrospectCount', retrospectCount);
         
     } catch (error) {
         console.error('Failed to update stats:', error);

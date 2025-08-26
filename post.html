@@ -145,19 +145,6 @@
             
             // 포스트 데이터 로드
             loadPosts();
-            
-            // URL 파라미터에서 태그 확인
-            const urlParams = new URLSearchParams(window.location.search);
-            const tagParam = urlParams.get('tag');
-            if (tagParam) {
-                // 페이지 제목 업데이트
-                document.title = `${tagParam} - Post - Gaeng02`;
-                
-                // 태그 필터가 생성된 후에 해당 태그 선택
-                setTimeout(() => {
-                    filterByTag(tagParam);
-                }, 100);
-            }
         });
 
         async function loadPosts() {
@@ -174,11 +161,35 @@
                 // 태그 필터 생성
                 generateTagFilters();
                 
-                // 포스트 그리드 렌더링
-                renderPosts();
-                
-                // 페이지네이션 렌더링
-                renderPagination();
+                // URL 파라미터에서 태그 확인
+                const urlParams = new URLSearchParams(window.location.search);
+                const tagParam = urlParams.get('tag');
+                if (tagParam) {
+                    // 페이지 제목 업데이트
+                    document.title = `${tagParam} - Post - Gaeng02`;
+                    
+                    console.log('URL tag parameter:', tagParam);
+                    console.log('Available tags:', Array.from(new Set(allPosts.flatMap(post => {
+                        if (post.tags) {
+                            try {
+                                const parsedTags = JSON.parse(post.tags);
+                                return Array.isArray(parsedTags) ? parsedTags : [post.tags];
+                            } catch (e) {
+                                return [post.tags];
+                            }
+                        }
+                        return [];
+                    }))));
+                    
+                    // 해당 태그 선택
+                    filterByTag(tagParam);
+                } else {
+                    // 포스트 그리드 렌더링
+                    renderPosts();
+                    
+                    // 페이지네이션 렌더링
+                    renderPagination();
+                }
                 
             } catch (error) {
                 console.error('Error loading posts:', error);
@@ -239,6 +250,7 @@
         }
 
         function filterByTag(tag) {
+            console.log('filterByTag called with tag:', tag);
             currentTag = tag;
             currentPage = 1;
             
@@ -249,12 +261,15 @@
             
             // 해당 태그 버튼 찾기 (대소문자 구분 없이)
             let targetButton = document.querySelector(`[data-tag="${tag}"]`);
+            console.log('Found target button:', targetButton);
             if (!targetButton) {
                 // 대소문자 구분 없이 찾기
                 const allButtons = document.querySelectorAll('.tag-filter');
+                console.log('All tag buttons:', Array.from(allButtons).map(btn => btn.getAttribute('data-tag')));
                 targetButton = Array.from(allButtons).find(btn => 
                     btn.getAttribute('data-tag').toLowerCase() === tag.toLowerCase()
                 );
+                console.log('Found target button (case-insensitive):', targetButton);
             }
             
             if (targetButton) {
