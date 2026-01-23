@@ -1,0 +1,99 @@
+{
+  "profile": {
+    "name": "Gaeng02",
+    "title": "Researcher",
+    "description": "도서 리뷰, 논문 정리, 학습 내용을 기록합니다.",
+    "image": "/assets/images/profile.jpg",
+    "email": "sondin144@gmail.com",
+    "github": "https://github.com/gaeng02",
+    "linkedin": "https://www.linkedin.com/in/kyungsik-yang-ba6426359/",
+    "instagram": "https://www.instagram.com/gaeng._.02/",
+    "blog": "https://gaeng02.github.io"
+  },
+  "experience": [
+    {
+      "title": "Senior Developer",
+      "company": "회사명",
+      "period": "2023.01 - 현재",
+      "description": "주요 업무 및 성과를 설명합니다.",
+      "technologies": ["React", "TypeScript", "Node.js"]
+    },
+    {
+      "title": "Developer",
+      "company": "회사명",
+      "period": "2021.01 - 2022.12",
+      "description": "주요 업무 및 성과를 설명합니다.",
+      "technologies": ["JavaScript", "Python"]
+    }
+  ],
+  "projects": [
+    {
+      "name": "프로젝트명",
+      "period": "2024.01 - 2024.06",
+      "description": "프로젝트 설명을 작성합니다.",
+      "technologies": ["Next.js", "TypeScript", "TailwindCSS"],
+      "github": "https://github.com/gaeng02/project",
+      "demo": "https://project-demo.com",
+      "featured": true,
+      "detailFile": "projects/project-1.md"
+    },
+    {
+      "name": "프로젝트명 2",
+      "period": "2023.06 - 2023.12",
+      "description": "프로젝트 설명을 작성합니다.",
+      "technologies": ["React", "Node.js"],
+      "github": "https://github.com/gaeng02/project2",
+      "demo": "",
+      "featured": false,
+      "detailFile": ""
+    }
+  ],
+  "activities": [
+    {
+      "title": "활동명",
+      "organization": "조직명",
+      "period": "2024.01 - 현재",
+      "description": "활동 내용을 설명합니다.",
+      "role": "역할",
+      "detailFile": "activities/activity-1.md"
+    },
+    {
+      "title": "활동명 2",
+      "organization": "조직명",
+      "period": "2023.06 - 2023.12",
+      "description": "활동 내용을 설명합니다.",
+      "role": "역할",
+      "detailFile": ""
+    }
+  ],
+  "awards": [
+    {
+      "title": "수상명",
+      "organization": "주최기관",
+      "date": "2024.01",
+      "description": "수상 내용을 설명합니다."
+    },
+    {
+      "title": "수상명 2",
+      "organization": "주최기관",
+      "date": "2023.06",
+      "description": "수상 내용을 설명합니다."
+    }
+  ],
+  "certifications": [
+    {
+      "name": "자격증명",
+      "issuer": "발급기관",
+      "date": "2024.01",
+      "credentialId": "CRED-12345",
+      "credentialUrl": "https://example.com/credential"
+    },
+    {
+      "name": "자격증명 2",
+      "issuer": "발급기관",
+      "date": "2023.06",
+      "credentialId": "",
+      "credentialUrl": ""
+    }
+  ]
+}
