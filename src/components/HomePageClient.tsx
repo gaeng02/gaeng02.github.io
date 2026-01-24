@@ -33,7 +33,7 @@ export default function HomePageClient({ postsByCategory, aboutData, aboutDetail
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header activeMenu={selectedMenu} onMenuClick={handleMenuClick} />
+      <Header activeMenu={selectedMenu || undefined} onMenuClick={handleMenuClick} />
       <MainContent 
         selectedMenu={selectedMenu} 
         posts={getPostsForMenu(selectedMenu)}
