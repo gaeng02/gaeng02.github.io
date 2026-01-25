@@ -29,10 +29,10 @@ export default function Header({ activeMenu, onMenuClick }: HeaderProps) {
     <header className="max-w-4xl mx-auto px-4 py-12">
       <div className="text-center mb-8">
         <p className="text-xs text-gray-500 mb-4 tracking-wider uppercase">
-          Everything is personal. Including this blog..
+          Little by little, a little becomes a lot.
         </p>
         <h1 className="text-5xl md:text-7xl font-serif font-bold text-gray-900 mb-4" style={{ fontFamily: 'var(--font-serif)' }}>
-          Train of Thought
+          Trace of Thought
         </h1>
         <div className="w-24 h-px bg-gray-300 mx-auto mb-8"></div>
       </div>
