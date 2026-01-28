@@ -57,12 +57,34 @@ export default function HomePage() {
     },
   }
 
+  // SEO를 위해 최근 포스트 목록을 서버 사이드에서 렌더링
+  const allPosts = [
+    ...bookPosts,
+    ...paperPosts,
+    ...tryTechPosts,
+    ...memoirPosts,
+  ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  const recentPosts = allPosts.slice(0, 10)
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {/* SEO를 위한 최근 포스트 목록 (검색 엔진이 볼 수 있도록 서버 사이드 렌더링) */}
+      <div className="sr-only" aria-hidden="true">
+        <h2>최근 포스트</h2>
+        <ul>
+          {recentPosts.map((post) => (
+            <li key={post.slug}>
+              <a href={`/${post.category}/${post.slug}`}>
+                {post.title} - {post.description}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
       <HomePageClient 
         postsByCategory={postsByCategory}
         aboutData={aboutData}

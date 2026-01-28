@@ -1,17 +1,9 @@
-import { getAllPosts } from '@/lib/content'
 import { MetadataRoute } from 'next'
 
+const baseUrl = 'https://gaeng02.github.io'
+
+// 메인 사이트맵 (인덱스) - 메인 페이지만 포함
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://gaeng02.github.io'
-  const posts = getAllPosts()
-
-  const postUrls = posts.map((post) => ({
-    url: `${baseUrl}/${post.category}/${post.slug}`,
-    lastModified: new Date(post.date),
-    changeFrequency: 'monthly' as const,
-    priority: 0.8,
-  }))
-
   return [
     {
       url: baseUrl,
@@ -19,6 +11,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'daily',
       priority: 1,
     },
-    ...postUrls,
   ]
 }

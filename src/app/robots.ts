@@ -7,6 +7,9 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: [],
     },
-    sitemap: 'https://gaeng02.github.io/sitemap.xml',
+    sitemap: [
+      'https://gaeng02.github.io/sitemap.xml',
+      'https://gaeng02.github.io/sitemap-posts.xml',
+    ],
   }
 }
