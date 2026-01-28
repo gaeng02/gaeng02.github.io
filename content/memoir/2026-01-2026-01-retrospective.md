@@ -4,8 +4,6 @@ date: "2026-01-31"
 description: "2026년 1월 한 달을 돌아보며 회고합니다."
 category: "memoir"
 tags: ["회고", "2026"]
-featured: false
-draft: false
 ---
 
 # 2026년 1월 회고

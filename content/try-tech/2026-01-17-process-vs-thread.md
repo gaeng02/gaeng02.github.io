@@ -3,11 +3,7 @@ title: "프로세스 vs 스레드"
 date: "2026-01-17"
 description: "프로세스와 스레드의 차이점을 정리합니다."
 category: "try-tech"
-topic: "cs"
-subtopic: "os"
 tags: ["운영체제", "프로세스", "스레드"]
-featured: false
-draft: false
 ---
 
 # 프로세스 vs 스레드

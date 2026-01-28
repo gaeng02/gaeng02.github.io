@@ -3,11 +3,7 @@ title: "RAG (Retrieval-Augmented Generation) 기초"
 date: "2026-01-18"
 description: "RAG의 기본 개념과 동작 원리를 정리합니다."
 category: "try-tech"
-topic: "ai"
-subtopic: "nlp"
 tags: ["RAG", "Embedding", "LLM"]
-featured: true
-draft: false
 ---
 
 ##### RAG (Retrieval-Augmented Generation) 기초

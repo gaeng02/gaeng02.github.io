@@ -4,8 +4,6 @@ date: "2026-01-20"
 description: "Transformer 아키텍처를 제안한 논문을 리뷰합니다."
 category: "paper"
 tags: ["Transformer", "NLP", "Attention"]
-featured: true
-draft: false
 ---
 
 # Attention Is All You Need

@@ -9,7 +9,7 @@ import type { Metadata } from 'next'
 export async function generateStaticParams() {
   const posts = getAllPosts()
   return posts
-    .filter((post) => post.category === 'paper')
+    .filter((post) => post.category === 'memoir')
     .map((post) => ({
       slug: post.slug,
     }))
@@ -17,14 +17,14 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
-  const post = getPostBySlug('paper', slug)
+  const post = getPostBySlug('memoir', slug)
 
   if (!post) {
     return {}
   }
 
   const url = 'https://gaeng02.github.io'
-  const postUrl = `${url}/paper/${slug}`
+  const postUrl = `${url}/memoir/${slug}`
   const ogImage = post.cover ? `${url}${post.cover}` : undefined
 
   return {
@@ -49,9 +49,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 }
 
-export default async function PaperPostPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function MemoirPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const post = getPostBySlug('paper', slug)
+  const post = getPostBySlug('memoir', slug)
 
   if (!post) {
     notFound()
@@ -75,7 +75,7 @@ export default async function PaperPostPage({ params }: { params: Promise<{ slug
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://gaeng02.github.io/paper/${slug}`,
+      '@id': `https://gaeng02.github.io/memoir/${slug}`,
     },
     keywords: post.tags?.join(', '),
   }
@@ -100,7 +100,7 @@ export default async function PaperPostPage({ params }: { params: Promise<{ slug
           <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
             <time>{post.date}</time>
             <span className="px-3 py-1 text-xs font-medium text-primary-600 bg-primary-50 rounded-full">
-              논문 리뷰
+              Memoir
             </span>
           </div>
           {post.description && (

@@ -5,24 +5,19 @@ import matter from 'gray-matter'
 const contentDirectory = path.join(process.cwd(), 'content')
 
 export type Category = 'book' | 'paper' | 'try-tech' | 'memoir'
-export type Topic = 'cs' | 'ai'
 
 export interface PostFrontMatter {
   title: string
   date: string
   description: string
   category: Category
-  topic?: Topic
-  subtopic?: string
   tags?: string[]
-  featured?: boolean
-  draft?: boolean
   cover?: string
 }
 
 export interface Post extends PostFrontMatter {
   slug: string
-  slugPath: string[] // for study/retrospective nested paths
+  slugPath: string[] // deprecated: 모든 카테고리는 단순 slug 사용
   content: string
   filePath: string
 }
@@ -33,24 +28,10 @@ function getSlugFromFilename(filename: string): string {
   return filename.replace(/\.md$/, '').replace(datePattern, '')
 }
 
-// 파일 경로에서 slug path 배열 생성 (memoir용)
+// 파일 경로에서 slug path 배열 생성 (memoir용 - 현재는 사용하지 않음)
 function getSlugPathFromFilePath(filePath: string, category: Category): string[] {
-  if (category !== 'memoir') {
-    return []
-  }
-  
-  const relativePath = path.relative(
-    path.join(contentDirectory, 'memoir'),
-    filePath
-  )
-  
-  const parts = relativePath.split(path.sep)
-  const filename = parts[parts.length - 1]
-  const slug = getSlugFromFilename(filename)
-  
-  // 폴더 경로 + slug
-  const dirParts = parts.slice(0, -1)
-  return [...dirParts, slug]
+  // 모든 카테고리는 단순 slug 사용
+  return []
 }
 
 // 모든 MD 파일 읽기
@@ -78,11 +59,6 @@ function getPostFromFile(filePath: string, category: Category): Post | null {
     const { data, content } = matter(fileContents)
     
     const frontMatter = data as PostFrontMatter
-    
-    // draft는 제외
-    if (frontMatter.draft) {
-      return null
-    }
     
     // category 일치 확인
     if (frontMatter.category !== category) {
@@ -143,39 +119,10 @@ export function getAllPosts(): Post[] {
   return allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }
 
-// slug로 포스트 가져오기 (book, paper, try-tech)
-export function getPostBySlug(category: 'book' | 'paper' | 'try-tech', slug: string): Post | null {
+// slug로 포스트 가져오기 (모든 카테고리)
+export function getPostBySlug(category: Category, slug: string): Post | null {
   const posts = getPostsByCategory(category)
   return posts.find((post) => post.slug === slug) || null
 }
 
-// slug path로 포스트 가져오기 (memoir)
-export function getPostBySlugPath(
-  category: 'memoir',
-  slugPath: string[]
-): Post | null {
-  const posts = getPostsByCategory(category)
-  
-  return (
-    posts.find((post) => {
-      if (post.slugPath.length !== slugPath.length) return false
-      return post.slugPath.every((part, idx) => part === slugPath[idx])
-    }) || null
-  )
-}
-
-// Featured 포스트 가져오기
-export function getFeaturedPosts(limit: number = 3): Post[] {
-  const allPosts = getAllPosts()
-  return allPosts
-    .filter((post) => post.featured)
-    .slice(0, limit)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-}
-
-// 최근 포스트 가져오기
-export function getRecentPosts(limit: number = 12): Post[] {
-  const allPosts = getAllPosts()
-  return allPosts.slice(0, limit)
-}
 

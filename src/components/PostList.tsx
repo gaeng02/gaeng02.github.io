@@ -15,11 +15,7 @@ export default function PostList({ posts }: PostListProps) {
   }
 
   const getPostUrl = (post: Post) => {
-    if (post.category === 'book' || post.category === 'paper') {
-      return withBasePath(`/${post.category}/${post.slug}`)
-    } else {
-      return withBasePath(`/${post.category}/${post.slugPath.join('/')}`)
-    }
+    return withBasePath(`/${post.category}/${post.slug}`)
   }
 
   return (

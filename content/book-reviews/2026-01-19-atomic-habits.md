@@ -4,8 +4,6 @@ date: "2026-01-19"
 description: "제임스 클리어의 Atomic Habits를 읽고 습관 형성에 대한 인사이트를 정리했습니다."
 category: "book"
 tags: ["습관", "자기계발", "생산성"]
-featured: true
-draft: false
 ---
 
 # Atomic Habits - 작은 습관의 힘

@@ -17,11 +17,7 @@ export default function PostCard({ post, showCategory = false }: PostCardProps) 
   }
 
   const getPostUrl = () => {
-    if (post.category === 'book' || post.category === 'paper') {
-      return withBasePath(`/${post.category}/${post.slug}`)
-    } else {
-      return withBasePath(`/${post.category}/${post.slugPath.join('/')}`)
-    }
+    return withBasePath(`/${post.category}/${post.slug}`)
   }
 
   return (

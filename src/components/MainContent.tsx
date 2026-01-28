@@ -68,11 +68,7 @@ export default function MainContent({ selectedMenu, posts, searchQuery, aboutDat
               displayPosts.map((post) => (
                 <Link
                   key={post.slug}
-                  href={
-                    post.category === 'book' || post.category === 'paper' || post.category === 'try-tech'
-                      ? withBasePath(`/${post.category}/${post.slug}`)
-                      : withBasePath(`/${post.category}/${post.slugPath.join('/')}`)
-                  }
+                  href={withBasePath(`/${post.category}/${post.slug}`)}
                   className="block group"
                 >
                   <article className="flex gap-6 pb-6 border-b border-gray-100 last:border-0">
@@ -203,11 +199,7 @@ export default function MainContent({ selectedMenu, posts, searchQuery, aboutDat
             displayPosts.map((post) => (
               <Link
                 key={post.slug}
-                href={
-                  post.category === 'book' || post.category === 'paper' || post.category === 'try-tech'
-                    ? withBasePath(`/${post.category}/${post.slug}`)
-                    : withBasePath(`/${post.category}/${post.slugPath.join('/')}`)
-                }
+                href={withBasePath(`/${post.category}/${post.slug}`)}
                 className="block group"
               >
                 <article className="flex gap-6 pb-6 border-b border-gray-100 last:border-0">
