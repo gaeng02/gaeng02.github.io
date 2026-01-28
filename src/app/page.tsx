@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Trace of Thought',
     description: '도서 리뷰, 논문 정리, 학습 내용, 그리고 회고를 기록하는 블로그',
-    url: 'https://gaeng02.github.io',
+    url: 'https://www.gaeng02.com',
   },
 }
 
@@ -50,7 +50,7 @@ export default function HomePage() {
     '@type': 'Blog',
     name: 'Trace of Thought',
     description: '도서 리뷰, 논문 정리, 학습 내용, 그리고 회고를 기록하는 블로그',
-    url: 'https://gaeng02.github.io',
+    url: 'https://www.gaeng02.com',
     author: {
       '@type': 'Person',
       name: 'gaeng02',

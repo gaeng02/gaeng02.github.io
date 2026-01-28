@@ -1,7 +1,7 @@
 import { getAllPosts } from '@/lib/content'
 import { MetadataRoute } from 'next'
 
-const baseUrl = 'https://gaeng02.github.io'
+const baseUrl = 'https://www.gaeng02.com'
 
 // 포스트 사이트맵 - 모든 포스트 포함
 export default function sitemap(): MetadataRoute.Sitemap {

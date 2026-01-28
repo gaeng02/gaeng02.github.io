@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     return {}
   }
 
-  const url = 'https://gaeng02.github.io'
+  const url = 'https://www.gaeng02.com'
   const postUrl = `${url}/memoir/${slug}`
   const ogImage = post.cover ? `${url}${post.cover}` : undefined
 
@@ -62,7 +62,7 @@ export default async function MemoirPostPage({ params }: { params: Promise<{ slu
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.description,
-    image: post.cover ? `https://gaeng02.github.io${post.cover}` : undefined,
+    image: post.cover ? `https://www.gaeng02.com${post.cover}` : undefined,
     datePublished: post.date,
     dateModified: post.date,
     author: {
@@ -75,7 +75,7 @@ export default async function MemoirPostPage({ params }: { params: Promise<{ slu
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://gaeng02.github.io/memoir/${slug}`,
+      '@id': `https://www.gaeng02.com/memoir/${slug}`,
     },
     keywords: post.tags?.join(', '),
   }

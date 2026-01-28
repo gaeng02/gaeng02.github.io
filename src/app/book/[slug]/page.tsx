@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     return {}
   }
 
-  const url = 'https://gaeng02.github.io'
+  const url = 'https://www.gaeng02.com'
   const postUrl = `${url}/book/${slug}`
   const ogImage = post.cover ? `${url}${post.cover}` : undefined
 
@@ -62,7 +62,7 @@ export default async function BookPostPage({ params }: { params: Promise<{ slug:
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.description,
-    image: post.cover ? `https://gaeng02.github.io${post.cover}` : undefined,
+    image: post.cover ? `https://www.gaeng02.com${post.cover}` : undefined,
     datePublished: post.date,
     dateModified: post.date,
     author: {
@@ -74,12 +74,12 @@ export default async function BookPostPage({ params }: { params: Promise<{ slug:
       name: 'Trace of Thought',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://gaeng02.github.io/assets/images/logo.png',
+        url: 'https://www.gaeng02.com/assets/images/logo.png',
       },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://gaeng02.github.io/book/${slug}`,
+      '@id': `https://www.gaeng02.com/book/${slug}`,
     },
     keywords: post.tags?.join(', '),
   }

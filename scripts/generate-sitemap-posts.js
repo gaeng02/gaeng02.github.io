@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 
 const contentDirectory = path.join(process.cwd(), 'content')
-const baseUrl = 'https://gaeng02.github.io'
+const baseUrl = 'https://www.gaeng02.com'
 
 // 모든 MD 파일 읽기
 function getAllMarkdownFiles(dir, fileList = []) {

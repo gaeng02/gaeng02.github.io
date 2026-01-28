@@ -8,8 +8,8 @@ export default function robots(): MetadataRoute.Robots {
       disallow: [],
     },
     sitemap: [
-      'https://gaeng02.github.io/sitemap.xml',
-      'https://gaeng02.github.io/sitemap-posts.xml',
+      'https://www.gaeng02.com/sitemap.xml',
+      'https://www.gaeng02.com/sitemap-posts.xml',
     ],
   }
 }
