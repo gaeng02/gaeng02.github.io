@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import Footer from '@/components/Footer'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 import { withBasePath } from '@/lib/utils'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
@@ -54,6 +55,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={`${inter.variable} ${playfair.variable} font-sans`}>
+        <GoogleAnalytics />
         <div className="min-h-screen flex flex-col">
           <main className="flex-1">{children}</main>
           <Footer />
