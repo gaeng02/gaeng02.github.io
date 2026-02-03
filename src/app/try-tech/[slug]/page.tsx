@@ -86,15 +86,15 @@ export default async function TryTechPostPage({ params }: { params: Promise<{ sl
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="max-w-4xl mx-auto px-4 py-12">
-        <Link
-          href={withBasePath('/')}
-          className="inline-flex items-center text-primary-600 hover:text-primary-700 mb-6"
-        >
-          ← 목록으로
-        </Link>
+    <div className="max-w-4xl mx-auto px-4 py-12">
+      <Link
+        href={withBasePath('/')}
+        className="inline-flex items-center text-primary-600 hover:text-primary-700 mb-6"
+      >
+        ← 목록으로
+      </Link>
 
-        <article className="bg-white rounded-3xl border border-gray-200 p-8 md:p-12 shadow-sm">
+      <article className="bg-white rounded-3xl border border-gray-200 p-8 md:p-12 shadow-sm">
         <header className="mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">{post.title}</h1>
           <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">

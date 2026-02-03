@@ -37,14 +37,16 @@ export default function HomePageClient({ postsByCategory, aboutData, aboutDetail
     }
   }
 
-  // 모든 포스트를 하나의 배열로 합치기
+  // 모든 포스트를 하나의 배열로 합치기 (날짜순 정렬)
   const allPosts = useMemo(() => {
-    return [
+    const posts = [
       ...postsByCategory.book,
       ...postsByCategory.paper,
       ...postsByCategory['try-tech'],
       ...postsByCategory.memoir,
     ]
+    // 날짜순 정렬 (최신순)
+    return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   }, [postsByCategory])
 
   // 검색어로 필터링
@@ -61,11 +63,14 @@ export default function HomePageClient({ postsByCategory, aboutData, aboutDetail
   }, [searchQuery, allPosts])
 
   const getPostsForMenu = (menu: MenuItem | null): Post[] => {
-    if (!menu || menu === 'about') return []
+    if (!menu || menu === 'about') {
+      // 메뉴가 선택되지 않았을 때는 최신 포스트 5개 보여주기
+      return allPosts.slice(0, 5)
+    }
     return postsByCategory[menu] || []
   }
 
-  // 검색 중이면 검색 결과, 아니면 메뉴별 포스트
+  // 검색 중이면 검색 결과, 아니면 메뉴별 포스트 (또는 최신 포스트)
   const displayPosts = searchQuery.trim() ? filteredPosts : getPostsForMenu(selectedMenu)
 
   return (
