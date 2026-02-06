@@ -92,7 +92,7 @@ export default async function BookPostPage({ params }: { params: Promise<{ slug:
       />
       <div className="max-w-4xl mx-auto px-4 py-12">
         <Link
-          href={withBasePath('/')}
+          href={withBasePath('/book')}
           className="inline-flex items-center text-primary-600 hover:text-primary-700 mb-6"
         >
           ← 목록으로

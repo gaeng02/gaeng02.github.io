@@ -1,93 +1,29 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import Header from './Header'
-import MainContent from './MainContent'
-import type { Post } from '@/lib/content'
-import type { AboutData } from '@/lib/about'
-
-type MenuItem = 'book' | 'paper' | 'try-tech' | 'memoir' | 'about'
+import SeriesList from './SeriesList'
+import type { SeriesWithPosts } from '@/lib/series'
 
 interface HomePageClientProps {
-  postsByCategory: {
-    book: Post[]
-    paper: Post[]
-    'try-tech': Post[]
-    memoir: Post[]
-  }
-  aboutData: AboutData
-  aboutDetailContents: Record<string, string>
+  allSeries: SeriesWithPosts[]
 }
 
-export default function HomePageClient({ postsByCategory, aboutData, aboutDetailContents }: HomePageClientProps) {
-  const [selectedMenu, setSelectedMenu] = useState<MenuItem | null>(null)
+export default function HomePageClient({ allSeries }: HomePageClientProps) {
   const [searchQuery, setSearchQuery] = useState('')
-
-  const handleMenuClick = (menu: MenuItem) => {
-    setSelectedMenu(menu)
-    // 메뉴 클릭 시 검색어 초기화
-    setSearchQuery('')
-  }
 
   const handleSearchChange = (query: string) => {
     setSearchQuery(query)
-    // 검색 시 메뉴 선택 해제
-    if (query) {
-      setSelectedMenu(null)
-    }
   }
-
-  // 모든 포스트를 하나의 배열로 합치기 (날짜순 정렬)
-  const allPosts = useMemo(() => {
-    const posts = [
-      ...postsByCategory.book,
-      ...postsByCategory.paper,
-      ...postsByCategory['try-tech'],
-      ...postsByCategory.memoir,
-    ]
-    // 날짜순 정렬 (최신순)
-    return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-  }, [postsByCategory])
-
-  // 검색어로 필터링
-  const filteredPosts = useMemo(() => {
-    if (!searchQuery.trim()) return []
-
-    const query = searchQuery.toLowerCase().trim()
-    return allPosts.filter((post) => {
-      const titleMatch = post.title.toLowerCase().includes(query)
-      const descriptionMatch = post.description.toLowerCase().includes(query)
-      const tagsMatch = post.tags?.some((tag) => tag.toLowerCase().includes(query)) || false
-      return titleMatch || descriptionMatch || tagsMatch
-    })
-  }, [searchQuery, allPosts])
-
-  const getPostsForMenu = (menu: MenuItem | null): Post[] => {
-    if (!menu || menu === 'about') {
-      // 메뉴가 선택되지 않았을 때는 최신 포스트 5개 보여주기
-      return allPosts.slice(0, 5)
-    }
-    return postsByCategory[menu] || []
-  }
-
-  // 검색 중이면 검색 결과, 아니면 메뉴별 포스트 (또는 최신 포스트)
-  const displayPosts = searchQuery.trim() ? filteredPosts : getPostsForMenu(selectedMenu)
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header 
-        activeMenu={selectedMenu || undefined} 
-        onMenuClick={handleMenuClick}
+        activeMenu="series"
         onSearchChange={handleSearchChange}
         searchQuery={searchQuery}
       />
-      <MainContent 
-        selectedMenu={searchQuery.trim() ? null : selectedMenu}
-        posts={displayPosts}
-        searchQuery={searchQuery.trim()}
-        aboutData={aboutData}
-        aboutDetailContents={aboutDetailContents}
-      />
+      <SeriesList series={allSeries} />
     </div>
   )
 }

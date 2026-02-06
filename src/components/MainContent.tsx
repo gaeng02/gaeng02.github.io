@@ -5,32 +5,28 @@ import { Post } from '@/lib/content'
 import Link from 'next/link'
 import { withBasePath } from '@/lib/utils'
 import Image from 'next/image'
-import type { AboutData } from '@/lib/about'
-import AboutSection from './AboutSection'
 
-type MenuItem = 'book' | 'paper' | 'try-tech' | 'memoir' | 'about'
+type MenuItem = 'series' | 'book' | 'paper' | 'try-tech' | 'memoir'
 
 interface MainContentProps {
   selectedMenu: MenuItem | null
   posts: Post[]
   searchQuery?: string
-  aboutData?: AboutData
-  aboutDetailContents?: Record<string, string>
 }
 
 const POSTS_PER_PAGE = 10
 
-export default function MainContent({ selectedMenu, posts, searchQuery, aboutData, aboutDetailContents }: MainContentProps) {
+export default function MainContent({ selectedMenu, posts, searchQuery }: MainContentProps) {
   const [currentPage, setCurrentPage] = useState(1)
 
-  const categoryLabels: Record<Exclude<MenuItem, 'about'>, string> = {
+  const categoryLabels: Record<Exclude<MenuItem, 'series'>, string> = {
     book: 'Book',
     paper: 'Paper',
     'try-tech': 'Try Tech',
     memoir: 'Memoir',
   }
 
-  const getCategoryUrl = (category: Exclude<MenuItem, 'about'>) => {
+  const getCategoryUrl = (category: Exclude<MenuItem, 'series'>) => {
     return withBasePath(`/${category}`)
   }
 
@@ -285,14 +281,6 @@ export default function MainContent({ selectedMenu, posts, searchQuery, aboutDat
         </div>
       </div>
     )
-  }
-
-  // About 메뉴인 경우 AboutSection 렌더링
-  if (selectedMenu === 'about') {
-    if (aboutData && aboutDetailContents) {
-      return <AboutSection data={aboutData} detailContents={aboutDetailContents} />
-    }
-    return null
   }
 
   const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE)

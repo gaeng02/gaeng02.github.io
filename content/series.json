@@ -1,0 +1,15 @@
+{
+  "series": [
+    {
+      "slug": "swmaestro",
+      "title": "SWMaestro",
+      "description": "SWMaestro 선발 과정과 경험을 기록한 포스트 모음",
+      "posts": [
+        {
+          "category": "memoir",
+          "slug": "2025-03-SWMaestro"
+        }
+      ]
+    }
+  ]
+}
