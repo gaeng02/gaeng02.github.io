@@ -11,3 +11,24 @@
     @apply bg-gray-50 text-gray-900;
   }
 }
+
+@layer components {
+  .markdown-content.prose :where(ul, ol) {
+    margin-top: 0.5em;
+    margin-bottom: 0.7em;
+  }
+
+  .markdown-content.prose :where(p + ul, p + ol) {
+    margin-top: 0.2em;
+  }
+
+  .markdown-content.prose :where(p:has(+ ul), p:has(+ ol)) {
+    margin-bottom: 0.2em;
+  }
+
+  .markdown-content.prose :where(li) {
+    font-size: 0.90em;
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+  }
+}

@@ -59,9 +59,6 @@ export function getSeriesWithPosts(slug: string): SeriesWithPosts | null {
     }
   })
 
-  // 날짜순 정렬 (최신순)
-  posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-
   return {
     ...series,
     posts,
@@ -84,9 +81,6 @@ export function getAllSeriesWithPosts(): SeriesWithPosts[] {
         posts.push(post)
       }
     })
-
-    // 날짜순 정렬 (최신순)
-    posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
     return {
       ...series,

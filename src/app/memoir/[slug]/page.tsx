@@ -31,6 +31,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: post.title,
     description: post.description,
     keywords: post.tags,
+    alternates: {
+      canonical: postUrl,
+    },
     openGraph: {
       title: post.title,
       description: post.description,
@@ -103,9 +106,6 @@ export default async function MemoirPostPage({ params }: { params: Promise<{ slu
               Memoir
             </span>
           </div>
-          {post.description && (
-            <p className="text-lg text-gray-700 mb-6">{post.description}</p>
-          )}
           {post.cover && (
             <div className="relative w-full h-64 md:h-96 rounded-2xl overflow-hidden mb-6">
               <Image

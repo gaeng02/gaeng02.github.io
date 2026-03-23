@@ -37,6 +37,13 @@ export async function generateMetadata({ params }: SeriesPageProps): Promise<Met
   return {
     title: `${series.title} - Trace of Thought`,
     description: series.description,
+    robots: {
+      index: false,
+      follow: true,
+    },
+    alternates: {
+      canonical: `https://www.gaeng02.com/series/${series.slug}`,
+    },
     openGraph: {
       title: `${series.title} - Trace of Thought`,
       description: series.description,

@@ -103,9 +103,6 @@ export default async function PaperPostPage({ params }: { params: Promise<{ slug
               논문 리뷰
             </span>
           </div>
-          {post.description && (
-            <p className="text-lg text-gray-700 mb-6">{post.description}</p>
-          )}
           {post.cover && (
             <div className="relative w-full h-64 md:h-96 rounded-2xl overflow-hidden mb-6">
               <Image

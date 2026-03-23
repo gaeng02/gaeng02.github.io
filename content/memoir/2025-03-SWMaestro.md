@@ -1,7 +1,7 @@
 ---
 title: "소프트웨어마에스트로 16기 합격 후기"
 date: "2025-03-31"
-description: ""
+description: "소프트웨어마에스트로 16기 지원부터 1·2차 코딩테스트, 최종 면접, 합격까지의 준비 과정과 경험을 정리한 후기"
 category: "memoir"
 tags: ["2025", "SWMaestro"]
 ---
