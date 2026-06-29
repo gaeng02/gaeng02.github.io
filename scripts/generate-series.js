@@ -94,15 +94,18 @@ function generateSeries() {
     const matched = allPosts.filter((post) => post.tags.includes(tag))
     const sorted = sortSeriesPosts(matched, seriesConfig.postSort)
 
-    return {
+    const entry = {
       slug: seriesConfig.slug,
       title: seriesConfig.title,
       description: seriesConfig.description || '',
-      posts: sorted.map((post) => ({
-        category: post.category,
-        slug: post.slug,
-      })),
     }
+    if (seriesConfig.note) entry.note = seriesConfig.note
+    if (seriesConfig.cover) entry.cover = seriesConfig.cover
+    entry.posts = sorted.map((post) => ({
+      category: post.category,
+      slug: post.slug,
+    }))
+    return entry
   })
 
   const orderMap = new Map(seriesOrder.map((slug, index) => [slug, index]))

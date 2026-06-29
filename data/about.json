@@ -3,13 +3,27 @@
     "name": "Gaeng02",
     "title": "Researcher",
     "description": "도서 리뷰, 논문 정리, 학습 내용을 기록합니다.",
+    "headline": "안녕하세요, *매번 배우려는 사람*입니다.",
+    "intro": [
+      "잘하는 것보다 꾸준한 것에 마음을 둡니다. 멋진 결론보다 어디서 막혔는지를 적으려 노력해요. 같은 자리에서 막혀본 다른 사람에게 조금이라도 도움이 되었으면 합니다.",
+      "읽은 책과 논문, 직접 만들어본 것들, 그리고 그 사이의 회고를 이곳에 남깁니다."
+    ],
     "image": "/assets/images/profile.jpg",
+    "imageCaption": "",
     "email": "sondin144@gmail.com",
     "github": "https://github.com/gaeng02",
     "linkedin": "https://www.linkedin.com/in/kyungsik-yang-ba6426359/",
     "instagram": "https://www.instagram.com/gaeng._.02/",
     "blog": "https://gaeng02.github.io"
   },
+  "education": [
+    {
+      "period": "2021 — 2025",
+      "degree": "학사 · 전공명",
+      "organization": "○○ 대학교",
+      "detail": "관심 분야와 활동을 한 줄로 적어 주세요."
+    }
+  ],
   "experience": [
     {
       "title": "Senior Developer",

@@ -9,13 +9,24 @@ export interface AboutData {
     name: string
     title: string
     description: string
+    /** large greeting headline; supports a single *emphasis* span */
+    headline?: string
+    /** intro paragraphs shown in the Intro section */
+    intro?: string[]
     image?: string
+    imageCaption?: string
     email?: string
     github?: string
     linkedin?: string
     instagram?: string
     blog?: string
   }
+  education?: Array<{
+    period: string
+    degree: string
+    organization?: string
+    detail?: string
+  }>
   experience: Array<{
     title: string
     company: string
@@ -66,6 +77,17 @@ export function getAboutDetailContent(filePath: string): string {
   } catch (error) {
     console.error(`Error reading detail content from ${filePath}:`, error)
     return ''
+  }
+}
+
+/** True if a /public asset actually exists (avoids broken <img> in production). */
+export function publicAssetExists(assetPath?: string): boolean {
+  if (!assetPath) return false
+  try {
+    const clean = assetPath.split('?')[0]
+    return fs.existsSync(path.join(process.cwd(), 'public', clean.replace(/^\//, '')))
+  } catch {
+    return false
   }
 }
 

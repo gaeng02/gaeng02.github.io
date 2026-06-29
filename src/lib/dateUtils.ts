@@ -15,3 +15,19 @@ export function getMonthName(month: number): string {
   const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
   return monthNames[month - 1]
 }
+
+const pad = (n: number) => String(n).padStart(2, '0')
+
+// 날짜를 점 포맷으로 (예: "2026.01.15")
+export function formatDot(dateString: string): string {
+  const date = new Date(dateString)
+  if (Number.isNaN(date.getTime())) return dateString
+  return `${date.getFullYear()}.${pad(date.getMonth() + 1)}.${pad(date.getDate())}`
+}
+
+// 짧은 점 포맷 (예: "26.01.15")
+export function formatDotShort(dateString: string): string {
+  const date = new Date(dateString)
+  if (Number.isNaN(date.getTime())) return dateString
+  return `${String(date.getFullYear()).slice(2)}.${pad(date.getMonth() + 1)}.${pad(date.getDate())}`
+}

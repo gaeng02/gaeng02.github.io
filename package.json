@@ -3,8 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "gen": "node scripts/generate-series.js && node scripts/generate-search-index.js",
+    "predev": "npm run gen",
     "dev": "next dev",
-    "build": "node scripts/generate-series.js && next build && node scripts/generate-sitemap-posts.js",
+    "prebuild": "npm run gen",
+    "build": "next build && node scripts/generate-sitemap-posts.js",
+    "build:local": "node scripts/build-local.js",
+    "preview": "npx serve out",
     "start": "next start",
     "lint": "next lint"
   },

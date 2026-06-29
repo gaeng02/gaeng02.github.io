@@ -12,11 +12,13 @@ export default function GoogleAnalytics() {
   useEffect(() => {
     if (!GA_MEASUREMENT_ID) return
 
-    // 페이지뷰 추적
+    // 페이지뷰 추적 (초기 로드 + 클라이언트 라우트 변경)
+    // 초기 pageview는 config에서 끄고(send_page_view:false) 여기서만 1회 전송 → 중복 카운트 방지
     if (typeof window !== 'undefined' && window.gtag) {
-      const url = pathname + (window.location.search || '')
-      window.gtag('config', GA_MEASUREMENT_ID, {
-        page_path: url,
+      window.gtag('event', 'page_view', {
+        page_path: pathname + (window.location.search || ''),
+        page_location: window.location.href,
+        page_title: document.title,
       })
     }
   }, [pathname])
@@ -40,7 +42,7 @@ export default function GoogleAnalytics() {
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', '${GA_MEASUREMENT_ID}', {
-              page_path: window.location.pathname,
+              send_page_view: false,
             });
           `,
         }}

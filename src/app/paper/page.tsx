@@ -1,19 +1,16 @@
-import { getPostsByCategory } from '@/lib/content'
-import CategoryPageClient from '@/components/CategoryPageClient'
 import type { Metadata } from 'next'
+import CategoryScreen from '@/components/CategoryScreen'
+import { CATEGORY_META } from '@/lib/categories'
+
+const meta = CATEGORY_META.paper
 
 export const metadata: Metadata = {
-  title: 'Paper',
-  description: '논문 정리 모음',
-  openGraph: {
-    title: 'Paper - Trace of Thought',
-    description: '논문 정리 모음',
-    url: 'https://www.gaeng02.com/paper',
-  },
+  title: `${meta.label} · ${meta.ko}`,
+  description: meta.description,
+  alternates: { canonical: meta.href },
+  openGraph: { title: `${meta.label} · ${meta.ko}`, description: meta.description, url: meta.href },
 }
 
 export default function PaperPage() {
-  const posts = getPostsByCategory('paper')
-
-  return <CategoryPageClient category="paper" posts={posts} />
+  return <CategoryScreen category="paper" />
 }

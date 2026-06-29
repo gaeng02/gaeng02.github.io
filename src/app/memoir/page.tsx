@@ -1,19 +1,16 @@
-import { getPostsByCategory } from '@/lib/content'
-import CategoryPageClient from '@/components/CategoryPageClient'
 import type { Metadata } from 'next'
+import CategoryScreen from '@/components/CategoryScreen'
+import { CATEGORY_META } from '@/lib/categories'
+
+const meta = CATEGORY_META.memoir
 
 export const metadata: Metadata = {
-  title: 'Memoir',
-  description: '회고 모음',
-  openGraph: {
-    title: 'Memoir - Trace of Thought',
-    description: '회고 모음',
-    url: 'https://www.gaeng02.com/memoir',
-  },
+  title: `${meta.label} · ${meta.ko}`,
+  description: meta.description,
+  alternates: { canonical: meta.href },
+  openGraph: { title: `${meta.label} · ${meta.ko}`, description: meta.description, url: meta.href },
 }
 
 export default function MemoirPage() {
-  const posts = getPostsByCategory('memoir')
-
-  return <CategoryPageClient category="memoir" posts={posts} />
+  return <CategoryScreen category="memoir" />
 }

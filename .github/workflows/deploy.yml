@@ -31,6 +31,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # The local-only writing tool (committed for backup) can't exist during a
+      # static export — `output: 'export'` forbids API route handlers. Remove it
+      # before building. This only affects the ephemeral CI checkout.
+      - name: Remove local-only admin tooling
+        run: rm -rf src/app/admin src/app/api
+
       - name: Build
         run: npm run build
         env:
