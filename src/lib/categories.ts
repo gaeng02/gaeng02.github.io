@@ -2,7 +2,7 @@ import type { Category } from './content'
 
 export type { Category }
 
-export const CATEGORIES: Category[] = ['book', 'paper', 'try-tech', 'memoir']
+export const CATEGORIES: Category[] = ['try-tech', 'memoir', 'paper', 'book']
 
 export interface CategoryMeta {
   /** content category key */
