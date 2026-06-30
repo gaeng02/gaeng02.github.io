@@ -61,9 +61,6 @@ export default function SeriesDetailPage({ params }: { params: { slug: string } 
         <p className="body-kr" style={{ fontSize: 20, maxWidth: 660, margin: 0 }}>
           {series.description}
         </p>
-        <div className="label" style={{ marginTop: 18, color: 'var(--ink-2)' }}>
-          {series.posts.length} articles
-        </div>
 
         {series.note && (
           <div
