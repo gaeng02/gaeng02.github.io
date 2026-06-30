@@ -391,7 +391,7 @@ mark { background: var(--c-paper-bg); color: var(--c-paper); padding: 0 3px; bor
   font-size: 17px;
   line-height: 1.85;
   color: var(--ink);
-  max-width: 680px;
+  max-width: 720px;
 }
 .prose > :first-child { margin-top: 0; }
 .prose p { margin: 0 0 1.1em; }

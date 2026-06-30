@@ -6,7 +6,7 @@ export default function ArticleToc({ items }: { items: TocItem[] }) {
   return (
     <nav className="card toc" aria-label="목차">
       <div className="label label--ink" style={{ marginBottom: 14 }}>
-        목차 · CONTENTS
+        CONTENTS
       </div>
       <ol>
         {items.map((it, i) => {

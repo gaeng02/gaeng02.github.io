@@ -61,7 +61,7 @@ export default async function ArticleScreen({
       <article>
         {/* HEAD */}
         <section className="px" style={{ paddingTop: 72, paddingBottom: 28 }}>
-          <div style={{ maxWidth: 1000, margin: '0 auto' }}>
+          <div style={{ maxWidth: 720, margin: '0 auto' }}>
             <Link className="btn" href={meta.href} style={{ marginBottom: 28 }}>
               ← {meta.label} 목록으로 돌아가기
             </Link>
@@ -92,7 +92,6 @@ export default async function ArticleScreen({
                 fontSize: 'clamp(32px, 5vw, 52px)',
                 margin: '0 0 18px',
                 lineHeight: 1.25,
-                maxWidth: 880,
                 color: 'var(--ink)',
               }}
             >
@@ -100,7 +99,7 @@ export default async function ArticleScreen({
             </h1>
 
             {post.description && (
-              <p className="body-kr" style={{ fontSize: 19, maxWidth: 720, color: 'var(--ink-2)', margin: '0 0 20px' }}>
+              <p className="body-kr" style={{ fontSize: 19, color: 'var(--ink-2)', margin: '0 0 20px' }}>
                 {post.description}
               </p>
             )}
@@ -119,17 +118,15 @@ export default async function ArticleScreen({
 
         {/* BODY */}
         <section className="px" style={{ paddingTop: 20, paddingBottom: 64 }}>
-          <div style={{ maxWidth: 1000, margin: '0 auto' }}>
-            <div style={{ maxWidth: 720, margin: '0 auto' }}>
-              <ArticleToc items={toc} />
-              <ProseHtml html={html} />
+          <div style={{ maxWidth: 720, margin: '0 auto' }}>
+            <ArticleToc items={toc} />
+            <ProseHtml html={html} />
 
-              <div style={{ marginTop: 48, paddingTop: 28, borderTop: '1px solid var(--rule)' }}>
-                <div className="label label--ink" style={{ marginBottom: 14 }}>
-                  Share
-                </div>
-                <CopyLinkButton url={url} />
+            <div style={{ marginTop: 48, paddingTop: 28, borderTop: '1px solid var(--rule)' }}>
+              <div className="label label--ink" style={{ marginBottom: 14 }}>
+                Share
               </div>
+              <CopyLinkButton url={url} />
             </div>
           </div>
         </section>
@@ -139,7 +136,7 @@ export default async function ArticleScreen({
           <section className="px" style={{ paddingBottom: 24 }}>
             <div
               style={{
-                maxWidth: 1000,
+                maxWidth: 720,
                 margin: '0 auto',
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr',
