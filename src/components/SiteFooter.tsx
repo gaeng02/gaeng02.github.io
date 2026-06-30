@@ -17,9 +17,7 @@ export default function SiteFooter() {
   return (
     <footer className="foot">
       <div className="colophon">
-        <h5>
-          {SITE.brandWord} — {SITE.name}
-        </h5>
+        <h5>{SITE.name}</h5>
         <p style={{ margin: 0 }}>{SITE.colophon}</p>
         {socials.length > 0 && (
           <p style={{ marginTop: 14, display: 'flex', gap: 16, flexWrap: 'wrap' }}>

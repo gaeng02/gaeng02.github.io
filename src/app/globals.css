@@ -159,9 +159,7 @@ html[data-theme='dark'] {
   z-index: 40;
 }
 .nav .brand { display: flex; align-items: center; gap: 9px; font-size: 15px; }
-.nav .brand .sq { width: 10px; height: 10px; background: var(--ink); display: inline-block; }
-.nav .brand .j { font-family: var(--mono); font-weight: 700; letter-spacing: -0.01em; }
-.nav .brand .name { font-family: var(--serif); font-weight: 500; font-style: italic; font-size: 18px; margin-left: 2px; color: var(--ink); }
+.nav .brand .name { font-family: var(--serif); font-weight: 500; font-style: italic; font-size: 18px; color: var(--ink); }
 .nav-links { display: flex; align-items: center; gap: 22px; }
 .nav-group { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; }
 .nav-divider { width: 1px; height: 16px; background: var(--rule-2); display: inline-block; }
@@ -199,6 +197,8 @@ html[data-theme='dark'] {
   font-family: var(--mono); font-size: 12px;
 }
 .search-btn:hover { border-color: var(--mute); color: var(--ink); }
+/* keep the button's footprint on the home page so the nav doesn't shift */
+.search-btn.is-hidden { visibility: hidden; pointer-events: none; }
 .kbd {
   font-family: var(--mono); font-size: 10px;
   border: 1px solid var(--rule); padding: 1px 5px; border-radius: 5px; color: var(--mute);

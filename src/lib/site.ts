@@ -2,8 +2,6 @@
 export const SITE = {
   /** serif name shown in the brand lockup and titles */
   name: 'Trace of Thought',
-  /** mono descriptor that precedes the name in the lockup */
-  brandWord: 'journal',
   url: 'https://www.gaeng02.com',
   description:
     '책 · 논문 · 시도 · 회고를 한곳에. 도서 리뷰, 논문 정리, 기술 학습 기록과 회고를 남기는 gaeng02의 블로그입니다.',

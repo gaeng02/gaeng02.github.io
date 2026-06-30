@@ -42,20 +42,10 @@ export default function SiteHeader() {
     <>
       <header className="nav">
         <Link href="/" className="brand" aria-label={`${SITE.name} 홈`}>
-          <span className="sq" aria-hidden />
-          <span className="j">{SITE.brandWord}</span>
-          <span className="name">— {SITE.name}</span>
+          <span className="name">{SITE.name}</span>
         </Link>
 
         <nav className="nav-links" aria-label="주요 메뉴">
-          <ul className="nav-group">
-            <li>
-              <Link className={`nav-link${aboutActive ? ' active' : ''}`} href="/about">
-                About
-              </Link>
-            </li>
-          </ul>
-          <span className="nav-divider" aria-hidden />
           <ul className="nav-group">
             <li>
               <Link className={`nav-link${seriesActive ? ' active' : ''}`} href="/series">
@@ -78,16 +68,28 @@ export default function SiteHeader() {
               )
             })}
           </ul>
+          <span className="nav-divider" aria-hidden />
+          <ul className="nav-group">
+            <li>
+              <Link className={`nav-link${aboutActive ? ' active' : ''}`} href="/about">
+                About
+              </Link>
+            </li>
+          </ul>
         </nav>
 
         <div className="right">
-          {!isHome && (
-            <button type="button" className="search-btn" onClick={() => setSearchOpen(true)}>
-              <span aria-hidden>⌕</span>
-              <span>Search</span>
-              <span className="kbd" aria-hidden>/</span>
-            </button>
-          )}
+          <button
+            type="button"
+            className={`search-btn${isHome ? ' is-hidden' : ''}`}
+            onClick={() => setSearchOpen(true)}
+            aria-hidden={isHome}
+            tabIndex={isHome ? -1 : 0}
+          >
+            <span aria-hidden>⌕</span>
+            <span>Search</span>
+            <span className="kbd" aria-hidden>/</span>
+          </button>
           <ThemeToggle />
         </div>
       </header>
