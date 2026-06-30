@@ -92,16 +92,19 @@ export default function CategoryView({
         </select>
       </div>
 
-      {/* tag drawer */}
+      {/* tag drawer — animate grid rows (0fr↔1fr) so it tracks the real
+          content height; max-height transitions lag when content is shorter
+          than the cap, leaving a dead gap on collapse. */}
       <div
         style={{
           borderBottom: open ? '1px solid var(--rule)' : 0,
           background: 'var(--bg-2)',
-          maxHeight: open ? 320 : 0,
-          overflow: 'hidden',
-          transition: 'max-height 0.25s ease',
+          display: 'grid',
+          gridTemplateRows: open ? '1fr' : '0fr',
+          transition: 'grid-template-rows 0.25s ease',
         }}
       >
+        <div style={{ overflow: 'hidden', minHeight: 0 }}>
         <div className="px" style={{ padding: '4px var(--page-px) 26px', display: 'flex', flexWrap: 'wrap', gap: 10 }}>
           <button
             type="button"
@@ -120,6 +123,7 @@ export default function CategoryView({
               #{tag} <span className="n">{count}</span>
             </button>
           ))}
+        </div>
         </div>
       </div>
 

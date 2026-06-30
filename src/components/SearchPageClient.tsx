@@ -26,7 +26,7 @@ type Filter = 'all' | Category
 export default function SearchPageClient() {
   const params = useSearchParams()
   const [items, setItems] = useState<SearchItem[]>([])
-  const [query, setQuery] = useState('')
+  const [query, setQuery] = useState(() => params.get('q') ?? '')
   const [filter, setFilter] = useState<Filter>('all')
   const [shown, setShown] = useState(8)
 
@@ -34,17 +34,23 @@ export default function SearchPageClient() {
     loadSearchIndex().then(setItems)
   }, [])
 
+  // read q from the URL (e.g. arriving from a tag link), but only when it
+  // actually differs — otherwise the writeback effect below would ping-pong
+  // with useSearchParams (Next tracks history.replaceState) in an endless loop.
   useEffect(() => {
-    setQuery(params.get('q') ?? '')
+    const q = params.get('q') ?? ''
+    setQuery((prev) => (prev === q ? prev : q))
   }, [params])
 
-  // keep the URL shareable as the user types
+  // keep the URL shareable as the user types; skip if it already matches
   useEffect(() => {
+    setShown(8)
     const url = new URL(window.location.href)
+    const current = url.searchParams.get('q') ?? ''
+    if (current === query) return
     if (query) url.searchParams.set('q', query)
     else url.searchParams.delete('q')
     window.history.replaceState(null, '', url.toString())
-    setShown(8)
   }, [query])
 
   const all = useMemo(() => searchItems(items, query), [items, query])
