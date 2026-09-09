@@ -1,3 +1,4 @@
+import { jsonLd as serializeJsonLd } from '@/lib/serialize'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { getAboutData, publicAssetExists } from '@/lib/about'
@@ -63,7 +64,7 @@ export default function AboutPage() {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }} />
 
       {/* HEADER */}
       <section className="px" style={{ paddingTop: 72, paddingBottom: 36 }}>

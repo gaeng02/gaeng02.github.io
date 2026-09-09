@@ -13,14 +13,12 @@ export default function SiteHeader() {
   const [searchOpen, setSearchOpen] = useState(false)
 
   const isHome = pathname === '/'
-  const isAdmin = pathname.startsWith('/admin')
 
   const aboutActive = pathname.startsWith('/about')
   const seriesActive = pathname.startsWith('/series')
 
   // global "/" + ⌘K to open the palette (home delegates "/" to its hero search)
   useEffect(() => {
-    if (isAdmin) return
     function onKey(e: KeyboardEvent) {
       if ((e.key === 'k' || e.key === 'K') && (e.metaKey || e.ctrlKey)) {
         e.preventDefault()
@@ -34,9 +32,7 @@ export default function SiteHeader() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [isHome, isAdmin])
-
-  if (isAdmin) return null
+  }, [isHome])
 
   return (
     <>

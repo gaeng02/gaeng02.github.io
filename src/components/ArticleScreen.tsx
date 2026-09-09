@@ -1,3 +1,4 @@
+import { jsonLd as serializeJsonLd } from '@/lib/serialize'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPostBySlug } from '@/lib/content'
@@ -33,7 +34,7 @@ export default async function ArticleScreen({
     description: post.description,
     image: post.cover ? absoluteUrl(post.cover) : undefined,
     datePublished: post.date,
-    dateModified: post.date,
+    dateModified: post.updatedAt || post.date,
     inLanguage: 'ko-KR',
     author: { '@type': 'Person', name: SITE.author, url: SITE.url },
     publisher: { '@type': 'Organization', name: SITE.name, url: SITE.url },
@@ -55,8 +56,8 @@ export default async function ArticleScreen({
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumb) }} />
 
       <article>
         {/* HEAD */}
@@ -81,7 +82,8 @@ export default async function ArticleScreen({
                 </>
               )}
               <div className="grow" />
-              <span className="label">{formatDot(post.date)}</span>
+              <time className="label" dateTime={post.date}>{formatDot(post.date)}</time>
+              {post.updatedAt && <time className="label" dateTime={post.updatedAt}>수정 {formatDot(post.updatedAt)}</time>}
             </div>
 
             <h1

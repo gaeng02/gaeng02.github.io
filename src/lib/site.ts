@@ -11,5 +11,5 @@ export const SITE = {
 } as const
 
 export function absoluteUrl(path: string): string {
-  return `${SITE.url}${path.startsWith('/') ? path : `/${path}`}`
+  return new URL(path, `${SITE.url}/`).href
 }

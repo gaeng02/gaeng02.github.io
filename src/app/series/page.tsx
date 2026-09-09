@@ -1,3 +1,4 @@
+import { jsonLd as serializeJsonLd } from '@/lib/serialize'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { getAllSeriesWithPosts, seriesCategoryMix } from '@/lib/series'
@@ -37,7 +38,7 @@ export default function SeriesIndexPage() {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }} />
 
       <section className="px" style={{ paddingTop: 72, paddingBottom: 24 }}>
         <h1 className="h-display" style={{ fontSize: 'clamp(40px, 8vw, 76px)', margin: 0 }}>

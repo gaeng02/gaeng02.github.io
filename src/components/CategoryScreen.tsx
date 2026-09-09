@@ -1,3 +1,4 @@
+import { jsonLd as serializeJsonLd } from '@/lib/serialize'
 import { getPostsByCategory } from '@/lib/content'
 import { CATEGORY_META, type Category } from '@/lib/categories'
 import { toPostSummary, aggregateTags } from '@/lib/posts'
@@ -30,7 +31,7 @@ export default function CategoryScreen({ category }: { category: Category }) {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }} />
       <section className="px" style={{ paddingTop: 72, paddingBottom: 28 }}>
         <h1 className="h-display" style={{ fontSize: 'clamp(40px, 8vw, 76px)', margin: '0 0 16px' }}>
           {meta.label}

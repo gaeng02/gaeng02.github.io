@@ -1,3 +1,4 @@
+import { jsonLd as serializeJsonLd } from '@/lib/serialize'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getAllSeries, getSeriesWithPosts } from '@/lib/series'
@@ -51,7 +52,7 @@ export default function SeriesDetailPage({ params }: { params: { slug: string } 
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }} />
 
       {/* HERO */}
       <section className="px" style={{ paddingTop: 72, paddingBottom: 48 }}>

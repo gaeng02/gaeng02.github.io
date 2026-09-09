@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { getPostBySlug, type Category } from './content'
-import { absoluteUrl } from './site'
+import { SITE, absoluteUrl } from './site'
 
 /** Shared metadata builder for article detail routes. */
 export function buildArticleMetadata(category: Category, slug: string): Metadata {
@@ -21,6 +21,10 @@ export function buildArticleMetadata(category: Category, slug: string): Metadata
       description: post.description,
       url,
       publishedTime: post.date,
+      modifiedTime: post.updatedAt || post.date,
+      authors: [SITE.author],
+      siteName: SITE.name,
+      locale: 'ko_KR',
       tags: post.tags,
       images,
     },

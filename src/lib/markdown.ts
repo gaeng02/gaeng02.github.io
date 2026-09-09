@@ -92,7 +92,7 @@ export async function renderMarkdown(markdown: string): Promise<RenderedMarkdown
 
   const processed = await remark()
     .use(remarkGfm)
-    .use(remarkHtml, { sanitize: false })
+    .use(remarkHtml)
     .process(markdown)
 
   let html = processed.toString()
@@ -108,9 +108,4 @@ export async function renderMarkdown(markdown: string): Promise<RenderedMarkdown
   const toc = headings.filter((h) => h.depth === 2 || h.depth === 3)
 
   return { html, toc }
-}
-
-/** Convenience: HTML only (used by the local admin preview). */
-export async function renderMarkdownHtml(markdown: string): Promise<string> {
-  return (await renderMarkdown(markdown)).html
 }

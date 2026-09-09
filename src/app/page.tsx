@@ -1,3 +1,4 @@
+import { jsonLd as serializeJsonLd } from '@/lib/serialize'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { getAllPosts } from '@/lib/content'
@@ -39,7 +40,7 @@ export default function HomePage() {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }} />
 
       {/* HERO — search + category jumps */}
       <section className="px" style={{ paddingTop: 88, paddingBottom: 56 }}>

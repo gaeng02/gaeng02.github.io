@@ -1,14 +1,14 @@
+import { jsonLd as serializeJsonLd } from '@/lib/serialize'
 import type { Metadata } from 'next'
 import './globals.css'
 import SiteHeader from '@/components/SiteHeader'
 import SiteFooter from '@/components/SiteFooter'
-import HideOnAdmin from '@/components/HideOnAdmin'
+import { SITE } from '@/lib/site'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
 
-const SITE_NAME = 'Trace of Thought'
-const SITE_URL = 'https://www.gaeng02.com'
-const SITE_DESC =
-  '책 · 논문 · 시도 · 회고를 한곳에. 도서 리뷰, 논문 정리, 기술 학습 기록과 회고를 남기는 gaeng02의 블로그입니다.'
+const SITE_NAME = SITE.name
+const SITE_URL = SITE.url
+const SITE_DESC = SITE.description
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -24,6 +24,7 @@ export const metadata: Metadata = {
   applicationName: SITE_NAME,
   alternates: {
     canonical: '/',
+    types: { 'application/rss+xml': '/feed.xml' },
   },
   openGraph: {
     type: 'website',
@@ -88,7 +89,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="theme-color" content="#0c0c0d" media="(prefers-color-scheme: dark)" />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(websiteJsonLd) }}
         />
       </head>
       <body>
@@ -96,9 +97,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="shell">
           <SiteHeader />
           <main>{children}</main>
-          <HideOnAdmin>
-            <SiteFooter />
-          </HideOnAdmin>
+          <SiteFooter />
         </div>
       </body>
     </html>

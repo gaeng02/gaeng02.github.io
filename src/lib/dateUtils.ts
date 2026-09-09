@@ -1,33 +1,38 @@
-// 클라이언트와 서버 모두에서 사용 가능한 날짜 유틸리티 함수
+const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+const pad = (value: number) => String(value).padStart(2, '0')
 
-// 날짜를 포맷팅 (예: "7 Feb, 2026")
-export function formatDate(dateString: string): string {
-  const date = new Date(dateString)
-  const day = date.getDate()
-  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-  const month = monthNames[date.getMonth()]
-  const year = date.getFullYear()
-  return `${day} ${month}, ${year}`
+// Publication dates are calendar dates; modification timestamps use the blog's KST timezone.
+// Never depend on the build machine or reader's timezone.
+function dateParts(value: string): { year: number; month: number; day: number } | null {
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    const [year, month, day] = value.split('-').map(Number)
+    return { year, month, day }
+  }
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return null
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Seoul', year: 'numeric', month: 'numeric', day: 'numeric',
+  }).formatToParts(date)
+  const get = (type: string) => Number(parts.find((part) => part.type === type)?.value)
+  return { year: get('year'), month: get('month'), day: get('day') }
 }
 
-// 월 이름 가져오기 (영문)
+export function formatDate(value: string): string {
+  const parts = dateParts(value)
+  return parts ? `${parts.day} ${monthNames[parts.month - 1]}, ${parts.year}` : value
+}
+
 export function getMonthName(month: number): string {
-  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-  return monthNames[month - 1]
+  const names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+  return names[month - 1]
 }
 
-const pad = (n: number) => String(n).padStart(2, '0')
-
-// 날짜를 점 포맷으로 (예: "2026.01.15")
-export function formatDot(dateString: string): string {
-  const date = new Date(dateString)
-  if (Number.isNaN(date.getTime())) return dateString
-  return `${date.getFullYear()}.${pad(date.getMonth() + 1)}.${pad(date.getDate())}`
+export function formatDot(value: string): string {
+  const parts = dateParts(value)
+  return parts ? `${parts.year}.${pad(parts.month)}.${pad(parts.day)}` : value
 }
 
-// 짧은 점 포맷 (예: "26.01.15")
-export function formatDotShort(dateString: string): string {
-  const date = new Date(dateString)
-  if (Number.isNaN(date.getTime())) return dateString
-  return `${String(date.getFullYear()).slice(2)}.${pad(date.getMonth() + 1)}.${pad(date.getDate())}`
+export function formatDotShort(value: string): string {
+  const parts = dateParts(value)
+  return parts ? `${String(parts.year).slice(2)}.${pad(parts.month)}.${pad(parts.day)}` : value
 }

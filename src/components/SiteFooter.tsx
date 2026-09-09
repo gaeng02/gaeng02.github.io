@@ -44,6 +44,7 @@ export default function SiteFooter() {
         <h5>Browse</h5>
         <Link href="/series">All Series</Link>
         <Link href="/archives">Archives</Link>
+        <a href="/feed.xml">RSS</a>
         <Link href="/about">About</Link>
       </div>
     </footer>
