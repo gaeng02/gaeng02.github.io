@@ -61,7 +61,7 @@ export default function CategoryView({
       <div
         className="px row items-center gap-16"
         style={{
-          padding: '14px var(--page-px)',
+          padding: '14px var(--gutter)',
           borderTop: '1px solid var(--rule)',
           borderBottom: open ? 0 : '1px solid var(--rule)',
           background: open ? 'var(--bg-2)' : 'transparent',
@@ -105,7 +105,7 @@ export default function CategoryView({
         }}
       >
         <div style={{ overflow: 'hidden', minHeight: 0 }}>
-        <div className="px" style={{ padding: '4px var(--page-px) 26px', display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+        <div className="px" style={{ padding: '4px var(--gutter) 26px', display: 'flex', flexWrap: 'wrap', gap: 10 }}>
           <button
             type="button"
             className={`tag-chip${activeTag === null ? ' active' : ''}`}

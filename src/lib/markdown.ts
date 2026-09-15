@@ -1,6 +1,10 @@
-import { remark } from 'remark'
+import { unified } from 'unified'
+import remarkParse from 'remark-parse'
 import remarkGfm from 'remark-gfm'
-import remarkHtml from 'remark-html'
+import remarkRehype from 'remark-rehype'
+import rehypeRaw from 'rehype-raw'
+import rehypeSanitize, { defaultSchema } from 'rehype-sanitize'
+import rehypeStringify from 'rehype-stringify'
 
 export interface TocItem {
   depth: number
@@ -11,6 +15,19 @@ export interface TocItem {
 export interface RenderedMarkdown {
   html: string
   toc: TocItem[]
+}
+
+/**
+ * GitHub-style content policy: Markdown plus inline HTML such as <img>, <details>,
+ * <table> and <br> is allowed, while scripts, iframes, event handlers, inline styles
+ * and unknown protocols are stripped. The same schema drives the BlogStudio preview.
+ */
+export const sanitizeSchema = {
+  ...defaultSchema,
+  attributes: {
+    ...defaultSchema.attributes,
+    img: [...(defaultSchema.attributes?.img ?? []), 'alt', 'title', 'width', 'height', 'loading', 'decoding'],
+  },
 }
 
 /** Strip inline markdown / html so heading text reads cleanly. */
@@ -82,20 +99,39 @@ function parseHeadings(markdown: string): RawHeading[] {
   return out
 }
 
+type HastNode = { type: string; tagName?: string; properties?: Record<string, unknown>; children?: HastNode[] }
+
+/** Images inside articles load lazily; runs after sanitize so the attributes survive. */
+function rehypeLazyImages() {
+  return (tree: HastNode) => {
+    const visit = (node: HastNode) => {
+      if (node.type === 'element' && node.tagName === 'img') {
+        node.properties = { loading: 'lazy', decoding: 'async', ...(node.properties ?? {}) }
+      }
+      node.children?.forEach(visit)
+    }
+    visit(tree)
+  }
+}
+
+const processor = unified()
+  .use(remarkParse)
+  .use(remarkGfm)
+  .use(remarkRehype, { allowDangerousHtml: true })
+  .use(rehypeRaw)
+  .use(rehypeSanitize, sanitizeSchema)
+  .use(rehypeLazyImages)
+  .use(rehypeStringify)
+
 /**
  * Render markdown to HTML, inject stable ids on headings, and extract a TOC.
- * No external rehype deps — ids are injected by sequential heading match,
- * which is safe because remark emits headings in the same document order.
+ * Ids are injected by sequential heading match, which is safe because the
+ * renderer emits headings in the same document order.
  */
 export async function renderMarkdown(markdown: string): Promise<RenderedMarkdown> {
   const headings = parseHeadings(markdown)
 
-  const processed = await remark()
-    .use(remarkGfm)
-    .use(remarkHtml)
-    .process(markdown)
-
-  let html = processed.toString()
+  let html = String(await processor.process(markdown))
 
   let i = 0
   html = html.replace(/<h([1-6])>/g, (match, lvl: string) => {

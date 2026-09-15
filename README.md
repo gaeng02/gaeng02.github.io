@@ -48,7 +48,11 @@ Markdown 본문
 
 `lib/content.cjs`가 화면·색인·시리즈·사이트맵의 공통 로더입니다. 잘못된 필수 메타데이터나 중복 URL은 빌드를 실패시켜 누락을 드러냅니다. 한글 slug를 지원하며 과거 회고 URL `/memoir/2025-03-SWMaestro`도 유지합니다.
 
-Markdown은 GFM을 지원하며 렌더링 결과를 정제합니다. 임의의 HTML/script는 허용하지 않습니다. 본문에 이미지를 넣을 때는 Markdown 문법을 사용합니다. 시리즈는 `content/series.config.json`에서 정의하고 태그로 글을 연결합니다.
+Markdown은 GFM을 지원하고, GitHub과 같은 방식으로 본문 안의 HTML(`<img>`, `<details>`, `<table>`, `<br>` 등)을 허용합니다. 다만 `script`, `iframe`, 이벤트 핸들러, `style` 속성, 알 수 없는 프로토콜은 렌더링 단계에서 제거합니다(`src/lib/markdown.ts`의 스키마가 기준이며 BlogStudio 미리보기도 같은 스키마를 씁니다). 본문 이미지는 `![설명](/assets/images/파일명)` 문법을 권장하며 `loading="lazy"`가 자동으로 붙습니다.
+
+이미지는 `public/assets/images/` 아래에 **내용 해시 기반 파일명**(`<sha256 앞 16자>.<확장자>`)으로 저장합니다. BlogStudio가 업로드 시 자동으로 이름을 정하므로 같은 이미지는 항상 같은 파일명을 갖고, 다른 이미지와 겹치지 않습니다. 파일명에 공백이나 한글을 쓰지 않습니다.
+
+시리즈는 `content/series.config.json`에서 정의하고 태그로 글을 연결합니다.
 
 ## SEO
 
@@ -59,8 +63,11 @@ Markdown은 GFM을 지원하며 렌더링 결과를 정제합니다. 임의의 H
 - 수정일은 메타데이터·구조화 데이터·사이트맵에 적용하고 근거 없는 빌드 시각을 lastmod로 쓰지 않습니다.
 - `/search`는 noindex를 적용하며 검색엔진이 해당 지시를 읽을 수 있도록 크롤링을 허용합니다.
 - 본문과 글 목록의 링크는 정적 HTML로 생성됩니다. 전체 글은 `/archives`에서도 접근할 수 있습니다.
+- 기본 OG 이미지: `public/og-default.png` (표지가 없는 글과 고정 페이지의 공유 카드에 사용)
+- 파비콘: `src/app/favicon.ico`, `src/app/icon.svg`, `src/app/apple-icon.png`
+- 레이아웃: 본문 컬럼은 `--content-max`(1024px)로 제한하고 중앙 정렬합니다(`src/app/globals.css`).
 
-[SEO 점검 보고서](docs/SEO-AUDIT.md)를 참고하세요. HTTP에서 HTTPS로의 이동은 GitHub Pages/Cloudflare 설정에서 수정해야 합니다. Search Console의 색인·노출 데이터는 해당 계정에서 확인해야 합니다.
+코드 밖에서 처리할 항목: HTTP에서 HTTPS로의 이동은 Cloudflare(Always Use HTTPS) 또는 GitHub Pages 설정에서 켜야 하고, `data/about.json`의 샘플 데이터는 실제 내용으로 바꿔야 합니다. Search Console의 색인·노출 데이터는 해당 계정에서 확인해야 합니다.
 
 ## 환경 변수
 

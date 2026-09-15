@@ -13,8 +13,14 @@
   --serif: 'Newsreader', 'Noto Serif KR', Georgia, serif;
   --serif-kr: 'Noto Serif KR', 'Newsreader', serif;
 
-  /* signature page gutter */
+  /* signature page gutter (minimum side padding) */
   --page-px: 160px;
+  /* content column: centered, never wider than this (toss.tech-style reading width) */
+  --content-max: 1024px;
+  /* actual side gutter = whichever is larger: the signature padding or the space
+     needed to center a --content-max column. Sections stay full-bleed (borders,
+     backgrounds) while their content is capped and centered. */
+  --gutter: max(var(--page-px), calc((100% - var(--content-max)) / 2));
 
   /* ---- light ---- */
   --bg: #ffffff;
@@ -100,8 +106,8 @@ html[data-theme='dark'] {
 /* ---------- layout helpers ---------- */
 .shell { min-height: 100vh; display: flex; flex-direction: column; }
 .shell > main { flex: 1 0 auto; }
-.px { padding-left: var(--page-px); padding-right: var(--page-px); }
-.wrap { max-width: 1240px; margin: 0 auto; }
+.px { padding-left: var(--gutter); padding-right: var(--gutter); }
+.wrap { max-width: var(--content-max); margin: 0 auto; }
 .row { display: flex; }
 .col { display: flex; flex-direction: column; }
 .between { justify-content: space-between; }
@@ -150,7 +156,7 @@ html[data-theme='dark'] {
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  padding: 18px var(--page-px);
+  padding: 18px var(--gutter);
   border-bottom: 1px solid var(--rule);
   background: color-mix(in oklab, var(--bg) 88%, transparent);
   backdrop-filter: saturate(1.1) blur(8px);
@@ -368,7 +374,7 @@ mark { background: var(--c-paper-bg); color: var(--c-paper); padding: 0 3px; bor
 /* ---------- footer (always dark) ---------- */
 .foot {
   border-top: 1px solid #1a1a1d;
-  padding: 48px var(--page-px);
+  padding: 48px var(--gutter);
   display: grid;
   grid-template-columns: 2.4fr 1fr 1fr;
   gap: 28px;

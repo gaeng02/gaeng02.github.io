@@ -16,7 +16,8 @@ SWMaestro는 과학기술정보통신부에서 진행하는 SW인재 양성 프�
 가장 확실한 것은 [SWMaestro 모집공고](https://www.swmaestro.ai/sw/main/notifyMentee.do?menuNo=200091)를 참고하는 것이다.  <br> 
 
 SWMaestro의 선발 과정은 크게 4단계로 이루어져 있다.
-<img src="/assets/images/SWMaestro 선발과정.png" alt="선발과정" width="1000" />
+
+![SWMaestro 선발 과정 4단계](/assets/images/4ee04ab51698e739.png)
 
 <details style="font-size:0.9em;">
 <summary> 16기(2025년도) 선발 일정 </summary>
@@ -135,7 +136,8 @@ SWMaestro의 선발 과정은 크게 4단계로 이루어져 있다.
 
 <br>
 합격 결과는 이메일/문자로 확인할 수 있고, 홈페이지 내에서도 "16기 연수생"으로 변경되어있는 것으로 확인할 수 있다.
-<img src="/assets/images/SWMaestro 합격.png" alt="합격이메일" width="1000" />
+
+![소프트웨어마에스트로 16기 합격 안내 이메일](/assets/images/26d8af217ace83fc.png)
 
 
 대학을 다니면 다른 대학 학생들의 경험을 볼 일이 아예 없는데, 다른 학교 학생들은 어떤 경험을 했는지 듣는 것이 경험이 되었고,  

@@ -77,7 +77,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <hr className="rule-thick px" style={{ marginLeft: 'var(--page-px)', marginRight: 'var(--page-px)' }} />
+      <hr className="rule-thick px" style={{ marginLeft: 'var(--gutter)', marginRight: 'var(--gutter)' }} />
 
       {/* FEED */}
       <section className="px" style={{ paddingTop: 8, paddingBottom: 64 }}>

@@ -9,6 +9,8 @@ import GoogleAnalytics from '@/components/GoogleAnalytics'
 const SITE_NAME = SITE.name
 const SITE_URL = SITE.url
 const SITE_DESC = SITE.description
+/** Fallback social preview used by every page that has no cover image of its own. */
+const DEFAULT_OG_IMAGE = { url: '/og-default.png', width: 1200, height: 630, alt: `${SITE_NAME} — 책 · 논문 · 시도 · 회고` }
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -33,11 +35,13 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: `${SITE_NAME} — 책 · 논문 · 시도 · 회고`,
     description: SITE_DESC,
+    images: [DEFAULT_OG_IMAGE],
   },
   twitter: {
     card: 'summary_large_image',
     title: `${SITE_NAME} — 책 · 논문 · 시도 · 회고`,
     description: SITE_DESC,
+    images: [DEFAULT_OG_IMAGE.url],
   },
   robots: {
     index: true,
@@ -85,6 +89,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Noto+Serif+KR:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
+        <link rel="alternate" type="application/rss+xml" title={`${SITE_NAME} RSS`} href="/feed.xml" />
         <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#0c0c0d" media="(prefers-color-scheme: dark)" />
         <script
