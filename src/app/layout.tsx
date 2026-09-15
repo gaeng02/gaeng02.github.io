@@ -15,7 +15,7 @@ const DEFAULT_OG_IMAGE = { url: '/og-default.png', width: 1200, height: 630, alt
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} — 책 · 논문 · 시도 · 회고`,
+    default: `${SITE_NAME}, ${SITE.author}`,
     template: `%s · ${SITE_NAME}`,
   },
   description: SITE_DESC,
@@ -33,13 +33,13 @@ export const metadata: Metadata = {
     locale: 'ko_KR',
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: `${SITE_NAME} — 책 · 논문 · 시도 · 회고`,
+    title: `${SITE_NAME}, ${SITE.author}`,
     description: SITE_DESC,
     images: [DEFAULT_OG_IMAGE],
   },
   twitter: {
     card: 'summary_large_image',
-    title: `${SITE_NAME} — 책 · 논문 · 시도 · 회고`,
+    title: `${SITE_NAME}, ${SITE.author}`,
     description: SITE_DESC,
     images: [DEFAULT_OG_IMAGE.url],
   },

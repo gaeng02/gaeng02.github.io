@@ -77,7 +77,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      <hr className="rule-thick px" style={{ marginLeft: 'var(--gutter)', marginRight: 'var(--gutter)' }} />
+      <div className="px">
+        <hr className="rule-thick" />
+      </div>
 
       {/* FEED */}
       <section className="px" style={{ paddingTop: 8, paddingBottom: 64 }}>
@@ -86,8 +88,10 @@ export default function HomePage() {
 
       {/* ARTICLE SERIES */}
       {series.length > 0 && (
-        <section className="px" style={{ paddingTop: 64, paddingBottom: 64, borderTop: '2px solid var(--ink)' }}>
-          <div className="row between items-baseline" style={{ marginBottom: 32 }}>
+        <section className="px" style={{ paddingTop: 0, paddingBottom: 64 }}>
+          {/* rule lives inside the padded column so it matches the feed divider above */}
+          <hr className="rule-thick" />
+          <div className="row between items-baseline" style={{ marginTop: 64, marginBottom: 32 }}>
             <h2 className="h-display" style={{ fontSize: 48, margin: 0 }}>
               Article Series
             </h2>
