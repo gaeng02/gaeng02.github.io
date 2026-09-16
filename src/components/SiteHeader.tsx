@@ -38,6 +38,8 @@ export default function SiteHeader() {
     <>
       <header className="nav">
         <Link href="/" className="brand" aria-label={`${SITE.name} 홈`}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="brand-mark" src="/logo.png" alt="" width="52" height="25" />
           <span className="name">{SITE.name}</span>
         </Link>
 
