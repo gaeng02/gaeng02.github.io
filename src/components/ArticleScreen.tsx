@@ -26,13 +26,15 @@ export default async function ArticleScreen({
   const nav = getPostSeriesNav(category, slug)
   const meta = CATEGORY_META[category]
   const url = absoluteUrl(`/${category}/${slug}`)
+  // Search results need an image for the article: its cover, else its first figure.
+  const bodyImage = /<img[^>]*\ssrc="([^"]+)"/.exec(html)?.[1]?.replace(/&amp;/g, '&')
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.description,
-    image: post.cover ? absoluteUrl(post.cover) : undefined,
+    image: absoluteUrl(post.cover || bodyImage || '/og-default.png'),
     datePublished: post.date,
     dateModified: post.updatedAt || post.date,
     inLanguage: 'ko-KR',
@@ -132,50 +134,51 @@ export default async function ArticleScreen({
             </div>
           </div>
         </section>
-
-        {/* prev / next within series */}
-        {nav && (nav.prev || nav.next) && (
-          <section className="px" style={{ paddingBottom: 24 }}>
-            <div
-              style={{
-                maxWidth: 720,
-                margin: '0 auto',
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: 24,
-              }}
-            >
-              {nav.prev ? (
-                <Link className="card" href={`/${nav.prev.category}/${nav.prev.slug}`} style={{ padding: 22 }}>
-                  <div className="label">← PREVIOUS · 시리즈</div>
-                  <div style={{ fontFamily: 'var(--serif-kr)', fontSize: 18, color: 'var(--ink)', marginTop: 8 }}>
-                    {nav.prev.title}
-                  </div>
-                </Link>
-              ) : (
-                <span />
-              )}
-              {nav.next ? (
-                <Link className="card" href={`/${nav.next.category}/${nav.next.slug}`} style={{ padding: 22, textAlign: 'right' }}>
-                  <div className="label">NEXT · 시리즈 →</div>
-                  <div style={{ fontFamily: 'var(--serif-kr)', fontSize: 18, color: 'var(--ink)', marginTop: 8 }}>
-                    {nav.next.title}
-                  </div>
-                </Link>
-              ) : (
-                <span />
-              )}
-            </div>
-          </section>
-        )}
-
-        {/* back to list */}
-        <section className="px" style={{ paddingTop: 12, paddingBottom: 64, textAlign: 'center' }}>
-          <Link className="btn" href={meta.href}>
-            ← {meta.label} 목록으로 돌아가기
-          </Link>
-        </section>
       </article>
+
+      {/* Navigation stays outside <article> so the article element holds only the post. */}
+      {/* prev / next within series */}
+      {nav && (nav.prev || nav.next) && (
+        <section className="px" style={{ paddingBottom: 24 }}>
+          <div
+            style={{
+              maxWidth: 720,
+              margin: '0 auto',
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: 24,
+            }}
+          >
+            {nav.prev ? (
+              <Link className="card" href={`/${nav.prev.category}/${nav.prev.slug}`} style={{ padding: 22 }}>
+                <div className="label">← PREVIOUS · 시리즈</div>
+                <div style={{ fontFamily: 'var(--serif-kr)', fontSize: 18, color: 'var(--ink)', marginTop: 8 }}>
+                  {nav.prev.title}
+                </div>
+              </Link>
+            ) : (
+              <span />
+            )}
+            {nav.next ? (
+              <Link className="card" href={`/${nav.next.category}/${nav.next.slug}`} style={{ padding: 22, textAlign: 'right' }}>
+                <div className="label">NEXT · 시리즈 →</div>
+                <div style={{ fontFamily: 'var(--serif-kr)', fontSize: 18, color: 'var(--ink)', marginTop: 8 }}>
+                  {nav.next.title}
+                </div>
+              </Link>
+            ) : (
+              <span />
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* back to list */}
+      <section className="px" style={{ paddingTop: 12, paddingBottom: 64, textAlign: 'center' }}>
+        <Link className="btn" href={meta.href}>
+          ← {meta.label} 목록으로 돌아가기
+        </Link>
+      </section>
     </>
   )
 }
