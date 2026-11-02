@@ -69,32 +69,28 @@ export default async function ArticleScreen({
               ← {meta.label} 목록으로 돌아가기
             </Link>
 
-            <div className="row gap-12 items-center wrap-flex" style={{ marginBottom: 22 }}>
-              <CatPill category={category} />
+            {/* series · category · tags, then the title with its date beneath */}
+            <div className="row gap-8 items-center wrap-flex" style={{ marginBottom: 22 }}>
               {nav && (
-                <>
-                  <span className="label">└ in series:</span>
-                  <Link
-                    href={`/series/${nav.series.slug}`}
-                    className={`cat-text ${meta.accent}`}
-                    style={{ fontFamily: 'var(--serif-kr)', fontSize: 14 }}
-                  >
-                    {nav.series.title}
-                  </Link>
-                </>
+                <Link href={`/series/${nav.series.slug}`} className={`series-link cat-text ${meta.accent}`}>
+                  {nav.series.title}
+                </Link>
               )}
-              <div className="grow" />
-              <time className="label" dateTime={post.date}>{formatDot(post.date)}</time>
-              {post.updatedAt && <time className="label" dateTime={post.updatedAt}>수정 {formatDot(post.updatedAt)}</time>}
+              <CatPill category={category} />
+              {post.tags.map((t) => (
+                <Link key={t} className="tag-flat" href={`/search?q=${encodeURIComponent(t)}`}>
+                  #{t}
+                </Link>
+              ))}
             </div>
 
             <h1
               style={{
                 fontFamily: 'var(--serif-kr)',
-                fontWeight: 500,
-                letterSpacing: '-0.015em',
-                fontSize: 'clamp(32px, 5vw, 52px)',
-                margin: '0 0 18px',
+                fontWeight: 600,
+                letterSpacing: '-0.02em',
+                fontSize: 'clamp(32px, 5vw, 48px)',
+                margin: '0 0 14px',
                 lineHeight: 1.25,
                 color: 'var(--ink)',
               }}
@@ -102,21 +98,15 @@ export default async function ArticleScreen({
               {post.title}
             </h1>
 
-            {post.description && (
-              <p className="body-kr" style={{ fontSize: 19, color: 'var(--ink-2)', margin: '0 0 20px' }}>
-                {post.description}
-              </p>
-            )}
-
-            {post.tags && post.tags.length > 0 && (
-              <div className="row gap-8 wrap-flex">
-                {post.tags.map((t) => (
-                  <Link key={t} className="tag-chip" href={`/search?q=${encodeURIComponent(t)}`}>
-                    #{t}
-                  </Link>
-                ))}
-              </div>
-            )}
+            <p className="label" style={{ margin: 0 }}>
+              <time dateTime={post.date}>{formatDot(post.date)}</time>
+              {post.updatedAt && (
+                <>
+                  {' · 수정 '}
+                  <time dateTime={post.updatedAt}>{formatDot(post.updatedAt)}</time>
+                </>
+              )}
+            </p>
           </div>
         </section>
 
