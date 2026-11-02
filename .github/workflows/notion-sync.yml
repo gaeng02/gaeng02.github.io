@@ -1,8 +1,7 @@
 name: Sync posts from Notion
 
 on:
-  schedule:
-    - cron: '*/30 * * * *'
+  # Run only on demand: Actions → Sync posts from Notion → Run workflow.
   workflow_dispatch:
 
 permissions:
@@ -21,10 +20,10 @@ jobs:
       changed: ${{ steps.commit.outputs.changed }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '22'
           cache: 'npm'
