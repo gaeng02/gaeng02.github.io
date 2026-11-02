@@ -5,6 +5,8 @@ on:
     branches:
       - main
   workflow_dispatch:
+  # Called by notion-sync.yml: a push made with GITHUB_TOKEN does not start this workflow.
+  workflow_call:
 
 permissions:
   contents: read
@@ -21,6 +23,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # After a Notion sync, build the commit it just pushed rather than the triggering one.
+          ref: ${{ github.event_name == 'push' && github.sha || 'main' }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
