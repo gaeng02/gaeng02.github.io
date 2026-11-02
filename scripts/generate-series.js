@@ -7,10 +7,8 @@ const outputPath = path.join(contentDirectory, 'series.json')
 
 const { readPosts: getAllPosts } = require('../lib/content.cjs')
 
-function sortSeriesPosts(posts, postSort) {
-  if (postSort === 'date-asc') {
-    return posts.sort((a, b) => new Date(a.date) - new Date(b.date))
-  }
+// Posts within a series are always listed newest first.
+function sortSeriesPosts(posts) {
   return posts.sort((a, b) => new Date(b.date) - new Date(a.date))
 }
 
@@ -26,16 +24,15 @@ function generateSeries() {
   const seriesOrder = Array.isArray(config.seriesOrder) ? config.seriesOrder : []
 
   const generated = seriesConfigList.map((seriesConfig) => {
-    const tag = seriesConfig.tag
-    const matched = allPosts.filter((post) => post.tags.includes(tag))
-    const sorted = sortSeriesPosts(matched, seriesConfig.postSort)
+    // A post joins a series through its `series` frontmatter (the Notion "series" property).
+    const matched = allPosts.filter((post) => post.series === seriesConfig.slug)
+    const sorted = sortSeriesPosts(matched)
 
     const entry = {
       slug: seriesConfig.slug,
       title: seriesConfig.title,
       description: seriesConfig.description || '',
     }
-    if (seriesConfig.note) entry.note = seriesConfig.note
     if (seriesConfig.cover) entry.cover = seriesConfig.cover
     entry.posts = sorted.map((post) => ({
       category: post.category,

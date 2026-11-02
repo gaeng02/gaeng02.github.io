@@ -62,29 +62,6 @@ export default function SeriesDetailPage({ params }: { params: { slug: string } 
         <p className="body-kr" style={{ fontSize: 20, maxWidth: 660, margin: 0 }}>
           {series.description}
         </p>
-
-        {series.note && (
-          <div
-            style={{
-              marginTop: 40,
-              maxWidth: 760,
-              display: 'grid',
-              gridTemplateColumns: '52px 1fr',
-              gap: 18,
-              alignItems: 'start',
-            }}
-          >
-            <div style={{ fontFamily: 'var(--serif)', fontSize: 84, lineHeight: 0.78, color: 'var(--c-paper)' }} aria-hidden>
-              &ldquo;
-            </div>
-            <div>
-              <p className="body-kr" style={{ fontSize: 20, lineHeight: 1.7, color: 'var(--ink)', margin: 0 }}>
-                {series.note}
-              </p>
-              <div className="label" style={{ marginTop: 14 }}>— Series Note</div>
-            </div>
-          </div>
-        )}
       </section>
 
       {/* POSTS */}

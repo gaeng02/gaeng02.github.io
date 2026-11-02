@@ -27,7 +27,7 @@ function loadSeriesMap() {
     description: s.description || '',
     tags: [],
     url: `/series/${s.slug}`,
-    excerpt: s.note || '',
+    excerpt: s.description || '',
     categories: Array.from(new Set(seriesByCat.get(s.slug) || [])),
   }))
 

@@ -3,12 +3,14 @@ const { Client } = require('@notionhq/client')
 const { syncNotion } = require('../lib/notion.cjs')
 
 async function main() {
-  const { NOTION_TOKEN: auth, NOTION_DATABASE_ID: databaseId } = process.env
+  const { NOTION_TOKEN: auth, NOTION_POST_DATABASE_ID: databaseId, NOTION_SERIES_DATABASE_ID: seriesDatabaseId } = process.env
   if (!auth || !databaseId) {
-    console.log('NOTION_TOKEN 또는 NOTION_DATABASE_ID가 없어 동기화를 건너뜁니다.')
+    console.log('NOTION_TOKEN 또는 NOTION_POST_DATABASE_ID가 없어 동기화를 건너뜁니다.')
     return
   }
-  const result = await syncNotion({ notion: new Client({ auth }), databaseId, root: process.cwd() })
+  const notion = new Client({ auth })
+  const result = await syncNotion({ notion, databaseId, seriesDatabaseId, root: process.cwd() })
+  if (result.seriesChanged) console.log('반영: content/series.config.json')
   for (const file of result.written) console.log(`반영: ${file}`)
   for (const file of result.removed) console.log(`내림: ${file}`)
   console.log(`변경 없음: ${result.skipped.length}편`)

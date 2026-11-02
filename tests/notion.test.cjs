@@ -15,7 +15,7 @@ const text = (content, annotations = {}) => ({
 })
 const block = (id, type, value, extra = {}) => ({ object: 'block', id, type, has_children: false, [type]: value, ...extra })
 
-function page(id, { title, status = 'released', category = 'Memoir', slug = '', date = '2026-11-01', edited = '2026-11-01T03:00:00.000Z', tags = [] }) {
+function page(id, { title, status = 'released', category = 'Memoir', slug = '', date = '2026-11-01', edited = '2026-11-01T03:00:00.000Z', tags = [], series = '' }) {
   return {
     object: 'page',
     id,
@@ -33,14 +33,21 @@ function page(id, { title, status = 'released', category = 'Memoir', slug = '', 
       tags: { type: 'multi_select', multi_select: tags.map((name) => ({ name })) },
       summary: { type: 'rich_text', rich_text: [text('검색 결과 설명')] },
       thumbnail: { type: 'files', files: [] },
+      series: { type: 'select', select: series ? { name: series } : null },
     },
   }
 }
 
-function fakeNotion(pages, blocks) {
+function fakeNotion(pages, blocks, series = () => []) {
   return {
-    databases: { retrieve: async () => ({ data_sources: [{ id: 'source' }] }) },
-    dataSources: { query: async () => ({ results: pages(), has_more: false, next_cursor: null }) },
+    databases: { retrieve: async ({ database_id }) => ({ data_sources: [{ id: `${database_id}-source` }] }) },
+    dataSources: {
+      query: async ({ data_source_id }) => ({
+        results: data_source_id === 'series-db-source' ? series() : pages(),
+        has_more: false,
+        next_cursor: null,
+      }),
+    },
     blocks: { children: { list: async ({ block_id }) => ({ results: blocks[block_id] || [], has_more: false, next_cursor: null }) } },
   }
 }
@@ -106,7 +113,13 @@ test('published Notion pages become posts the blog can build; others are left al
   const moved = await syncNotion({ notion, databaseId: 'db', root, fetchImpl, log: () => {} })
   assert.deepEqual(moved.written, ['content/memoir/2026-11-01-renamed.md'])
   assert.ok(!fs.existsSync(file))
-  assert.ok(matter(fs.readFileSync(path.join(root, 'content/memoir/2026-11-01-renamed.md'), 'utf8')).data.updatedAt)
+  const renamed = path.join(root, 'content/memoir/2026-11-01-renamed.md')
+  // Changing only the address is not an update of the article itself.
+  assert.equal(matter(fs.readFileSync(renamed, 'utf8')).data.updatedAt, undefined)
+  blocks.p1 = [...blocks.p1, block('b7', 'paragraph', { rich_text: [text('덧붙인 문단')] })]
+  pages = [page('p1', { title: '첫 글', slug: 'renamed', edited: '2026-11-03T03:00:00.000Z' })]
+  await syncNotion({ notion, databaseId: 'db', root, fetchImpl, log: () => {} })
+  assert.equal(matter(fs.readFileSync(renamed, 'utf8')).data.updatedAt, '2026-11-03T03:00:00.000Z')
   pages = [page('p1', { title: '첫 글', slug: 'renamed', status: 'before' })]
   const removed = await syncNotion({ notion, databaseId: 'db', root, fetchImpl, log: () => {} })
   assert.deepEqual(removed.removed, ['content/memoir/2026-11-01-renamed.md'])
@@ -118,4 +131,48 @@ test('published Notion pages become posts the blog can build; others are left al
   fs.renameSync(path.join(root, 'content/memoir/2025-03-SWMaestro.md'), path.join(root, 'content/memoir/2025-03-31-2025-03-SWMaestro.md'))
   await assert.rejects(syncNotion({ notion, databaseId: 'db', root, fetchImpl, log: () => {} }), /직접 작성한 글/)
   assert.equal(fs.readFileSync(path.join(root, 'content/memoir/2025-03-31-2025-03-SWMaestro.md'), 'utf8'), handWritten)
+})
+
+test('the Series database defines series, and a post joins one through its series property', async (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'notion-series-'))
+  t.after(() => fs.rmSync(root, { recursive: true }))
+  fs.mkdirSync(path.join(root, 'content'), { recursive: true })
+  const seriesPage = (id, title, url, order, status = 'released') => ({
+    object: 'page',
+    id,
+    url: `https://www.notion.so/${id}`,
+    properties: {
+      title: { type: 'title', title: [text(title)] },
+      url: { type: 'rich_text', rich_text: url ? [text(url)] : [] },
+      summary: { type: 'rich_text', rich_text: [text(`${title} 설명`)] },
+      order: { type: 'number', number: order },
+      status: { type: 'status', status: { name: status } },
+    },
+  })
+  let series = [seriesPage('s2', '두번째', 'second', 2), seriesPage('s1', 'SWMaestro', 'swmaestro', 1), seriesPage('s3', '숨김', 'hidden', 3, 'writing')]
+  const pages = [page('p1', { title: '첫 글', slug: 'first', series: 'SWMaestro' }), page('p2', { title: '둘째 글', slug: 'second-post', series: '없는 시리즈' })]
+  const notion = fakeNotion(() => pages, {}, () => series)
+  const options = { notion, databaseId: 'db', seriesDatabaseId: 'series-db', root, fetchImpl, log: () => {} }
+
+  const first = await syncNotion(options)
+  assert.equal(first.seriesChanged, true)
+  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(root, 'content/series.config.json'), 'utf8')), {
+    seriesOrder: ['swmaestro', 'second'],
+    series: [
+      { slug: 'swmaestro', title: 'SWMaestro', description: 'SWMaestro 설명' },
+      { slug: 'second', title: '두번째', description: '두번째 설명' },
+    ],
+  })
+  const read = (name) => matter(fs.readFileSync(path.join(root, 'content/memoir', name), 'utf8')).data
+  assert.equal(read('2026-11-01-first.md').series, 'swmaestro')
+  assert.equal(read('2026-11-01-second-post.md').series, undefined)
+  assert.ok(first.errors.some((error) => error.includes('없는 시리즈')))
+
+  // Renaming a series' address re-links its posts even though the posts were not edited.
+  series = [seriesPage('s1', 'SWMaestro', 'soma', 1)]
+  const second = await syncNotion(options)
+  assert.ok(second.written.includes('content/memoir/2026-11-01-first.md'))
+  assert.equal(read('2026-11-01-first.md').series, 'soma')
+  assert.equal(read('2026-11-01-first.md').updatedAt, undefined)
+  assert.equal((await syncNotion(options)).seriesChanged, false)
 })

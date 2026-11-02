@@ -36,7 +36,11 @@ jobs:
         run: node scripts/notion-sync.cjs
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          NOTION_POST_DATABASE_ID: ${{ secrets.NOTION_POST_DATABASE_ID }}
+          NOTION_SERIES_DATABASE_ID: ${{ secrets.NOTION_SERIES_DATABASE_ID }}
+
+      - name: Regenerate series list
+        run: node scripts/generate-series.js
 
       - name: Check content
         run: npm test

@@ -9,6 +9,8 @@ export interface Post {
   category: Category
   tags: string[]
   cover?: string
+  /** slug of the series this post belongs to */
+  series?: string
   slug: string
   content: string
   filePath: string

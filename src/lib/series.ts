@@ -13,8 +13,6 @@ export interface Series {
   slug: string
   title: string
   description: string
-  /** editorial "Series Note" pull-quote shown on the series detail page */
-  note?: string
   /** optional cover image path */
   cover?: string
   posts: SeriesPost[]
